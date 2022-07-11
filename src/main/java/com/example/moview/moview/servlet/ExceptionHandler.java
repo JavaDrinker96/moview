@@ -54,7 +54,7 @@ public class ExceptionHandler extends HttpServlet {
         final String exceptionName = exception.getClass().getSimpleName();
         return switch (exceptionName) {
             case "NumberFormatException", "MappingException", "JsonMappingException" -> 400;
-            case "ClassNotFoundException" -> 404;
+            case "NotFoundException" -> 404;
             default -> defaultStatus;
         };
     }
