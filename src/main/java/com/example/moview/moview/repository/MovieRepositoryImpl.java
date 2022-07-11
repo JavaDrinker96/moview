@@ -1,6 +1,7 @@
 package com.example.moview.moview.repository;
 
 import com.example.moview.moview.config.db.DataSourceJdbc;
+import com.example.moview.moview.exception.NotFoundException;
 import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.model.Review;
 import org.apache.logging.log4j.LogManager;
@@ -22,10 +23,10 @@ public class MovieRepositoryImpl implements MovieRepository {
             final PreparedStatement ps = conn.prepareStatement("INSERT INTO movie (title, description, " +
                     "release_date, duration) VALUES (?,?,?,?)");
 
-            ps.setString(1, movie.getTitle());
-            ps.setString(2, movie.getDescription());
-            ps.setDate(3, Date.valueOf(movie.getReleaseDate()));
-            ps.setLong(4, movie.getDuration().getSeconds());
+            ps.setString(1, movie.title());
+            ps.setString(2, movie.description());
+            ps.setDate(3, Date.valueOf(movie.releaseDate()));
+            ps.setLong(4, movie.duration().getSeconds());
             ps.executeUpdate();
         }
     }
@@ -38,11 +39,11 @@ public class MovieRepositoryImpl implements MovieRepository {
                     conn.prepareStatement("UPDATE movie SET title = ?, description = ?, release_date = ?, " +
                             "duration = ? WHERE id = ?");
 
-            ps.setString(1, newMovie.getTitle());
-            ps.setString(2, newMovie.getDescription());
-            ps.setDate(3, Date.valueOf(newMovie.getReleaseDate()));
-            ps.setLong(4, newMovie.getDuration().getSeconds());
-            ps.setLong(5, newMovie.getId());
+            ps.setString(1, newMovie.title());
+            ps.setString(2, newMovie.description());
+            ps.setDate(3, Date.valueOf(newMovie.releaseDate()));
+            ps.setLong(4, newMovie.duration().getSeconds());
+            ps.setLong(5, newMovie.id());
             ps.executeUpdate();
         }
     }
@@ -59,44 +60,22 @@ public class MovieRepositoryImpl implements MovieRepository {
 
     @Override
     public Movie read(final Long id) throws ClassNotFoundException, SQLException {
-        log.debug(String.format("Reading movie  with id = %d from the database.", id));
         try (Connection conn = DataSourceJdbc.getConnection()) {
-            final String movieQuery = "SELECT * FROM movie WHERE id = ?";
-            final PreparedStatement movieStatement = conn.prepareStatement(movieQuery);
+            final String query = "SELECT m.id as m_id,m.title as m_title, description, release_date, duration, " +
+                    "rating, r.id as r_id, movie_id, score, r.title as r_title, content, publication_date " +
+                    "FROM movie m LEFT JOIN review r on m.id = r.movie_id WHERE m.id=?";
+
+            log.debug(String.format("Reading movie and its reviews with id = %d from the database.", id));
+            final PreparedStatement movieStatement = conn.prepareStatement(query);
             movieStatement.setLong(1, id);
-            ResultSet movieSet = movieStatement.executeQuery();
+            final ResultSet resultSet = movieStatement.executeQuery();
 
-            if (!movieSet.next()) {
-                throw new ClassNotFoundException(String.format("Movie with id = %s not found in the data base.", id));
+            if (!resultSet.next()) {
+                throw new NotFoundException(String.format("Movie with id = %s not found in the data base.", id));
             }
 
-            final Movie movie = Movie.builder()
-                    .id(movieSet.getLong("id"))
-                    .title(movieSet.getString("title"))
-                    .description(movieSet.getString("description"))
-                    .releaseDate(movieSet.getDate("release_date").toLocalDate())
-                    .duration(Duration.ofSeconds(movieSet.getLong("duration")))
-                    .rating(movieSet.getInt("rating"))
-                    .reviews(new ArrayList<>())
-                    .build();
-
-            log.info(String.format("Reading review data in the database for movie with id=%s.", id));
-            final String reviewsQuery = "SELECT * FROM review WHERE movie_id = ?";
-            final PreparedStatement reviewsStatement = conn.prepareStatement(reviewsQuery);
-            reviewsStatement.setLong(1, id);
-            ResultSet reviewsSet = reviewsStatement.executeQuery();
-
-            while (reviewsSet.next()) {
-                movie.getReviews().add(
-                        Review.builder()
-                                .id(reviewsSet.getLong("id"))
-                                .score(reviewsSet.getInt("score"))
-                                .title(reviewsSet.getString("title"))
-                                .content(reviewsSet.getString("content"))
-                                .publicationDate(reviewsSet.getDate("publication_date").toLocalDate())
-                                .build());
-            }
-
+            final Movie movie = buildReadMovie(resultSet);
+            fillMovieWithReadReviews(movie, resultSet);
             return movie;
         }
     }
@@ -108,7 +87,7 @@ public class MovieRepositoryImpl implements MovieRepository {
         try (Connection conn = DataSourceJdbc.getConnection()) {
             final String query = "SELECT * FROM movie";
             final PreparedStatement ps = conn.prepareStatement(query);
-            ResultSet resultSet = ps.executeQuery();
+            final ResultSet resultSet = ps.executeQuery();
 
             while (resultSet.next()) {
                 movieList.add(Movie.builder()
@@ -123,5 +102,35 @@ public class MovieRepositoryImpl implements MovieRepository {
         }
 
         return movieList;
+    }
+
+    private Movie buildReadMovie(final ResultSet resultSet) throws SQLException {
+        return Movie.builder()
+                .id(resultSet.getLong("m_id"))
+                .title(resultSet.getString("m_title"))
+                .description(resultSet.getString("description"))
+                .releaseDate(resultSet.getDate("release_date").toLocalDate())
+                .duration(Duration.ofSeconds(resultSet.getLong("duration")))
+                .rating(resultSet.getInt("rating"))
+                .reviews(new ArrayList<>())
+                .build();
+    }
+
+    private void fillMovieWithReadReviews(final Movie movie, final ResultSet resultSet) throws SQLException {
+        final Long zero = 0L;
+        do {
+            final Long reviewId = resultSet.getLong("r_id");
+            if (reviewId.equals(zero)) continue;
+
+            movie.reviews().add(
+                    Review.builder()
+                            .id(reviewId)
+                            .movie(Movie.builder().id(movie.id()).build())
+                            .score(resultSet.getInt("score"))
+                            .title(resultSet.getString("r_title"))
+                            .content(resultSet.getString("content"))
+                            .publicationDate(resultSet.getDate("publication_date").toLocalDate())
+                            .build());
+        } while (resultSet.next());
     }
 }

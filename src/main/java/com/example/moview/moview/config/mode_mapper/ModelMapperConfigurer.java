@@ -40,23 +40,23 @@ public class ModelMapperConfigurer {
             @Override
             public MovieDto convert(final MappingContext<Movie, MovieDto> mappingContext) {
                 final Movie movie = mappingContext.getSource();
-                final List<ReviewDto> reviewDtoList = movie.getReviews().stream()
+                final List<ReviewDto> reviewDtoList = movie.reviews().stream()
                         .map(review -> ReviewDto.builder()
-                                .id(review.getId())
-                                .score(review.getScore())
-                                .title(review.getTitle())
-                                .content(review.getContent())
-                                .publicationDate(DateTimeUtil.formatLocalDateToString(review.getPublicationDate()))
+                                .id(review.id())
+                                .score(review.score())
+                                .title(review.title())
+                                .content(review.content())
+                                .publicationDate(DateTimeUtil.formatLocalDateToString(review.publicationDate()))
                                 .build())
                         .collect(Collectors.toList());
 
                 return MovieDto.builder()
-                        .id(movie.getId())
-                        .title(movie.getTitle())
-                        .description(movie.getDescription())
-                        .releaseDate(DateTimeUtil.formatLocalDateToString(movie.getReleaseDate()))
-                        .duration(DateTimeUtil.formatDurationToString(movie.getDuration()))
-                        .rating(movie.getRating())
+                        .id(movie.id())
+                        .title(movie.title())
+                        .description(movie.description())
+                        .releaseDate(DateTimeUtil.formatLocalDateToString(movie.releaseDate()))
+                        .duration(DateTimeUtil.formatDurationToString(movie.duration()))
+                        .rating(movie.rating())
                         .reviews(reviewDtoList)
                         .build();
             }
@@ -103,12 +103,12 @@ public class ModelMapperConfigurer {
                 final Movie movie = mappingContext.getSource();
 
                 return MovieShortDto.builder()
-                        .id(movie.getId())
-                        .title(movie.getTitle())
-                        .description(movie.getDescription())
-                        .releaseDate(DateTimeUtil.formatLocalDateToString(movie.getReleaseDate()))
-                        .duration(DateTimeUtil.formatDurationToString(movie.getDuration()))
-                        .rating(movie.getRating())
+                        .id(movie.id())
+                        .title(movie.title())
+                        .description(movie.description())
+                        .releaseDate(DateTimeUtil.formatLocalDateToString(movie.releaseDate()))
+                        .duration(DateTimeUtil.formatDurationToString(movie.duration()))
+                        .rating(movie.rating())
                         .build();
             }
         };

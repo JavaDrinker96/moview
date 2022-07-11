@@ -21,11 +21,11 @@ public class ReviewRepositoryImpl implements ReviewRepository {
             final PreparedStatement ps = conn.prepareStatement("INSERT INTO review ( movie_id, score, title, " +
                     "content, publication_date) VALUES (?,?,?,?,?)");
 
-            ps.setLong(1, review.getMovie().getId());
-            ps.setInt(2, review.getScore());
-            ps.setString(3, review.getTitle());
-            ps.setString(4, review.getContent());
-            ps.setDate(5, Date.valueOf(review.getPublicationDate()));
+            ps.setLong(1, review.movie().id());
+            ps.setInt(2, review.score());
+            ps.setString(3, review.title());
+            ps.setString(4, review.content());
+            ps.setDate(5, Date.valueOf(review.publicationDate()));
             ps.executeUpdate();
         }
     }
@@ -37,12 +37,12 @@ public class ReviewRepositoryImpl implements ReviewRepository {
             final PreparedStatement ps = conn.prepareStatement("UPDATE review SET score = ?, movie_id = ?, " +
                     "title = ?, content =?, publication_date = ? WHERE id = ?");
 
-            ps.setInt(1, newReview.getScore());
-            ps.setLong(2, newReview.getMovie().getId());
-            ps.setString(3, newReview.getTitle());
-            ps.setString(4, newReview.getContent());
-            ps.setDate(5, Date.valueOf(newReview.getPublicationDate()));
-            ps.setLong(6, newReview.getId());
+            ps.setInt(1, newReview.score());
+            ps.setLong(2, newReview.movie().id());
+            ps.setString(3, newReview.title());
+            ps.setString(4, newReview.content());
+            ps.setDate(5, Date.valueOf(newReview.publicationDate()));
+            ps.setLong(6, newReview.id());
             ps.executeUpdate();
         }
     }
