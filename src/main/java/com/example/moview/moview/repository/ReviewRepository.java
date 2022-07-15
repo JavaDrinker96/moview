@@ -2,14 +2,15 @@ package com.example.moview.moview.repository;
 
 
 import com.example.moview.moview.model.Review;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import java.sql.SQLException;
+import java.util.List;
 
-public interface ReviewRepository {
+@Repository
+public interface ReviewRepository extends BaseRepository<Review> {
 
-    void create(Review review) throws ClassNotFoundException, SQLException;
-
-    void update(Review newReview) throws SQLException, ClassNotFoundException;
-
-    void delete(Long id) throws SQLException, ClassNotFoundException;
+    @Query(value = "SELECT * FROM review r WHERE r.movie_id = :id", nativeQuery = true)
+    List<Review> findAllByMovieId(@Param("id") Long movieId);
 }

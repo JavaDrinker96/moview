@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 
 @Getter
@@ -15,7 +16,7 @@ public class ErrorDto {
 
     private String error;
     private String message;
-    private Integer status;
+    private HttpStatus status;
     private String timestamp;
 
     @JsonPOJOBuilder(withPrefix = "")

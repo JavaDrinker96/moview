@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -16,6 +17,8 @@ import java.util.List;
 public class MovieDto {
 
     private Long id;
+    private String created;
+    private String updated;
     private String title;
     private String description;
     private String releaseDate;

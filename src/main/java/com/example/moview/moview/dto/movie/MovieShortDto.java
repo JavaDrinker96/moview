@@ -13,6 +13,8 @@ import lombok.Setter;
 public class MovieShortDto {
 
     private Long id;
+    private String created;
+    private String updated;
     private String title;
     private String description;
     private String releaseDate;

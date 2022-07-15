@@ -11,6 +11,9 @@ import lombok.*;
 public class ReviewDto {
 
     private Long id;
+    private String created;
+    private String updated;
+    private Long movieId;
     private Integer score;
     private String title;
     private String content;
