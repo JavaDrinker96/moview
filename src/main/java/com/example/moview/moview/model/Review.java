@@ -1,12 +1,13 @@
 package com.example.moview.moview.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 
@@ -23,7 +24,7 @@ public class Review extends BaseEntity {
     @SequenceGenerator(name = "review_seq", sequenceName = "SEQ_REVIEW", allocationSize = 10)
     private Long id;
 
-    @Size(min = 1, max = 100)
+    @Range(min = 1, max = 100)
     private Integer score;
 
     @Column(columnDefinition = "varchar(352) not null")

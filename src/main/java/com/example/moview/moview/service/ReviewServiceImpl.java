@@ -5,7 +5,6 @@ import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.model.Review;
 import com.example.moview.moview.repository.MovieRepository;
 import com.example.moview.moview.repository.ReviewRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

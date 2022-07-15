@@ -6,10 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -17,12 +15,10 @@ import javax.validation.constraints.Size;
 @JsonDeserialize(builder = ReviewCreateDto.ReviewCreateDtoBuilder.class)
 public class ReviewCreateDto {
 
-    @Min(1)
     @NotNull
     private Long movieId;
 
     @NotNull
-    @Size(min = 1, max = 100)
     private Integer score;
 
     @NotNull
