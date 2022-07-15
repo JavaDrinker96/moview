@@ -2,7 +2,6 @@ package com.example.moview.moview.dto.movie;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import javax.validation.constraints.Min;
@@ -23,10 +22,10 @@ public class MovieUpdateDto {
     @Pattern(regexp = "^\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}:\\d{2}:\\d{2}$")
     private String created;
 
-    @NotBlank
+    @NotNull
     private String title;
 
-    @NotBlank
+    @NotNull
     private String description;
 
     @NotNull

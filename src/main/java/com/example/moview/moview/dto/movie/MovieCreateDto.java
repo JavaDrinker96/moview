@@ -2,7 +2,6 @@ package com.example.moview.moview.dto.movie;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,10 +15,10 @@ import javax.validation.constraints.Pattern;
 @JsonDeserialize(builder = MovieCreateDto.MovieCreateDtoBuilder.class)
 public class MovieCreateDto {
 
-    @NotBlank
+    @NotNull
     private String title;
 
-    @NotBlank
+    @NotNull
     private String description;
 
     @NotNull

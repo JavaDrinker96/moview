@@ -2,7 +2,6 @@ package com.example.moview.moview.dto.review;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,10 +25,10 @@ public class ReviewCreateDto {
     @Size(min = 1, max = 100)
     private Integer score;
 
-    @NotBlank
+    @NotNull
     private String title;
 
-    @NotBlank
+    @NotNull
     private String content;
 
     @NotNull
