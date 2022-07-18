@@ -11,8 +11,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @Setter
 @Builder(builderClassName = "ErrorDtoBuilder")
-@JsonDeserialize(builder = ErrorDto.ErrorDtoBuilder.class)
-public class ErrorDto {
+@JsonDeserialize(builder = ExceptionResponse.ErrorDtoBuilder.class)
+public class ExceptionResponse {
 
     private String error;
     private String message;

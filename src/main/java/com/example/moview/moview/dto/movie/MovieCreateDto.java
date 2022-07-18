@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -15,10 +16,10 @@ import javax.validation.constraints.Pattern;
 @JsonDeserialize(builder = MovieCreateDto.MovieCreateDtoBuilder.class)
 public class MovieCreateDto {
 
-    @NotNull
+    @NotBlank
     private String title;
 
-    @NotNull
+    @NotBlank
     private String description;
 
     @NotNull

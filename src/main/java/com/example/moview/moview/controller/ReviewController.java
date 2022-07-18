@@ -26,7 +26,7 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/review", method = RequestMethod.POST)
-    public ResponseEntity<ReviewDto> create(@Valid  @RequestBody final ReviewCreateDto dto) {
+    public ResponseEntity<ReviewDto> create(@RequestBody @Valid final ReviewCreateDto dto) {
         final Review review = modelMapper.map(dto, Review.class);
         final Review createdReview = reviewService.create(review);
         final ReviewDto dtoCreated = modelMapper.map(createdReview, ReviewDto.class);
@@ -34,7 +34,7 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/review", method = RequestMethod.PUT)
-    public ResponseEntity<ReviewDto> update(@Valid @RequestBody final ReviewUpdateDto dto) {
+    public ResponseEntity<ReviewDto> update(@RequestBody @Valid final ReviewUpdateDto dto) {
         final Review review = modelMapper.map(dto, Review.class);
         final Review updatedReview = reviewService.update(review);
         final ReviewDto updatedDto = modelMapper.map(updatedReview, ReviewDto.class);

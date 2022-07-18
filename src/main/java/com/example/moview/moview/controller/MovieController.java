@@ -26,7 +26,7 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/movie", method = RequestMethod.POST)
-    public ResponseEntity<MovieShortDto> create(@Valid @RequestBody final MovieCreateDto dto) {
+    public ResponseEntity<MovieShortDto> create(@RequestBody @Valid final MovieCreateDto dto) {
         final Movie movie = modelMapper.map(dto, Movie.class);
         final Movie createdMovie = movieService.create(movie);
         final MovieShortDto dtoCreated = modelMapper.map(createdMovie, MovieShortDto.class);
@@ -41,7 +41,7 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/movie", method = RequestMethod.PUT)
-    public ResponseEntity<MovieDto> update(@Valid @RequestBody final MovieUpdateDto dto) {
+    public ResponseEntity<MovieDto> update(@RequestBody @Valid final MovieUpdateDto dto) {
         final Movie movie = modelMapper.map(dto, Movie.class);
         final Movie updatedMovie = movieService.update(movie);
         final MovieDto dtoUpdated = modelMapper.map(updatedMovie, MovieDto.class);
