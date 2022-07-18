@@ -55,7 +55,7 @@ public class ErrorHandler {
 
     private ExceptionResponse buildErrorResponse(final Throwable e, final HttpStatus status) {
         return ExceptionResponse.builder()
-                .error(e.getClass().getName())
+                .error(e.getClass().getSimpleName())
                 .message(e.getMessage())
                 .status(status)
                 .timestamp(dateTimeConverter.formatLocalDateTimeToString(LocalDateTime.now()))

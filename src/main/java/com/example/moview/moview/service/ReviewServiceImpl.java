@@ -52,7 +52,7 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository>
     private void actualizeMovieRating(final Long movieId) {
         final Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() ->
-                        new NotFoundException(String.format("%s with id = %d not found in the database for create " +
+                        new NotFoundException(String.format("%s with id = %d not found in the database for " +
                                 "method of %s", Movie.class.getName(), movieId, this.getClass().getName()))
                 );
 
