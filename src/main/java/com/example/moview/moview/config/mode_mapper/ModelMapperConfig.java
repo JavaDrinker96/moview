@@ -42,6 +42,13 @@ public class ModelMapperConfig {
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
 
+        addMovieConverters(mapper);
+        addReviewConverters(mapper);
+
+        return mapper;
+    }
+
+    private void addMovieConverters(final ModelMapper mapper) {
         Converter<Movie, MovieDto> movieToMovieDtoConverter = new Converter<>() {
             @Override
             public MovieDto convert(final MappingContext<Movie, MovieDto> mappingContext) {
@@ -106,7 +113,6 @@ public class ModelMapperConfig {
             }
         };
 
-
         Converter<Movie, MovieShortDto> movieToMovieShortDtoConverter = new Converter<>() {
             @Override
             public MovieShortDto convert(final MappingContext<Movie, MovieShortDto> mappingContext) {
@@ -125,6 +131,13 @@ public class ModelMapperConfig {
             }
         };
 
+        mapper.addConverter(movieToMovieDtoConverter);
+        mapper.addConverter(movieCreateDtoToMovieConverter);
+        mapper.addConverter(movieUpdateDtoToMovieConverter);
+        mapper.addConverter(movieToMovieShortDtoConverter);
+    }
+
+    private void addReviewConverters(final ModelMapper mapper) {
         Converter<ReviewCreateDto, Review> reviewCreateDtoToReviewConverter = new Converter<>() {
             @Override
             public Review convert(final MappingContext<ReviewCreateDto, Review> mappingContext) {
@@ -157,7 +170,7 @@ public class ModelMapperConfig {
             }
         };
 
-        Converter<Review,ReviewDto> reviewToReviewDtoConverter = new Converter<>() {
+        Converter<Review, ReviewDto> reviewToReviewDtoConverter = new Converter<>() {
             @Override
             public ReviewDto convert(final MappingContext<Review, ReviewDto> mappingContext) {
                 final Review review = mappingContext.getSource();
@@ -175,16 +188,9 @@ public class ModelMapperConfig {
             }
         };
 
-        mapper.addConverter(movieToMovieDtoConverter);
-        mapper.addConverter(movieCreateDtoToMovieConverter);
-        mapper.addConverter(movieUpdateDtoToMovieConverter);
-        mapper.addConverter(movieToMovieShortDtoConverter);
-
         mapper.addConverter(reviewCreateDtoToReviewConverter);
         mapper.addConverter(reviewUpdateDtoToReviewConverter);
         mapper.addConverter(reviewToReviewDtoConverter);
-
-        return mapper;
     }
 }
 
