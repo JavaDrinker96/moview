@@ -31,7 +31,7 @@ public class ErrorHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConstraintViolationException(final ConstraintViolationException e) {
-        final ExceptionResponse response = buildErrorResponse(e, HttpStatus.MULTI_STATUS);
+        final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, response.getStatus());
     }
 
