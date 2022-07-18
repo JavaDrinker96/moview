@@ -18,19 +18,27 @@
         <java-version>17</java-version>
 
         <spring.version>5.3.20</spring.version>
-        <hibernate.version>5.6.8.Final</hibernate.version>
-        <hibernate.validator>5.4.1.Final</hibernate.validator>
-        <jackson.version>2.13.3</jackson.version>
         <servlets.version>4.0.1</servlets.version>
         <tomcat.version>9.0.62</tomcat.version>
         <lombok.version>1.18.22</lombok.version>
-        <modelmaper.version>3.1.0</modelmaper.version>
-        <psql.version>42.3.6</psql.version>
+
+
+        <hibernate.version>5.6.8.Final</hibernate.version>
         <data-jpa.version>2.7.0</data-jpa.version>
+
+        <hibernate.validator>6.0.13.Final</hibernate.validator>
+        <javax-validation.version>2.0.1.Final</javax-validation.version>
+        <javax-el.version>3.0.0</javax-el.version>
+
+        <jackson.version>2.13.3</jackson.version>
+        <modelmaper.version>3.1.0</modelmaper.version>
+
+        <psql.version>42.3.6</psql.version>
         <log4j.version>1.2.17</log4j.version>
     </properties>
 
     <dependencies>
+        <!--For spring-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
@@ -61,10 +69,32 @@
             <artifactId>spring-data-jpa</artifactId>
             <version>${data-jpa.version}</version>
         </dependency>
+
+        <!--To interact with the server-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlets.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--For work with db-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${psql.version}</version>
+        </dependency>
+
+        <!--For validation-->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${javax-validation.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -72,28 +102,28 @@
             <version>${hibernate.validator}</version>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${servlets.version}</version>
-            <scope>provided</scope>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>${javax-el.version}</version>
         </dependency>
+
+        <!--To reduce language redundancy-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${psql.version}</version>
-        </dependency>
+
+        <!--For logging-->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
             <scope>runtime</scope>
         </dependency>
+
+        <!--For mapping to (in json and application objects)-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -105,6 +135,7 @@
             <version>${modelmaper.version}</version>
         </dependency>
 
+        <!--For a local server-->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
@@ -120,6 +151,7 @@
             <artifactId>threetenbp</artifactId>
             <version>1.4.2</version>
         </dependency>
+
     </dependencies>
     <build>
         <finalName>moviewRest</finalName>
@@ -145,16 +177,20 @@
                         </goals>
                         <configuration>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>com.example.moview.moview.MoviewApplication</mainClass>
                                 </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/spring.handlers</resource>
                                 </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/spring.schemas</resource>
                                 </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/spring.factories</resource>
                                 </transformer>
                             </transformers>
