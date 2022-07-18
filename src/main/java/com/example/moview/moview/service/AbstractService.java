@@ -10,8 +10,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 
-import static java.time.LocalDateTime.now;
-
 @Component
 public abstract class AbstractService<E extends BaseEntity, R extends BaseRepository<E>> implements BaseService<E> {
 
@@ -27,7 +25,6 @@ public abstract class AbstractService<E extends BaseEntity, R extends BaseReposi
     @Transactional
     public E create(final E entity) {
         checkForNull(entity);
-        entity.setCreated(now());
         return repository.save(entity);
     }
 
@@ -35,7 +32,6 @@ public abstract class AbstractService<E extends BaseEntity, R extends BaseReposi
     @Transactional
     public E update(final E newEntity) {
         checkForNull(newEntity);
-        newEntity.setUpdated(now());
         return repository.save(newEntity);
     }
 

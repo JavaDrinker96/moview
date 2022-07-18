@@ -29,7 +29,7 @@ public class ModelMapperConfig {
 
     private final DateTimeConverter dateTimeConverter;
 
-    public ModelMapperConfig(DateTimeConverter dateTimeConverter) {
+    public ModelMapperConfig(final DateTimeConverter dateTimeConverter) {
         this.dateTimeConverter = dateTimeConverter;
     }
 
