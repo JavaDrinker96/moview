@@ -22,7 +22,7 @@ import static java.time.LocalDateTime.now;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-    @Column
+    @Column(name = "created")
     protected LocalDateTime created;
 
     @Column

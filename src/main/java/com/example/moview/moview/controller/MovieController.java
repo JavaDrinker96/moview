@@ -34,14 +34,14 @@ public class MovieController {
         final Movie movie = modelMapper.map(dto, Movie.class);
         final Movie createdMovie = movieService.create(movie);
         final MovieShortDto dtoCreated = modelMapper.map(createdMovie, MovieShortDto.class);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoCreated);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dtoCreated);
     }
 
     @RequestMapping(value = "/movie/{id}", method = RequestMethod.GET)
     public ResponseEntity<MovieDto> deepRead(@PathVariable final Long id) {
         final Movie movie = movieService.read(id);
         final MovieDto dto = modelMapper.map(movie, MovieDto.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @RequestMapping(value = "/movie", method = RequestMethod.PUT)

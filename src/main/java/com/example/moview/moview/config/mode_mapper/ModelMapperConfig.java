@@ -7,8 +7,12 @@ import com.example.moview.moview.dto.movie.MovieUpdateDto;
 import com.example.moview.moview.dto.review.ReviewCreateDto;
 import com.example.moview.moview.dto.review.ReviewDto;
 import com.example.moview.moview.dto.review.ReviewUpdateDto;
+import com.example.moview.moview.dto.user.UserCreateDto;
+import com.example.moview.moview.dto.user.UserDto;
+import com.example.moview.moview.dto.user.UserUpdateDto;
 import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.model.Review;
+import com.example.moview.moview.model.User;
 import com.example.moview.moview.util.datetime.DateTimeConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -16,6 +20,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.ui.ModelMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +49,13 @@ public class ModelMapperConfig {
 
         addMovieConverters(mapper);
         addReviewConverters(mapper);
+        addUserConverters(mapper);
 
         return mapper;
     }
 
     private void addMovieConverters(final ModelMapper mapper) {
-        Converter<Movie, MovieDto> movieToMovieDtoConverter = new Converter<>() {
+        Converter<Movie, MovieDto> movie2MovieDtoConverter = new Converter<>() {
             @Override
             public MovieDto convert(final MappingContext<Movie, MovieDto> mappingContext) {
                 final Movie movie = mappingContext.getSource();
@@ -83,7 +89,7 @@ public class ModelMapperConfig {
             }
         };
 
-        Converter<MovieCreateDto, Movie> movieCreateDtoToMovieConverter = new Converter<>() {
+        Converter<MovieCreateDto, Movie> movieCreateDto2MovieConverter = new Converter<>() {
             @Override
             public Movie convert(MappingContext<MovieCreateDto, Movie> mappingContext) {
                 final MovieCreateDto dto = mappingContext.getSource();
@@ -97,7 +103,7 @@ public class ModelMapperConfig {
             }
         };
 
-        Converter<MovieUpdateDto, Movie> movieUpdateDtoToMovieConverter = new Converter<>() {
+        Converter<MovieUpdateDto, Movie> movieUpdateDto2MovieConverter = new Converter<>() {
             @Override
             public Movie convert(final MappingContext<MovieUpdateDto, Movie> mappingContext) {
                 final MovieUpdateDto movieDto = mappingContext.getSource();
@@ -113,7 +119,7 @@ public class ModelMapperConfig {
             }
         };
 
-        Converter<Movie, MovieShortDto> movieToMovieShortDtoConverter = new Converter<>() {
+        Converter<Movie, MovieShortDto> movie2MovieShortDtoConverter = new Converter<>() {
             @Override
             public MovieShortDto convert(final MappingContext<Movie, MovieShortDto> mappingContext) {
                 final Movie movie = mappingContext.getSource();
@@ -131,14 +137,14 @@ public class ModelMapperConfig {
             }
         };
 
-        mapper.addConverter(movieToMovieDtoConverter);
-        mapper.addConverter(movieCreateDtoToMovieConverter);
-        mapper.addConverter(movieUpdateDtoToMovieConverter);
-        mapper.addConverter(movieToMovieShortDtoConverter);
+        mapper.addConverter(movie2MovieDtoConverter);
+        mapper.addConverter(movieCreateDto2MovieConverter);
+        mapper.addConverter(movieUpdateDto2MovieConverter);
+        mapper.addConverter(movie2MovieShortDtoConverter);
     }
 
     private void addReviewConverters(final ModelMapper mapper) {
-        Converter<ReviewCreateDto, Review> reviewCreateDtoToReviewConverter = new Converter<>() {
+        Converter<ReviewCreateDto, Review> reviewCreateDto2ReviewConverter = new Converter<>() {
             @Override
             public Review convert(final MappingContext<ReviewCreateDto, Review> mappingContext) {
                 final ReviewCreateDto dto = mappingContext.getSource();
@@ -153,7 +159,7 @@ public class ModelMapperConfig {
             }
         };
 
-        Converter<ReviewUpdateDto, Review> reviewUpdateDtoToReviewConverter = new Converter<>() {
+        Converter<ReviewUpdateDto, Review> reviewUpdateDto2ReviewConverter = new Converter<>() {
             @Override
             public Review convert(final MappingContext<ReviewUpdateDto, Review> mappingContext) {
                 final ReviewUpdateDto dto = mappingContext.getSource();
@@ -170,7 +176,7 @@ public class ModelMapperConfig {
             }
         };
 
-        Converter<Review, ReviewDto> reviewToReviewDtoConverter = new Converter<>() {
+        Converter<Review, ReviewDto> review2ReviewDtoConverter = new Converter<>() {
             @Override
             public ReviewDto convert(final MappingContext<Review, ReviewDto> mappingContext) {
                 final Review review = mappingContext.getSource();
@@ -188,9 +194,62 @@ public class ModelMapperConfig {
             }
         };
 
-        mapper.addConverter(reviewCreateDtoToReviewConverter);
-        mapper.addConverter(reviewUpdateDtoToReviewConverter);
-        mapper.addConverter(reviewToReviewDtoConverter);
+        mapper.addConverter(reviewCreateDto2ReviewConverter);
+        mapper.addConverter(reviewUpdateDto2ReviewConverter);
+        mapper.addConverter(review2ReviewDtoConverter);
+    }
+
+    private void addUserConverters(final ModelMapper mapper) {
+        Converter<UserCreateDto, User> user2UserCreateDtoConverter = new Converter<>() {
+            @Override
+            public User convert(final MappingContext<UserCreateDto, User> mappingContext) {
+                final UserCreateDto dto = mappingContext.getSource();
+
+                return User.builder()
+                        .firstName(dto.getFirstName())
+                        .lastName(dto.getLastName())
+                        .birthday(dateTimeConverter.parseLocalDate(dto.getBirthday()))
+                        .email(dto.getEmail())
+                        .build();
+            }
+        };
+
+        Converter<User, UserDto> user2UserDtoConverter = new Converter<>() {
+            @Override
+            public UserDto convert(final MappingContext<User, UserDto> mappingContext) {
+                final User user = mappingContext.getSource();
+
+                return UserDto.builder()
+                        .id(user.getId())
+                        .created(dateTimeConverter.formatLocalDateTimeToString(user.getCreated()))
+                        .updated(dateTimeConverter.formatLocalDateTimeToString(user.getUpdated()))
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .birthday(dateTimeConverter.formatLocalDateToString(user.getBirthday()))
+                        .email(user.getEmail())
+                        .build();
+            }
+        };
+
+        Converter<UserUpdateDto, User> userUpdateDto2UserConverter = new Converter<>() {
+            @Override
+            public User convert(final MappingContext<UserUpdateDto, User> mappingContext) {
+                final UserUpdateDto dto = mappingContext.getSource();
+
+                return User.builder()
+                        .id(dto.getId())
+                        .created(dateTimeConverter.parseLocalDateTime(dto.getCreated()))
+                        .firstName(dto.getFirstName())
+                        .lastName(dto.getLastName())
+                        .birthday(dateTimeConverter.parseLocalDate(dto.getBirthday()))
+                        .email(dto.getEmail())
+                        .build();
+            }
+        };
+
+        mapper.addConverter(user2UserCreateDtoConverter);
+        mapper.addConverter(user2UserDtoConverter);
+        mapper.addConverter(userUpdateDto2UserConverter);
     }
 }
 
