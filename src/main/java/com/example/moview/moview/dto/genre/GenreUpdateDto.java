@@ -1,4 +1,4 @@
-package com.example.moview.moview.config.spring.genre;
+package com.example.moview.moview.dto.genre;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -27,6 +27,7 @@ public class GenreUpdateDto {
 
     @NotBlank
     private String name;
+
     @JsonPOJOBuilder(withPrefix = "")
     public static class GenreUpdateDtoBuilder{
     }

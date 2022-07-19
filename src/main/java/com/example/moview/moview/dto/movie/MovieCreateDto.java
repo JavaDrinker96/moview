@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,6 +30,9 @@ public class MovieCreateDto {
     @NotNull
     @Pattern(regexp = "^\\d{2}:\\d{2}:\\d{2}$")
     private String duration;
+
+    @NotNull
+    private Set<Long> genreIds;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class MovieCreateDtoBuilder {

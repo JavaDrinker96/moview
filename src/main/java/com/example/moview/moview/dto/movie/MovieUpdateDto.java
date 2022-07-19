@@ -10,6 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -38,6 +39,9 @@ public class MovieUpdateDto {
     @NotNull
     @Pattern(regexp = "^\\d{2}:\\d{2}:\\d{2}$")
     private String duration;
+
+    @NotNull
+    private Set<Long> genreIds;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class MovieUpdateDtoBuilder {

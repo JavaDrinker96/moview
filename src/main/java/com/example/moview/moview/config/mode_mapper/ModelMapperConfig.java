@@ -1,8 +1,8 @@
 package com.example.moview.moview.config.mode_mapper;
 
-import com.example.moview.moview.config.spring.genre.GenreCreateDto;
-import com.example.moview.moview.config.spring.genre.GenreDto;
-import com.example.moview.moview.config.spring.genre.GenreUpdateDto;
+import com.example.moview.moview.dto.genre.GenreCreateDto;
+import com.example.moview.moview.dto.genre.GenreDto;
+import com.example.moview.moview.dto.genre.GenreUpdateDto;
 import com.example.moview.moview.dto.movie.MovieCreateDto;
 import com.example.moview.moview.dto.movie.MovieDto;
 import com.example.moview.moview.dto.movie.MovieShortDto;

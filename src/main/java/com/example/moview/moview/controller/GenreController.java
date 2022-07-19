@@ -1,8 +1,8 @@
 package com.example.moview.moview.controller;
 
-import com.example.moview.moview.config.spring.genre.GenreCreateDto;
-import com.example.moview.moview.config.spring.genre.GenreDto;
-import com.example.moview.moview.config.spring.genre.GenreUpdateDto;
+import com.example.moview.moview.dto.genre.GenreCreateDto;
+import com.example.moview.moview.dto.genre.GenreDto;
+import com.example.moview.moview.dto.genre.GenreUpdateDto;
 import com.example.moview.moview.model.Genre;
 import com.example.moview.moview.service.GenreService;
 import org.modelmapper.ModelMapper;

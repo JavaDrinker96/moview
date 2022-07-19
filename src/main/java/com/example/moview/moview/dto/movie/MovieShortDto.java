@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @Builder(builderClassName = "MovieShortDtoBuilder")
@@ -20,6 +22,7 @@ public class MovieShortDto {
     private String releaseDate;
     private String duration;
     private Integer rating;
+    private Set<Long> genreIds;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class MovieShortDtoBuilder {

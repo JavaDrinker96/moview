@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,6 +25,7 @@ public class MovieDto {
     private String duration;
     private Integer rating;
     private List<ReviewDto> reviews;
+    private Set<Long> genreIds;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class MovieDtoBuilder {

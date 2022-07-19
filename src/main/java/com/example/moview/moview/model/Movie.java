@@ -14,11 +14,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @SuperBuilder
 @Getter
@@ -50,5 +53,12 @@ public class Movie extends BaseEntity {
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @ToString.Exclude
-    private List<Review> reviews;
+    private Set<Review> reviews;
+
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @ToString.Exclude
+    private Set<Genre> genres;
 }
