@@ -49,6 +49,11 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository>
         actualizeMovieRating(movieId);
     }
 
+    @Override
+    public Long getAuthorId(final Long reviewId) {
+        return repository.getAuthorIdById(reviewId);
+    }
+
     private void actualizeMovieRating(final Long movieId) {
         final Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() ->

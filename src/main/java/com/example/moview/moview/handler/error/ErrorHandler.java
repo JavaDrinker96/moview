@@ -1,6 +1,8 @@
 package com.example.moview.moview.handler.error;
 
 import com.example.moview.moview.dto.ExceptionResponse;
+import com.example.moview.moview.exception.ForbiddenAuthorException;
+import com.example.moview.moview.exception.UnauthorizedAuthorException;
 import com.example.moview.moview.exception.NotFoundException;
 import com.example.moview.moview.exception.NullParameterException;
 import com.example.moview.moview.util.datetime.DateTimeConverter;
@@ -50,6 +52,18 @@ public class ErrorHandler {
     @ExceptionHandler(UnexpectedTypeException.class)
     protected ResponseEntity<Object> handleUnexpectedTypeException(final UnexpectedTypeException e) {
         final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
+    @ExceptionHandler(UnauthorizedAuthorException.class)
+    protected ResponseEntity<Object> handleUnauthorizedAuthorException(final UnauthorizedAuthorException e) {
+        final ExceptionResponse response = buildErrorResponse(e, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
+    @ExceptionHandler(ForbiddenAuthorException.class)
+    protected ResponseEntity<Object> handleForbiddenAuthorException(final ForbiddenAuthorException e){
+        final ExceptionResponse response = buildErrorResponse(e, HttpStatus.FORBIDDEN);
         return new ResponseEntity<>(response, response.getStatus());
     }
 

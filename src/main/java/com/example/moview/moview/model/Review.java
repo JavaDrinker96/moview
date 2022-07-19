@@ -3,6 +3,7 @@ package com.example.moview.moview.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Range;
@@ -46,4 +47,9 @@ public class Review extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
+
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "app_user_id", nullable = false)
+    private User author;
 }

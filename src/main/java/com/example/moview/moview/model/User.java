@@ -6,21 +6,25 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import java.time.LocalDate;
+import java.util.List;
 
 @SuperBuilder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@Entity
-public class User extends BaseEntity{
+@Entity(name = "app_user")
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
@@ -38,4 +42,8 @@ public class User extends BaseEntity{
 
     @Column(nullable = false)
     private String email;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Review> reviews;
 }

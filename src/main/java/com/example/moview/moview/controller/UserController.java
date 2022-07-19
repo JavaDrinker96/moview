@@ -27,7 +27,7 @@ public class UserController {
         this.modelMapper = modelMapper;
     }
 
-    @RequestMapping(value = "/user/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity<UserDto> create(@RequestBody @Valid final UserCreateDto dto) {
         final User user = modelMapper.map(dto, User.class);
         final User createdUser = userService.create(user);
