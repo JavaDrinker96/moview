@@ -1,5 +1,8 @@
 package com.example.moview.moview.config.mode_mapper;
 
+import com.example.moview.moview.config.spring.genre.GenreCreateDto;
+import com.example.moview.moview.config.spring.genre.GenreDto;
+import com.example.moview.moview.config.spring.genre.GenreUpdateDto;
 import com.example.moview.moview.dto.movie.MovieCreateDto;
 import com.example.moview.moview.dto.movie.MovieDto;
 import com.example.moview.moview.dto.movie.MovieShortDto;
@@ -10,6 +13,7 @@ import com.example.moview.moview.dto.review.ReviewUpdateDto;
 import com.example.moview.moview.dto.user.UserCreateDto;
 import com.example.moview.moview.dto.user.UserDto;
 import com.example.moview.moview.dto.user.UserUpdateDto;
+import com.example.moview.moview.model.Genre;
 import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.model.Review;
 import com.example.moview.moview.model.User;
@@ -49,6 +53,7 @@ public class ModelMapperConfig {
         addMovieConverters(mapper);
         addReviewConverters(mapper);
         addUserConverters(mapper);
+        addGenreConverters(mapper);
 
         return mapper;
     }
@@ -249,6 +254,51 @@ public class ModelMapperConfig {
         mapper.addConverter(user2UserCreateDtoConverter);
         mapper.addConverter(user2UserDtoConverter);
         mapper.addConverter(userUpdateDto2UserConverter);
+    }
+
+    private void addGenreConverters(final ModelMapper mapper){
+        Converter<GenreCreateDto, Genre> genreCreateDto2GenreConverter = new Converter<>() {
+            @Override
+            public Genre convert(final MappingContext<GenreCreateDto, Genre> mappingContext) {
+                final GenreCreateDto dto = mappingContext.getSource();
+
+                return Genre.builder()
+                        .name(dto.getName())
+                        .build();
+            }
+        };
+
+        Converter<Genre, GenreDto> genre2GenreDtoConverter = new Converter<>() {
+            @Override
+            public GenreDto convert(final MappingContext<Genre, GenreDto> mappingContext) {
+                final Genre genre = mappingContext.getSource();
+
+                return GenreDto.builder()
+                        .id(genre.getId())
+                        .created(dateTimeConverter.formatLocalDateTimeToString(genre.getCreated()))
+                        .updated(dateTimeConverter.formatLocalDateTimeToString(genre.getUpdated()))
+                        .name(genre.getName())
+                        .build();
+            }
+        };
+
+        Converter<GenreUpdateDto,Genre> genreUpdateDto2GenreConverter = new Converter<>() {
+            @Override
+            public Genre convert(final MappingContext<GenreUpdateDto, Genre> mappingContext) {
+                final GenreUpdateDto dto = mappingContext.getSource();
+
+                return Genre.builder()
+                        .id(dto.getId())
+                        .created(dateTimeConverter.parseLocalDateTime(dto.getCreated()))
+                        .updated(dateTimeConverter.parseLocalDateTime(dto.getCreated()))
+                        .name(dto.getName())
+                        .build();
+            }
+        };
+
+        mapper.addConverter(genreCreateDto2GenreConverter);
+        mapper.addConverter(genre2GenreDtoConverter);
+        mapper.addConverter(genreUpdateDto2GenreConverter);
     }
 }
 
