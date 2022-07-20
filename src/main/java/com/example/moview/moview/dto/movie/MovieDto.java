@@ -1,5 +1,6 @@
 package com.example.moview.moview.dto.movie;
 
+import com.example.moview.moview.dto.genre.GenreDto;
 import com.example.moview.moview.dto.review.ReviewDto;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
@@ -25,7 +26,7 @@ public class MovieDto {
     private String duration;
     private Integer rating;
     private List<ReviewDto> reviews;
-    private Set<Long> genreIds;
+    private Set<GenreDto> genres;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class MovieDtoBuilder {

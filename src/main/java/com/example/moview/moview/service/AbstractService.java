@@ -1,11 +1,11 @@
 package com.example.moview.moview.service;
 
-import com.example.moview.moview.exception.NotFoundException;
 import com.example.moview.moview.exception.NullParameterException;
 import com.example.moview.moview.model.BaseEntity;
 import com.example.moview.moview.repository.BaseRepository;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
@@ -40,7 +40,7 @@ public abstract class AbstractService<E extends BaseEntity, R extends BaseReposi
     public E read(final Long id) {
         checkForNull(id);
         return repository.findById(id).orElseThrow(() ->
-                new NotFoundException(String.format("%s with id = %d not found in the database", clazz.getName(), id))
+                new EntityNotFoundException(String.format("Unable to find %s with id %d", clazz.getName(), id))
         );
     }
 

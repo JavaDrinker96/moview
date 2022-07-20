@@ -10,4 +10,10 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
     public MovieServiceImpl(final MovieRepository repository) {
         super(repository, Movie.class);
     }
+
+    @Override
+    public Movie create(final Movie movie) {
+
+        return super.create(movie);
+    }
 }

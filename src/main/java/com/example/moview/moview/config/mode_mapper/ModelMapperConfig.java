@@ -26,8 +26,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
@@ -79,6 +81,17 @@ public class ModelMapperConfig {
                                 .build())
                         .collect(Collectors.toList());
 
+                final Set<GenreDto> genreDtoSet = Objects.isNull(movie.getGenres())
+                        ? new HashSet<>()
+                        : movie.getGenres().stream()
+                        .map(genre -> GenreDto.builder()
+                                .id(genre.getId())
+                                .created(dateTimeConverter.formatLocalDateTimeToString(genre.getCreated()))
+                                .updated(dateTimeConverter.formatLocalDateTimeToString(genre.getUpdated()))
+                                .name(genre.getName())
+                                .build())
+                        .collect(Collectors.toSet());
+
                 return MovieDto.builder()
                         .id(movie.getId())
                         .created(dateTimeConverter.formatLocalDateTimeToString(movie.getCreated()))
@@ -89,6 +102,7 @@ public class ModelMapperConfig {
                         .duration(dateTimeConverter.formatDurationToString(movie.getDuration()))
                         .rating(movie.getRating())
                         .reviews(reviewDtoList)
+                        .genres(genreDtoSet)
                         .build();
             }
         };
@@ -103,6 +117,9 @@ public class ModelMapperConfig {
                         .description(dto.getDescription())
                         .releaseDate(dateTimeConverter.parseLocalDate(dto.getReleaseDate()))
                         .duration(dateTimeConverter.parseDuration(dto.getDuration()))
+                        .genres(dto.getGenreIds().stream()
+                                .map(id -> Genre.builder().id(id).build())
+                                .collect(Collectors.toSet()))
                         .build();
             }
         };
@@ -119,6 +136,9 @@ public class ModelMapperConfig {
                         .description(movieDto.getTitle())
                         .releaseDate(dateTimeConverter.parseLocalDate(movieDto.getReleaseDate()))
                         .duration(dateTimeConverter.parseDuration(movieDto.getDuration()))
+                        .genres(movieDto.getGenreIds().stream()
+                                .map(id -> Genre.builder().id(id).build())
+                                .collect(Collectors.toSet()))
                         .build();
             }
         };
@@ -137,6 +157,7 @@ public class ModelMapperConfig {
                         .releaseDate(dateTimeConverter.formatLocalDateToString(movie.getReleaseDate()))
                         .duration(dateTimeConverter.formatDurationToString(movie.getDuration()))
                         .rating(movie.getRating())
+                        .genreIds(movie.getGenres().stream().map(Genre::getId).collect(Collectors.toSet()))
                         .build();
             }
         };
@@ -256,7 +277,7 @@ public class ModelMapperConfig {
         mapper.addConverter(userUpdateDto2UserConverter);
     }
 
-    private void addGenreConverters(final ModelMapper mapper){
+    private void addGenreConverters(final ModelMapper mapper) {
         Converter<GenreCreateDto, Genre> genreCreateDto2GenreConverter = new Converter<>() {
             @Override
             public Genre convert(final MappingContext<GenreCreateDto, Genre> mappingContext) {
@@ -282,7 +303,7 @@ public class ModelMapperConfig {
             }
         };
 
-        Converter<GenreUpdateDto,Genre> genreUpdateDto2GenreConverter = new Converter<>() {
+        Converter<GenreUpdateDto, Genre> genreUpdateDto2GenreConverter = new Converter<>() {
             @Override
             public Genre convert(final MappingContext<GenreUpdateDto, Genre> mappingContext) {
                 final GenreUpdateDto dto = mappingContext.getSource();

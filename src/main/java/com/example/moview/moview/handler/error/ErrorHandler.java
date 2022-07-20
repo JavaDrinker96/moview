@@ -2,9 +2,8 @@ package com.example.moview.moview.handler.error;
 
 import com.example.moview.moview.dto.ExceptionResponse;
 import com.example.moview.moview.exception.ForbiddenAuthorException;
-import com.example.moview.moview.exception.UnauthorizedAuthorException;
-import com.example.moview.moview.exception.NotFoundException;
 import com.example.moview.moview.exception.NullParameterException;
+import com.example.moview.moview.exception.UnauthorizedAuthorException;
 import com.example.moview.moview.util.datetime.DateTimeConverter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.UnexpectedTypeException;
 import java.time.LocalDateTime;
@@ -43,11 +43,17 @@ public class ErrorHandler {
         return new ResponseEntity<>(response, response.getStatus());
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    protected ResponseEntity<Object> handleNotFoundException(final NotFoundException e) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    protected ResponseEntity<Object> handleEntityNotFoundException(final EntityNotFoundException e) {
         final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, response.getStatus());
     }
+
+//    @ExceptionHandler(DataIntegrityViolationException.class)
+//    protected ResponseEntity<Object> handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
+//        final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
+//        return new ResponseEntity<>(response, response.getStatus());
+//    }
 
     @ExceptionHandler(UnexpectedTypeException.class)
     protected ResponseEntity<Object> handleUnexpectedTypeException(final UnexpectedTypeException e) {

@@ -1,12 +1,12 @@
 package com.example.moview.moview.service;
 
-import com.example.moview.moview.exception.NotFoundException;
 import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.model.Review;
 import com.example.moview.moview.repository.MovieRepository;
 import com.example.moview.moview.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.OptionalDouble;
@@ -56,10 +56,8 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository>
 
     private void actualizeMovieRating(final Long movieId) {
         final Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() ->
-                        new NotFoundException(String.format("%s with id = %d not found in the database for " +
-                                "method of %s", Movie.class.getName(), movieId, this.getClass().getName()))
-                );
+                .orElseThrow(() -> new EntityNotFoundException(String.format(" Unable to find %s with id %d",
+                        Movie.class.getName(), movieId)));
 
         final List<Review> reviewList = repository.findAllByMovieId(movieId);
         final OptionalDouble optionalAvgMovieScore = reviewList.stream().mapToLong(Review::getScore).average();
