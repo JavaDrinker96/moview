@@ -5,6 +5,7 @@ import com.example.moview.moview.dto.genre.GenreDto;
 import com.example.moview.moview.dto.genre.GenreUpdateDto;
 import com.example.moview.moview.dto.movie.MovieCreateDto;
 import com.example.moview.moview.dto.movie.MovieDto;
+import com.example.moview.moview.dto.movie.MovieReadPageDto;
 import com.example.moview.moview.dto.movie.MovieShortDto;
 import com.example.moview.moview.dto.movie.MovieUpdateDto;
 import com.example.moview.moview.dto.review.ReviewCreateDto;
@@ -24,6 +25,8 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -162,10 +165,22 @@ public class ModelMapperConfig {
             }
         };
 
+        Converter<MovieReadPageDto, PageRequest> movieReadPageDto2PageRequestConverter = new Converter<>() {
+            @Override
+            public PageRequest convert(final MappingContext<MovieReadPageDto, PageRequest> mappingContext) {
+                final MovieReadPageDto dto = mappingContext.getSource();
+
+                return PageRequest.of(dto.getPage(), dto.getSize(),
+                        Sort.by(dto.getDirection(), dto.getProperty().getPropertyName())
+                );
+            }
+        };
+
         mapper.addConverter(movie2MovieDtoConverter);
         mapper.addConverter(movieCreateDto2MovieConverter);
         mapper.addConverter(movieUpdateDto2MovieConverter);
         mapper.addConverter(movie2MovieShortDtoConverter);
+        mapper.addConverter(movieReadPageDto2PageRequestConverter);
     }
 
     private void addReviewConverters(final ModelMapper mapper) {

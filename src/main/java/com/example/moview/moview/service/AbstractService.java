@@ -3,6 +3,8 @@ package com.example.moview.moview.service;
 import com.example.moview.moview.exception.NullParameterException;
 import com.example.moview.moview.model.BaseEntity;
 import com.example.moview.moview.repository.BaseRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
@@ -55,6 +57,12 @@ public abstract class AbstractService<E extends BaseEntity, R extends BaseReposi
     @Transactional
     public List<E> readAll() {
         return repository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public Page<E> readAll(final Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     private void checkForNull(final Object object) {

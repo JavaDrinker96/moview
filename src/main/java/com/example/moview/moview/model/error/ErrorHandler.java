@@ -1,4 +1,4 @@
-package com.example.moview.moview.handler.error;
+package com.example.moview.moview.model.error;
 
 import com.example.moview.moview.dto.ExceptionResponse;
 import com.example.moview.moview.exception.ForbiddenAuthorException;
@@ -49,12 +49,6 @@ public class ErrorHandler {
         return new ResponseEntity<>(response, response.getStatus());
     }
 
-//    @ExceptionHandler(DataIntegrityViolationException.class)
-//    protected ResponseEntity<Object> handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
-//        final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
-//        return new ResponseEntity<>(response, response.getStatus());
-//    }
-
     @ExceptionHandler(UnexpectedTypeException.class)
     protected ResponseEntity<Object> handleUnexpectedTypeException(final UnexpectedTypeException e) {
         final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
@@ -68,7 +62,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(ForbiddenAuthorException.class)
-    protected ResponseEntity<Object> handleForbiddenAuthorException(final ForbiddenAuthorException e){
+    protected ResponseEntity<Object> handleForbiddenAuthorException(final ForbiddenAuthorException e) {
         final ExceptionResponse response = buildErrorResponse(e, HttpStatus.FORBIDDEN);
         return new ResponseEntity<>(response, response.getStatus());
     }
