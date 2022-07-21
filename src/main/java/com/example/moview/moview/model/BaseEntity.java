@@ -22,19 +22,19 @@ import static java.time.LocalDateTime.now;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-    @Column(name = "created")
+    @Column(updatable = false)
     protected LocalDateTime created;
 
     @Column
-    protected LocalDateTime updated;
+    protected LocalDateTime modified;
 
     @PrePersist
-    public void prePersist(){
+    public void prePersist() {
         created = now();
     }
 
     @PreUpdate
-    public void preUpdate(){
-        updated = now();
+    public void preUpdate() {
+        modified = now();
     }
 }
