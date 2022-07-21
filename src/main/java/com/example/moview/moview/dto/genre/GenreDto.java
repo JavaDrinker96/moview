@@ -13,8 +13,6 @@ import lombok.Setter;
 public class GenreDto {
 
     private Long id;
-    private String created;
-    private String updated;
     private String name;
 
     @JsonPOJOBuilder(withPrefix = "")

@@ -74,8 +74,6 @@ public class ModelMapperConfig {
                         : movie.getReviews().stream()
                         .map(review -> ReviewDto.builder()
                                 .id(review.getId())
-                                .created(dateTimeConverter.formatLocalDateTimeToString(review.getCreated()))
-                                .updated(dateTimeConverter.formatLocalDateTimeToString(review.getUpdated()))
                                 .movieId(movie.getId())
                                 .score(review.getScore())
                                 .title(review.getTitle())
@@ -89,16 +87,12 @@ public class ModelMapperConfig {
                         : movie.getGenres().stream()
                         .map(genre -> GenreDto.builder()
                                 .id(genre.getId())
-                                .created(dateTimeConverter.formatLocalDateTimeToString(genre.getCreated()))
-                                .updated(dateTimeConverter.formatLocalDateTimeToString(genre.getUpdated()))
                                 .name(genre.getName())
                                 .build())
                         .collect(Collectors.toSet());
 
                 return MovieDto.builder()
                         .id(movie.getId())
-                        .created(dateTimeConverter.formatLocalDateTimeToString(movie.getCreated()))
-                        .updated(dateTimeConverter.formatLocalDateTimeToString(movie.getUpdated()))
                         .title(movie.getTitle())
                         .description(movie.getDescription())
                         .releaseDate(dateTimeConverter.formatLocalDateToString(movie.getReleaseDate()))
@@ -134,7 +128,6 @@ public class ModelMapperConfig {
 
                 return Movie.builder()
                         .id(movieDto.getId())
-                        .created(dateTimeConverter.parseLocalDateTime(movieDto.getCreated()))
                         .title(movieDto.getTitle())
                         .description(movieDto.getTitle())
                         .releaseDate(dateTimeConverter.parseLocalDate(movieDto.getReleaseDate()))
@@ -153,8 +146,6 @@ public class ModelMapperConfig {
 
                 return MovieShortDto.builder()
                         .id(movie.getId())
-                        .created(dateTimeConverter.formatLocalDateTimeToString(movie.getCreated()))
-                        .updated(dateTimeConverter.formatLocalDateTimeToString(movie.getUpdated()))
                         .title(movie.getTitle())
                         .description(movie.getDescription())
                         .releaseDate(dateTimeConverter.formatLocalDateToString(movie.getReleaseDate()))
@@ -206,7 +197,6 @@ public class ModelMapperConfig {
 
                 return Review.builder()
                         .id(dto.getId())
-                        .created(dateTimeConverter.parseLocalDateTime(dto.getCreated()))
                         .movie(Movie.builder().id(dto.getMovieId()).build())
                         .score(dto.getScore())
                         .title(dto.getTitle())
@@ -223,8 +213,6 @@ public class ModelMapperConfig {
 
                 return ReviewDto.builder()
                         .id(review.getId())
-                        .created(dateTimeConverter.formatLocalDateTimeToString(review.getCreated()))
-                        .updated(dateTimeConverter.formatLocalDateTimeToString(review.getUpdated()))
                         .movieId(review.getMovie().getId())
                         .score(review.getScore())
                         .title(review.getTitle())
@@ -261,8 +249,6 @@ public class ModelMapperConfig {
 
                 return UserDto.builder()
                         .id(user.getId())
-                        .created(dateTimeConverter.formatLocalDateTimeToString(user.getCreated()))
-                        .updated(dateTimeConverter.formatLocalDateTimeToString(user.getUpdated()))
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
                         .birthday(dateTimeConverter.formatLocalDateToString(user.getBirthday()))
@@ -278,7 +264,6 @@ public class ModelMapperConfig {
 
                 return User.builder()
                         .id(dto.getId())
-                        .created(dateTimeConverter.parseLocalDateTime(dto.getCreated()))
                         .firstName(dto.getFirstName())
                         .lastName(dto.getLastName())
                         .birthday(dateTimeConverter.parseLocalDate(dto.getBirthday()))
@@ -311,8 +296,6 @@ public class ModelMapperConfig {
 
                 return GenreDto.builder()
                         .id(genre.getId())
-                        .created(dateTimeConverter.formatLocalDateTimeToString(genre.getCreated()))
-                        .updated(dateTimeConverter.formatLocalDateTimeToString(genre.getUpdated()))
                         .name(genre.getName())
                         .build();
             }
@@ -325,8 +308,6 @@ public class ModelMapperConfig {
 
                 return Genre.builder()
                         .id(dto.getId())
-                        .created(dateTimeConverter.parseLocalDateTime(dto.getCreated()))
-                        .updated(dateTimeConverter.parseLocalDateTime(dto.getCreated()))
                         .name(dto.getName())
                         .build();
             }
@@ -337,5 +318,3 @@ public class ModelMapperConfig {
         mapper.addConverter(genreUpdateDto2GenreConverter);
     }
 }
-
-

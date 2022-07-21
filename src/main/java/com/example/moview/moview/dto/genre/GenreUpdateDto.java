@@ -9,7 +9,6 @@ import lombok.Setter;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -21,14 +20,10 @@ public class GenreUpdateDto {
     @Min(1)
     private Long id;
 
-    @NotNull
-    @Pattern(regexp = "^\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}:\\d{2}:\\d{2}$")
-    private String created;
-
     @NotBlank
     private String name;
 
     @JsonPOJOBuilder(withPrefix = "")
-    public static class GenreUpdateDtoBuilder{
+    public static class GenreUpdateDtoBuilder {
     }
 }

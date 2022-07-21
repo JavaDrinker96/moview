@@ -18,8 +18,6 @@ import java.util.Set;
 public class MovieDto {
 
     private Long id;
-    private String created;
-    private String updated;
     private String title;
     private String description;
     private String releaseDate;
