@@ -40,26 +40,24 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/review", method = RequestMethod.POST)
-    public ResponseEntity<ReviewDto> create(@RequestHeader("Authorization") final String userId,
+    public ResponseEntity<ReviewDto> create(@RequestHeader("Authorization") final Long userId,
                                             @RequestBody @Valid final ReviewCreateDto dto) {
 
-        final Long authorId = Long.valueOf(userId);
-        validateUserExisting(authorId);
+        validateUserExisting(userId);
 
         final Review review = modelMapper.map(dto, Review.class);
-        review.setAuthor(User.builder().id(authorId).build());
+        review.setAuthor(User.builder().id(userId).build());
         final Review createdReview = reviewService.create(review);
         final ReviewDto dtoCreated = modelMapper.map(createdReview, ReviewDto.class);
         return ResponseEntity.status(HttpStatus.OK).body(dtoCreated);
     }
 
     @RequestMapping(value = "/review", method = RequestMethod.PUT)
-    public ResponseEntity<ReviewDto> update(@RequestHeader("Authorization") final String userId,
+    public ResponseEntity<ReviewDto> update(@RequestHeader("Authorization") final Long userId,
                                             @RequestBody @Valid final ReviewUpdateDto dto) {
 
-        final Long authorId = Long.valueOf(userId);
         final Long reviewId = dto.getId();
-        validateAuthor(authorId, reviewId);
+        validateAuthor(userId, reviewId);
 
         final Review review = modelMapper.map(dto, Review.class);
         final Review updatedReview = reviewService.update(review);
@@ -68,10 +66,9 @@ public class ReviewController {
     }
 
     @RequestMapping(value = "/review/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> delete(@RequestHeader("Authorization") final String userId, @PathVariable Long id) {
+    public ResponseEntity<?> delete(@RequestHeader("Authorization") final Long userId, @PathVariable final Long id) {
 
-        final Long authorId = Long.valueOf(userId);
-        validateAuthor(authorId, id);
+        validateAuthor(userId, id);
 
         reviewService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

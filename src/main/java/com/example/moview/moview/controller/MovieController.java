@@ -80,23 +80,22 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/movie/top", method = RequestMethod.GET)
-    public ResponseEntity<List<MovieDto>> getRecommendation(@RequestHeader("Authorization") final String userId,
+    public ResponseEntity<List<MovieDto>> getRecommendation(@RequestHeader("Authorization") final Long userId,
                                                             @RequestBody final List<Long> genreIds) {
 
-        final Long id = Long.valueOf(userId);
-        validateUserExisting(id);
-        final List<Movie> movieList = movieService.getUsersTop(id, genreIds);
+        validateUserExisting(userId);
+        final List<Movie> movieList = movieService.getUsersTop(userId, genreIds);
 
         final List<MovieDto> dtoList = movieList.stream()
                 .map(x -> modelMapper.map(x, MovieDto.class)).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(dtoList);
     }
 
-    private void validateUserExisting(final Long authorId) {
-        final boolean exist = userService.readAll().stream().anyMatch(user -> user.getId().equals(authorId));
+    private void validateUserExisting(final Long userId) {
+        final boolean exist = userService.readAll().stream().anyMatch(user -> user.getId().equals(userId));
         if (!exist) {
             throw new UnauthorizedAuthorException(
-                    String.format("User with id = %s is not exist in the database", authorId)
+                    String.format("User with id = %s is not exist in the database", userId)
             );
         }
     }
