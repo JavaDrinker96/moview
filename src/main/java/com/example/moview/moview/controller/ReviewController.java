@@ -44,7 +44,7 @@ public class ReviewController {
                                             @RequestBody @Valid final ReviewCreateDto dto) {
 
         final Long authorId = Long.valueOf(userId);
-        validateAuthorExisting(authorId);
+        validateUserExisting(authorId);
 
         final Review review = modelMapper.map(dto, Review.class);
         review.setAuthor(User.builder().id(authorId).build());
@@ -78,7 +78,7 @@ public class ReviewController {
     }
 
     private void validateAuthor(final Long authorId, final Long reviewId) {
-        validateAuthorExisting(authorId);
+        validateUserExisting(authorId);
         validateAuthorsPermissionToInteract(authorId, reviewId);
     }
 
@@ -92,7 +92,7 @@ public class ReviewController {
         }
     }
 
-    private void validateAuthorExisting(final Long authorId) {
+    private void validateUserExisting(final Long authorId) {
         final boolean exist = userService.readAll().stream().anyMatch(user -> user.getId().equals(authorId));
         if (!exist) {
             throw new UnauthorizedAuthorException(

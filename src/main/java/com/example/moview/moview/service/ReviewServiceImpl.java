@@ -11,8 +11,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.OptionalDouble;
 
-import static java.time.LocalDateTime.now;
-
 @Service
 public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository> implements ReviewService {
 
@@ -66,8 +64,6 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository>
                 : Double.valueOf(Math.ceil(optionalAvgMovieScore.getAsDouble())).intValue();
 
         movie.setRating(avgMovieScore);
-        movie.setUpdated(now());
-
         movieRepository.save(movie);
     }
 }

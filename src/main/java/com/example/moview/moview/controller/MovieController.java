@@ -5,8 +5,10 @@ import com.example.moview.moview.dto.movie.MovieDto;
 import com.example.moview.moview.dto.movie.MovieReadPageDto;
 import com.example.moview.moview.dto.movie.MovieShortDto;
 import com.example.moview.moview.dto.movie.MovieUpdateDto;
+import com.example.moview.moview.exception.UnauthorizedAuthorException;
 import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.service.MovieService;
+import com.example.moview.moview.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,10 +29,13 @@ import java.util.stream.Collectors;
 public class MovieController {
 
     private final MovieService movieService;
+    private final UserService userService;
     private final ModelMapper modelMapper;
 
-    public MovieController(final MovieService movieService, final ModelMapper modelMapper) {
+
+    public MovieController(final MovieService movieService, final ModelMapper modelMapper, UserService userService) {
         this.movieService = movieService;
+        this.userService = userService;
         this.modelMapper = modelMapper;
     }
 
@@ -71,5 +77,27 @@ public class MovieController {
         final List<MovieDto> dtoList = movieList.getContent().stream()
                 .map(x -> modelMapper.map(x, MovieDto.class)).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(dtoList);
+    }
+
+    @RequestMapping(value = "/movie/top", method = RequestMethod.GET)
+    public ResponseEntity<List<MovieDto>> getRecommendation(@RequestHeader("Authorization") final String userId,
+                                                            @RequestBody final List<Long> genreIds) {
+
+        final Long id = Long.valueOf(userId);
+        validateUserExisting(id);
+        final List<Movie> movieList = movieService.getUsersTop(id, genreIds);
+
+        final List<MovieDto> dtoList = movieList.stream()
+                .map(x -> modelMapper.map(x, MovieDto.class)).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(dtoList);
+    }
+
+    private void validateUserExisting(final Long authorId) {
+        final boolean exist = userService.readAll().stream().anyMatch(user -> user.getId().equals(authorId));
+        if (!exist) {
+            throw new UnauthorizedAuthorException(
+                    String.format("User with id = %s is not exist in the database", authorId)
+            );
+        }
     }
 }
