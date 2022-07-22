@@ -27,13 +27,18 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
     }
 
     @Override
+    public Movie update(final Movie movie) {
+        setActualRating(movie);
+        return repository.save(movie);
+    }
+
+    @Override
     public void actualizeRating(final Long id) {
         final Movie movie = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(" Unable to find %s with id %d",
                         Movie.class.getName(), id)));
 
-        final Integer movieRating = calculateRating(movie.getId());
-        movie.setRating(movieRating);
+        setActualRating(movie);
         repository.save(movie);
     }
 
@@ -58,6 +63,11 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
         }
 
         return topList;
+    }
+
+    private void setActualRating(final Movie movie) {
+        final Integer movieRating = calculateRating(movie.getId());
+        movie.setRating(movieRating);
     }
 
     private Integer calculateRating(final Long id) {
