@@ -41,7 +41,8 @@ public class Review extends BaseEntity {
     @Column(columnDefinition = "text not null")
     private String content;
 
-    @Column(name = "publication_date", nullable = false)
+    @Setter
+    @Column(name = "publication_date", updatable = false, nullable = false)
     private LocalDate publicationDate;
 
     @ManyToOne

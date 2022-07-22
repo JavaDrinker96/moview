@@ -151,7 +151,11 @@ public class ModelMapperConfig {
                         .releaseDate(dateTimeConverter.formatLocalDateToString(movie.getReleaseDate()))
                         .duration(dateTimeConverter.formatDurationToString(movie.getDuration()))
                         .rating(movie.getRating())
-                        .genreIds(movie.getGenres().stream().map(Genre::getId).collect(Collectors.toSet()))
+                        .genres(movie.getGenres().stream()
+                                .map(genre -> GenreDto.builder()
+                                        .id(genre.getId())
+                                        .name(genre.getName()).build())
+                                .collect(Collectors.toSet()))
                         .build();
             }
         };
@@ -185,7 +189,6 @@ public class ModelMapperConfig {
                         .score(dto.getScore())
                         .title(dto.getTitle())
                         .content(dto.getContent())
-                        .publicationDate(dateTimeConverter.parseLocalDate(dto.getPublicationDate()))
                         .build();
             }
         };
@@ -201,7 +204,6 @@ public class ModelMapperConfig {
                         .score(dto.getScore())
                         .title(dto.getTitle())
                         .content(dto.getContent())
-                        .publicationDate(dateTimeConverter.parseLocalDate(dto.getPublicationDate()))
                         .build();
             }
         };

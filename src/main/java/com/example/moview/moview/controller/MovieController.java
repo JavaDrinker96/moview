@@ -57,10 +57,10 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/movie", method = RequestMethod.PUT)
-    public ResponseEntity<MovieDto> update(@RequestBody @Valid final MovieUpdateDto dto) {
+    public ResponseEntity<MovieShortDto> update(@RequestBody @Valid final MovieUpdateDto dto) {
         final Movie movie = modelMapper.map(dto, Movie.class);
         final Movie updatedMovie = movieService.update(movie);
-        final MovieDto dtoUpdated = modelMapper.map(updatedMovie, MovieDto.class);
+        final MovieShortDto dtoUpdated = modelMapper.map(updatedMovie, MovieShortDto.class);
         return ResponseEntity.status(HttpStatus.OK).body(dtoUpdated);
     }
 
@@ -71,22 +71,22 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/movie/all", method = RequestMethod.GET)
-    public ResponseEntity<List<MovieDto>> readAll(@RequestBody @Valid final MovieReadPageDto dto) {
+    public ResponseEntity<List<MovieShortDto>> readAll(@RequestBody @Valid final MovieReadPageDto dto) {
         final PageRequest pageRequest = modelMapper.map(dto, PageRequest.class);
         final Page<Movie> moviePage = movieService.readAll(pageRequest);
-        final List<MovieDto> dtoList = moviePage.stream()
-                .map(x -> modelMapper.map(x, MovieDto.class)).collect(Collectors.toList());
+        final List<MovieShortDto> dtoList = moviePage.stream()
+                .map(x -> modelMapper.map(x, MovieShortDto.class)).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(dtoList);
     }
 
     @RequestMapping(value = "/movie/top", method = RequestMethod.GET)
-    public ResponseEntity<List<MovieDto>> getRecommendation(@RequestHeader("Authorization") final Long userId,
+    public ResponseEntity<List<MovieShortDto>> getRecommendation(@RequestHeader("Authorization") final Long userId,
                                                             @RequestBody final List<Long> genreIds) {
 
         userValidator.validateUserExisting(userId);
         final List<Movie> movieList = movieService.getUsersTop(userId, genreIds);
-        final List<MovieDto> dtoList = movieList.stream()
-                .map(x -> modelMapper.map(x, MovieDto.class)).collect(Collectors.toList());
+        final List<MovieShortDto> dtoList = movieList.stream()
+                .map(x -> modelMapper.map(x, MovieShortDto.class)).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(dtoList);
     }
 }

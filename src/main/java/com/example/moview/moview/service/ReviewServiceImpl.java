@@ -11,6 +11,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.OptionalDouble;
 
+import static java.time.LocalDate.now;
+
 @Service
 public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository> implements ReviewService {
 
@@ -24,6 +26,7 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository>
     @Override
     @Transactional
     public Review create(final Review entity) {
+        entity.setPublicationDate(now());
         final Review createdReview = super.create(entity);
         final Long movieId = createdReview.getMovie().getId();
         actualizeMovieRating(movieId);
