@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 public class GenreServiceImpl extends AbstractService<Genre, GenreRepository> implements GenreService {
 
     public GenreServiceImpl(final GenreRepository repository) {
-        super(repository, Genre.class);
+        super(repository);
     }
 }

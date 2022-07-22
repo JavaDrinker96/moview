@@ -17,8 +17,7 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository>
     private final MovieService movieService;
 
     public ReviewServiceImpl(final ReviewRepository repository, final MovieService movieService) {
-
-        super(repository, Review.class);
+        super(repository);
         this.movieService = movieService;
     }
 

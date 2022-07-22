@@ -4,7 +4,6 @@ import com.example.moview.moview.model.BaseEntity;
 import com.example.moview.moview.repository.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.EntityNotFoundException;
@@ -13,15 +12,12 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Validated
-@Component
 public abstract class AbstractService<E extends BaseEntity, R extends BaseRepository<E>> implements BaseService<E> {
 
     protected R repository;
-    protected Class<E> clazz;
 
-    public AbstractService(final R repository, final Class<E> clazz) {
+    public AbstractService(final R repository) {
         this.repository = repository;
-        this.clazz = clazz;
     }
 
     @Override
@@ -40,8 +36,7 @@ public abstract class AbstractService<E extends BaseEntity, R extends BaseReposi
     @Transactional
     public E read(@NotNull final Long id) {
         return repository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException(String.format("Unable to find %s with id %d", clazz.getName(), id))
-        );
+                new EntityNotFoundException(String.format("Unable to find entity with id %d.", id)));
     }
 
     @Override

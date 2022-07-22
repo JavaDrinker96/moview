@@ -25,7 +25,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
     private final ReviewRepository reviewRepository;
 
     public MovieServiceImpl(final MovieRepository repository, final ReviewRepository reviewRepository) {
-        super(repository, Movie.class);
+        super(repository);
         this.reviewRepository = reviewRepository;
     }
 
