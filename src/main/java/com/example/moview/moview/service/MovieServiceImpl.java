@@ -2,12 +2,16 @@ package com.example.moview.moview.service;
 
 import com.example.moview.moview.model.Genre;
 import com.example.moview.moview.model.Movie;
+import com.example.moview.moview.model.Review;
 import com.example.moview.moview.repository.MovieRepository;
+import com.example.moview.moview.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.Set;
 
 @Service
@@ -15,8 +19,22 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
     private static final int SAMPLE_USERS_TOP_SCORE = 80;
     private static final int USERS_TOP_SIZE = 5;
 
-    public MovieServiceImpl(final MovieRepository repository) {
+    private final ReviewRepository reviewRepository;
+
+    public MovieServiceImpl(final MovieRepository repository, final ReviewRepository reviewRepository) {
         super(repository, Movie.class);
+        this.reviewRepository = reviewRepository;
+    }
+
+    @Override
+    public void actualizeRating(final Long id) {
+        final Movie movie = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(" Unable to find %s with id %d",
+                        Movie.class.getName(), id)));
+
+        final Integer movieRating = calculateRating(movie.getId());
+        movie.setRating(movieRating);
+        repository.save(movie);
     }
 
     @Override
@@ -40,6 +58,14 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
         }
 
         return topList;
+    }
+
+    private Integer calculateRating(final Long id) {
+        final List<Review> reviewList = reviewRepository.findAllByMovieId(id);
+        final OptionalDouble optionalAvgMovieRating = reviewList.stream().mapToLong(Review::getScore).average();
+        return optionalAvgMovieRating.isEmpty()
+                ? null
+                : Double.valueOf(Math.ceil(optionalAvgMovieRating.getAsDouble())).intValue();
     }
 
     private List<Movie> pickUpMoviesByScoreAndGenres(final List<Movie> sourceList,

@@ -1,26 +1,22 @@
 package com.example.moview.moview.service;
 
-import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.model.Review;
-import com.example.moview.moview.repository.MovieRepository;
 import com.example.moview.moview.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.OptionalDouble;
 
 import static java.time.LocalDate.now;
 
 @Service
 public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository> implements ReviewService {
 
-    private final MovieRepository movieRepository;
+    private final MovieService movieService;
 
-    public ReviewServiceImpl(final ReviewRepository repository, final MovieRepository movieRepository) {
+    public ReviewServiceImpl(final ReviewRepository repository, final MovieService movieService) {
+
         super(repository, Review.class);
-        this.movieRepository = movieRepository;
+        this.movieService = movieService;
     }
 
     @Override
@@ -29,7 +25,7 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository>
         entity.setPublicationDate(now());
         final Review createdReview = super.create(entity);
         final Long movieId = createdReview.getMovie().getId();
-        actualizeMovieRating(movieId);
+        movieService.actualizeRating(movieId);
         return createdReview;
     }
 
@@ -38,7 +34,7 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository>
     public Review update(final Review newEntity) {
         final Review updatedReview = super.update(newEntity);
         final Long movieId = updatedReview.getMovie().getId();
-        actualizeMovieRating(movieId);
+        movieService.actualizeRating(movieId);
         return updatedReview;
     }
 
@@ -47,21 +43,6 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository>
     public void delete(final Long id) {
         final Long movieId = super.read(id).getMovie().getId();
         super.delete(id);
-        actualizeMovieRating(movieId);
-    }
-
-    private void actualizeMovieRating(final Long movieId) {
-        final Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(" Unable to find %s with id %d",
-                        Movie.class.getName(), movieId)));
-
-        final List<Review> reviewList = repository.findAllByMovieId(movieId);
-        final OptionalDouble optionalAvgMovieScore = reviewList.stream().mapToLong(Review::getScore).average();
-        final Integer avgMovieScore = optionalAvgMovieScore.isEmpty()
-                ? null
-                : Double.valueOf(Math.ceil(optionalAvgMovieScore.getAsDouble())).intValue();
-
-        movie.setRating(avgMovieScore);
-        movieRepository.save(movie);
+        movieService.actualizeRating(movieId);
     }
 }

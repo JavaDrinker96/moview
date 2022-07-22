@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface MovieService extends BaseService<Movie> {
 
+    void actualizeRating(Long id);
+
     List<Movie> getUsersTop(Long userId, List<Long> genreIds);
 }
