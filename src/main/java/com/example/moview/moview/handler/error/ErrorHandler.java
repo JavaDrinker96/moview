@@ -1,4 +1,4 @@
-package com.example.moview.moview.model.error;
+package com.example.moview.moview.handler.error;
 
 import com.example.moview.moview.dto.ExceptionResponse;
 import com.example.moview.moview.exception.ForbiddenAuthorException;
