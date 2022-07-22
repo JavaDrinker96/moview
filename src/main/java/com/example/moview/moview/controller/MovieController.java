@@ -2,9 +2,9 @@ package com.example.moview.moview.controller;
 
 import com.example.moview.moview.dto.movie.MovieCreateDto;
 import com.example.moview.moview.dto.movie.MovieDto;
-import com.example.moview.moview.dto.movie.MovieReadPageDto;
 import com.example.moview.moview.dto.movie.MovieShortDto;
 import com.example.moview.moview.dto.movie.MovieUpdateDto;
+import com.example.moview.moview.dto.pagination.MovieReadPageDto;
 import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.service.MovieService;
 import com.example.moview.moview.validator.UserValidator;
