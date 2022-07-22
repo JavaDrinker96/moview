@@ -1,17 +1,18 @@
 package com.example.moview.moview.service;
 
-import com.example.moview.moview.exception.NullParameterException;
 import com.example.moview.moview.model.BaseEntity;
 import com.example.moview.moview.repository.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 
+@Validated
 @Component
 public abstract class AbstractService<E extends BaseEntity, R extends BaseRepository<E>> implements BaseService<E> {
 
@@ -25,22 +26,19 @@ public abstract class AbstractService<E extends BaseEntity, R extends BaseReposi
 
     @Override
     @Transactional
-    public E create(final E entity) {
-        checkForNull(entity);
+    public E create(@NotNull final E entity) {
         return repository.save(entity);
     }
 
     @Override
     @Transactional
-    public E update(final E newEntity) {
-        checkForNull(newEntity);
+    public E update(@NotNull final E newEntity) {
         return repository.save(newEntity);
     }
 
     @Override
     @Transactional
-    public E read(final Long id) {
-        checkForNull(id);
+    public E read(@NotNull final Long id) {
         return repository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(String.format("Unable to find %s with id %d", clazz.getName(), id))
         );
@@ -48,8 +46,7 @@ public abstract class AbstractService<E extends BaseEntity, R extends BaseReposi
 
     @Override
     @Transactional
-    public void delete(final Long id) {
-        checkForNull(id);
+    public void delete(@NotNull final Long id) {
         repository.deleteById(id);
     }
 
@@ -61,14 +58,7 @@ public abstract class AbstractService<E extends BaseEntity, R extends BaseReposi
 
     @Override
     @Transactional
-    public Page<E> readAll(final Pageable pageable) {
+    public Page<E> readAll(@NotNull final Pageable pageable) {
         return repository.findAll(pageable);
-    }
-
-    private void checkForNull(final Object object) {
-        if (Objects.isNull(object)) {
-            throw new NullParameterException(
-                    String.format("The parameter cannot be null in the service method of %s.", clazz.getName()));
-        }
     }
 }
