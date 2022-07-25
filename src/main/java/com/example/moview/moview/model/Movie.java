@@ -42,7 +42,7 @@ public class Movie extends BaseEntity {
     @Column(columnDefinition = "text not null")
     private String description;
 
-    @Column(name = "release_date",nullable = false)
+    @Column(name = "release_date", nullable = false)
     private LocalDate releaseDate;
 
     @Column(nullable = false)
@@ -51,11 +51,11 @@ public class Movie extends BaseEntity {
     @Setter
     private Integer rating;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Review> reviews;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))

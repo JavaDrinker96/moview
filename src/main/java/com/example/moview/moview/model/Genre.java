@@ -11,9 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
-import java.util.Set;
 
 @SuperBuilder
 @Getter
@@ -30,8 +28,4 @@ public class Genre extends BaseEntity{
 
     @Column(nullable = false)
     private String name;
-
-    @ManyToMany(mappedBy = "genres")
-    @ToString.Exclude
-    private Set<Movie> movies;
 }

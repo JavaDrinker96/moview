@@ -156,7 +156,6 @@
             <artifactId>threetenbp</artifactId>
             <version>1.4.2</version>
         </dependency>
-
     </dependencies>
     <build>
         <plugins>
