@@ -14,12 +14,13 @@ import java.util.Optional;
 @Repository
 public interface MovieRepository extends BaseRepository<Movie> {
 
-    @EntityGraph(attributePaths = {"reviews","genres"})
+    @EntityGraph(attributePaths = {"reviews", "genres"})
     Optional<Movie> findById(Long id);
+
     @EntityGraph(attributePaths = {"genres"})
     Page<Movie> findAll(Pageable pageable);
 
-    @EntityGraph(attributePaths = {"reviews","genres"})
+    @EntityGraph(attributePaths = {"reviews", "genres"})
     @Query(value = "SELECT m FROM Movie m LEFT JOIN m.reviews r WHERE r.author.id = :userId")
     List<Movie> getMoviesByUserId(@Param("userId") Long userId);
 }

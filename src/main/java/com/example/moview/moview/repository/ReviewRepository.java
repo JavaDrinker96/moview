@@ -11,9 +11,9 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends BaseRepository<Review> {
 
-    @Query(value = "SELECT * FROM review r WHERE r.movie_id = :id", nativeQuery = true)
+    @Query(value = "SELECT r FROM Review r WHERE r.movie.id = :id")
     List<Review> findAllByMovieId(@Param("id") Long movieId);
 
-    @Query(value = "SELECT app_user_id FROM review WHERE id = :id", nativeQuery = true)
+    @Query(value = "SELECT r.author.id FROM Review r WHERE r.id = :id")
     Long getAuthorIdById(@Param("id") Long id);
 }
