@@ -1,10 +1,8 @@
 package com.example.moview.moview.dto.review;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -14,8 +12,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@Builder(builderClassName = "ReviewUpdateDtoBuilder")
-@JsonDeserialize(builder = ReviewUpdateDto.ReviewUpdateDtoBuilder.class)
+@Jacksonized
 public class ReviewUpdateDto {
 
     @NotNull
@@ -36,8 +33,4 @@ public class ReviewUpdateDto {
 
     @NotBlank
     private String content;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class ReviewUpdateDtoBuilder {
-    }
 }

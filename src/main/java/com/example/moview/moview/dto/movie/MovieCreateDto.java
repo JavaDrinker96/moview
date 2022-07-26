@@ -1,10 +1,9 @@
 package com.example.moview.moview.dto.movie;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,8 +12,8 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Builder(builderClassName = "MovieCreateDtoBuilder")
-@JsonDeserialize(builder = MovieCreateDto.MovieCreateDtoBuilder.class)
+@Builder
+@Jacksonized
 public class MovieCreateDto {
 
     @NotBlank
@@ -33,8 +32,4 @@ public class MovieCreateDto {
 
     @NotNull
     private Set<Long> genreIds;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class MovieCreateDtoBuilder {
-    }
 }

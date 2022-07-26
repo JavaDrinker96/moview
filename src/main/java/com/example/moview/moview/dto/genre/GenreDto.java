@@ -1,21 +1,16 @@
 package com.example.moview.moview.dto.genre;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
 @Setter
-@Builder(builderClassName = "GenreDtoBuilder")
-@JsonDeserialize(builder = GenreDto.GenreDtoBuilder.class)
+@Builder
+@Jacksonized
 public class GenreDto {
 
     private Long id;
     private String name;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class GenreDtoBuilder {
-    }
 }

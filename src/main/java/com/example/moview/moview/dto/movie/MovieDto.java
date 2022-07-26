@@ -2,19 +2,18 @@ package com.example.moview.moview.dto.movie;
 
 import com.example.moview.moview.dto.genre.GenreDto;
 import com.example.moview.moview.dto.review.ReviewDto;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.List;
 import java.util.Set;
 
 @Getter
 @Setter
-@Builder(builderClassName = "MovieDtoBuilder")
-@JsonDeserialize(builder = MovieDto.MovieDtoBuilder.class)
+@Builder
+@Jacksonized
 public class MovieDto {
 
     private Long id;
@@ -25,8 +24,4 @@ public class MovieDto {
     private Integer rating;
     private List<ReviewDto> reviews;
     private Set<GenreDto> genres;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class MovieDtoBuilder {
-    }
 }

@@ -1,15 +1,14 @@
 package com.example.moview.moview.dto.review;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
 @Setter
-@Builder(builderClassName = "ReviewDtoBuilder")
-@JsonDeserialize(builder = ReviewDto.ReviewDtoBuilder.class)
+@Builder
+@Jacksonized
 public class ReviewDto {
 
     private Long id;
@@ -18,8 +17,4 @@ public class ReviewDto {
     private String title;
     private String content;
     private String publicationDate;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class ReviewDtoBuilder {
-    }
 }

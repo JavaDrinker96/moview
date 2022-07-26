@@ -1,10 +1,9 @@
 package com.example.moview.moview.dto.user;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,8 +12,8 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
-@Builder(builderClassName = "UserCreateDtoBuilder")
-@JsonDeserialize(builder = UserCreateDto.UserCreateDtoBuilder.class)
+@Builder
+@Jacksonized
 public class UserCreateDto {
 
     @NotBlank
@@ -30,8 +29,4 @@ public class UserCreateDto {
     @NotNull
     @Email
     private String email;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class UserCreateDtoBuilder {
-    }
 }

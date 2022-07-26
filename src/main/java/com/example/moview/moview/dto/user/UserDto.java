@@ -1,15 +1,14 @@
 package com.example.moview.moview.dto.user;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
 @Setter
-@Builder(builderClassName = "UserDtoBuilder")
-@JsonDeserialize(builder = UserDto.UserDtoBuilder.class)
+@Builder
+@Jacksonized
 public class UserDto {
 
     private Long id;
@@ -17,8 +16,4 @@ public class UserDto {
     private String lastName;
     private String birthday;
     private String email;
-
-    @JsonPOJOBuilder(withPrefix = "")
-    public static class UserDtoBuilder {
-    }
 }
