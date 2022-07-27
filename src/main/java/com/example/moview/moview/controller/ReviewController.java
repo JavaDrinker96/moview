@@ -3,12 +3,12 @@ package com.example.moview.moview.controller;
 import com.example.moview.moview.dto.review.ReviewCreateDto;
 import com.example.moview.moview.dto.review.ReviewDto;
 import com.example.moview.moview.dto.review.ReviewUpdateDto;
+import com.example.moview.moview.mapper.ReviewMapper;
 import com.example.moview.moview.model.Review;
 import com.example.moview.moview.model.User;
 import com.example.moview.moview.service.ReviewService;
 import com.example.moview.moview.validator.ReviewValidator;
 import com.example.moview.moview.validator.UserValidator;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,18 +25,19 @@ import javax.validation.Valid;
 public class ReviewController {
 
     private final ReviewService reviewService;
-    private final ModelMapper modelMapper;
+
+    private final ReviewMapper reviewMapper;
     private final UserValidator userValidator;
     private final ReviewValidator reviewValidator;
 
     @Autowired
     public ReviewController(final ReviewService reviewService,
-                            final ModelMapper modelMapper,
+                            final ReviewMapper reviewMapper,
                             final UserValidator userValidator,
                             final ReviewValidator reviewValidator) {
 
         this.reviewService = reviewService;
-        this.modelMapper = modelMapper;
+        this.reviewMapper = reviewMapper;
         this.userValidator = userValidator;
         this.reviewValidator = reviewValidator;
     }
@@ -46,21 +47,22 @@ public class ReviewController {
                                             @RequestBody @Valid final ReviewCreateDto dto) {
 
         userValidator.validateUserExisting(userId);
-        final Review review = modelMapper.map(dto, Review.class);
+        final Review review = reviewMapper.createDtoToModel(dto);
         review.setAuthor(User.builder().id(userId).build());
         final Review createdReview = reviewService.create(review);
-        final ReviewDto dtoCreated = modelMapper.map(createdReview, ReviewDto.class);
+        final ReviewDto dtoCreated = reviewMapper.modelToDto(createdReview);
         return ResponseEntity.status(HttpStatus.OK).body(dtoCreated);
     }
 
     @RequestMapping(value = "/review", method = RequestMethod.PUT)
     public ResponseEntity<ReviewDto> update(@RequestHeader("Authorization") final Long userId,
-                                            @RequestBody @Valid final ReviewUpdateDto reviewDto) {
+                                            @RequestBody @Valid final ReviewUpdateDto dto) {
 
-        reviewValidator.validateAuthor(userId, reviewDto.getId());
-        final Review review = modelMapper.map(reviewDto, Review.class);
+        reviewValidator.validateAuthor(userId, dto.getId());
+        final Review review = reviewMapper.updateDtoToModel(dto);
+        review.setAuthor(User.builder().id(userId).build());
         final Review updatedReview = reviewService.update(review);
-        final ReviewDto updatedDto = modelMapper.map(updatedReview, ReviewDto.class);
+        final ReviewDto updatedDto = reviewMapper.modelToDto(updatedReview);
         return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
     }
 

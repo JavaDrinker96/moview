@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.jackson.Jacksonized;
 
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -22,6 +21,6 @@ public class MovieDto {
     private String releaseDate;
     private String duration;
     private Integer rating;
-    private List<ReviewDto> reviews;
+    private Set<ReviewDto> reviews;
     private Set<GenreDto> genres;
 }

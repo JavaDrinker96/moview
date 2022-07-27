@@ -105,7 +105,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
                 .filter(m -> m.getRating() >= score && anyGenresMatch(m.getGenres(), genresIds))
                 .limit(pickUpQuantity).collect(Collectors.toList());
 
-        if(!result.isEmpty()){
+        if (!result.isEmpty()) {
             sourceList.removeAll(result);
         }
 
@@ -122,7 +122,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
                 .limit(pickUpQuantity)
                 .collect(Collectors.toList());
 
-        if(!result.isEmpty()){
+        if (!result.isEmpty()) {
             sourceList.removeAll(result);
         }
 
@@ -132,7 +132,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
     private List<Movie> pickUpFirstMovies(final List<Movie> sourceList, final int pickUpQuantity) {
         final List<Movie> result = sourceList.stream().limit(pickUpQuantity).collect(Collectors.toList());
 
-        if(!result.isEmpty()){
+        if (!result.isEmpty()) {
             sourceList.removeAll(result);
         }
 

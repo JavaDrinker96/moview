@@ -14,6 +14,6 @@ public interface ReviewRepository extends BaseRepository<Review> {
     @Query(value = "SELECT r FROM Review r WHERE r.movie.id = :id")
     List<Review> findAllByMovieId(@Param("id") Long movieId);
 
-    @Query(value = "SELECT r.author.id FROM Review r WHERE r.id = :id")
+    @Query(value = "SELECT a.id FROM Review r LEFT JOIN r.author a WHERE r.id = :id")
     Long getAuthorIdById(@Param("id") Long id);
 }
