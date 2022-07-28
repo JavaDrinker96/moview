@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.UnexpectedTypeException;
-import java.time.LocalDateTime;
+
+import static java.time.LocalDateTime.now;
 
 @ControllerAdvice
 public class ErrorHandler {
@@ -58,7 +59,7 @@ public class ErrorHandler {
                 .error(e.getClass().getSimpleName())
                 .message(e.getMessage())
                 .status(status)
-                .timestamp(dateTimeConverter.formatLocalDateTimeToString(LocalDateTime.now()))
+                .timestamp(dateTimeConverter.formatLocalDateTimeToString(now()))
                 .build();
     }
 }

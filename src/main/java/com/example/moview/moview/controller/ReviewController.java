@@ -32,17 +32,15 @@ public class ReviewController {
     @RequestMapping(value = "/review", method = RequestMethod.POST)
     public ResponseEntity<ReviewDto> create(@RequestBody @Valid final ReviewCreateDto dto) {
         final Review review = modelMapper.map(dto, Review.class);
-        final Review createdReview = reviewService.create(review);
-        final ReviewDto dtoCreated = modelMapper.map(createdReview, ReviewDto.class);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoCreated);
+        final ReviewDto reviewDto = modelMapper.map(reviewService.create(review), ReviewDto.class);
+        return ResponseEntity.status(HttpStatus.OK).body(reviewDto);
     }
 
     @RequestMapping(value = "/review", method = RequestMethod.PUT)
     public ResponseEntity<ReviewDto> update(@RequestBody @Valid final ReviewUpdateDto dto) {
         final Review review = modelMapper.map(dto, Review.class);
-        final Review updatedReview = reviewService.update(review);
-        final ReviewDto updatedDto = modelMapper.map(updatedReview, ReviewDto.class);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+        final ReviewDto reviewDto = modelMapper.map(reviewService.update(review), ReviewDto.class);
+        return ResponseEntity.status(HttpStatus.OK).body(reviewDto);
     }
 
     @RequestMapping(value = "/review/{id}", method = RequestMethod.DELETE)

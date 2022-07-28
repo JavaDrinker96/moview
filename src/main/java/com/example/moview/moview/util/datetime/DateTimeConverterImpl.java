@@ -17,20 +17,15 @@ public class DateTimeConverterImpl implements DateTimeConverter {
     private final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";
 
     public Duration parseDuration(final String durationString) {
-        final LocalTime time = LocalTime.parse(durationString);
-        return Duration.between(LocalTime.MIN, time);
+        return Duration.between(LocalTime.MIN, LocalTime.parse(durationString));
     }
 
     public String formatDurationToString(final Duration duration) {
-        final long hh = duration.toHours();
-        final long mm = duration.toMinutesPart();
-        final long ss = duration.toSecondsPart();
-        return String.format("%02d:%02d:%02d", hh, mm, ss);
+        return String.format("%02d:%02d:%02d", duration.toHours(), duration.toMinutesPart(), duration.toSecondsPart());
     }
 
     public LocalDate parseLocalDate(final String dateString) {
-        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
-        return LocalDate.parse(dateString, formatter);
+        return LocalDate.parse(dateString, DateTimeFormatter.ofPattern(DATE_PATTERN));
     }
 
     public String formatLocalDateToString(final LocalDate date) {
@@ -48,7 +43,6 @@ public class DateTimeConverterImpl implements DateTimeConverter {
     }
 
     public String formatLocalDateTimeToString(final LocalDateTime dateTime) {
-        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
-        return Objects.nonNull(dateTime) ? dateTime.format(formatter) : null;
+        return Objects.nonNull(dateTime) ? dateTime.format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)) : null;
     }
 }

@@ -26,19 +26,17 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository>
     @Override
     @Transactional
     public Review create(final Review entity) {
-        final Review createdReview = super.create(entity);
-        final Long movieId = createdReview.getMovie().getId();
-        actualizeMovieRating(movieId);
-        return createdReview;
+        final Review review = super.create(entity);
+        actualizeMovieRating(review.getMovie().getId());
+        return review;
     }
 
     @Override
     @Transactional
     public Review update(final Review newEntity) {
-        final Review updatedReview = super.update(newEntity);
-        final Long movieId = updatedReview.getMovie().getId();
-        actualizeMovieRating(movieId);
-        return updatedReview;
+        final Review review = super.update(newEntity);
+        actualizeMovieRating(review.getMovie().getId());
+        return review;
     }
 
     @Override
