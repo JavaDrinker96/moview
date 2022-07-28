@@ -104,7 +104,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
         return result;
     }
 
-    private boolean anyGenresMatch(Set<Genre> genres, List<Long> genreIds) {
+    private boolean anyGenresMatch(final Set<Genre> genres, final List<Long> genreIds) {
         return genres.stream().anyMatch(genre -> genreIds.contains(genre.getId()));
     }
 
