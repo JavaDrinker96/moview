@@ -19,8 +19,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
@@ -54,10 +53,8 @@ public class ModelMapperConfig {
             public MovieDto convert(final MappingContext<Movie, MovieDto> mappingContext) {
                 final Movie movie = mappingContext.getSource();
 
-                final List<ReviewDto> reviewDtoList = Objects.isNull(movie.getReviews())
-                        ? new ArrayList<>()
-                        : movie.getReviews().stream()
-                        .map(review -> ReviewDto.builder()
+                final List<ReviewDto> reviewDtoList = Optional.ofNullable(movie.getReviews()).orElse(new ArrayList<>())
+                        .stream().map(review -> ReviewDto.builder()
                                 .id(review.getId())
                                 .created(dateTimeConverter.formatLocalDateTimeToString(review.getCreated()))
                                 .updated(dateTimeConverter.formatLocalDateTimeToString(review.getUpdated()))
@@ -67,7 +64,7 @@ public class ModelMapperConfig {
                                 .content(review.getContent())
                                 .publicationDate(dateTimeConverter.formatLocalDateToString(review.getPublicationDate()))
                                 .build())
-                        .collect(Collectors.toList());
+                        .toList();
 
                 return MovieDto.builder()
                         .id(movie.getId())
