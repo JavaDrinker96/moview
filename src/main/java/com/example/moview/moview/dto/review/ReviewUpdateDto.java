@@ -23,10 +23,6 @@ public class ReviewUpdateDto {
     @Min(1)
     private Long id;
 
-    @NotNull
-    @Pattern(regexp = "^\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}:\\d{2}:\\d{2}$")
-    private String created;
-
     @Min(1)
     @NotNull
     private Long movieId;

@@ -40,10 +40,10 @@ public class Review extends BaseEntity {
     @Column(columnDefinition = "text not null")
     private String content;
 
-    @Column(name = "publication_date", nullable = false)
+    @Column(nullable = false)
     private LocalDate publicationDate;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id", nullable = false)
+    @JoinColumn(nullable = false)
     private Movie movie;
 }
