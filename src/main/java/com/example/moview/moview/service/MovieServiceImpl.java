@@ -37,7 +37,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
     }
 
     @Override
-    public void actualizeRating(@NotNull final Long id) {
+    public void actualizeRating(final Long id) {
         final Movie movie = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(" Unable to find %s with id %d",
                         Movie.class.getName(), id)));
@@ -121,6 +121,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
     private List<Movie> pickUpFirstMovies(final List<Movie> sourceList, final int pickUpQuantity) {
         final List<Movie> result = sourceList.stream().limit(pickUpQuantity).collect(Collectors.toList());
         sourceList.removeAll(result);
+
         return result;
     }
 }
