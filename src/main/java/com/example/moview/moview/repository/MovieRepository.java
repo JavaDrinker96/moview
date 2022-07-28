@@ -1,8 +1,9 @@
 package com.example.moview.moview.repository;
 
 import com.example.moview.moview.model.Movie;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MovieRepository extends BaseRepository<Movie> {
+public interface MovieRepository extends JpaRepository<Movie, Long> {
 }

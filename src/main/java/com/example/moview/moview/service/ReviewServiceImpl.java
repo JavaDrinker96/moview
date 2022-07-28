@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 @Service
-public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository> implements ReviewService {
+public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository, Long> implements ReviewService {
 
     private final MovieRepository movieRepository;
 

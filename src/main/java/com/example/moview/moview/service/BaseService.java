@@ -4,15 +4,15 @@ import com.example.moview.moview.model.BaseEntity;
 
 import java.util.List;
 
-public interface BaseService<E extends BaseEntity> {
+public interface BaseService<E extends BaseEntity, ID> {
 
     E create(E entity);
 
     E update(E newEntity);
 
-    E read(Long id);
+    E read(ID id);
 
-    void delete(Long id);
+    void delete(ID id);
 
     List<E> readAll();
 }
