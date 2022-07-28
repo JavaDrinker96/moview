@@ -4,7 +4,6 @@ import com.example.moview.moview.dto.ExceptionResponse;
 import com.example.moview.moview.exception.ForbiddenAuthorException;
 import com.example.moview.moview.exception.NullParameterException;
 import com.example.moview.moview.exception.UnauthorizedAuthorException;
-import com.example.moview.moview.util.datetime.DateTimeConverter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,16 +13,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.UnexpectedTypeException;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static java.time.LocalDateTime.now;
 
 @ControllerAdvice
 public class ErrorHandler {
-
-    private final DateTimeConverter dateTimeConverter;
-
-    public ErrorHandler(DateTimeConverter dateTimeConverter) {
-        this.dateTimeConverter = dateTimeConverter;
-    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
@@ -68,11 +63,13 @@ public class ErrorHandler {
     }
 
     private ExceptionResponse buildErrorResponse(final Throwable e, final HttpStatus status) {
+        final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";
+
         return ExceptionResponse.builder()
                 .error(e.getClass().getSimpleName())
                 .message(e.getMessage())
                 .status(status)
-                .timestamp(dateTimeConverter.formatLocalDateTimeToString(LocalDateTime.now()))
+                .timestamp(now().format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)))
                 .build();
     }
 }
