@@ -5,7 +5,7 @@ import com.example.moview.moview.repository.GenreRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GenreServiceImpl extends AbstractService<Genre, GenreRepository> implements GenreService {
+public class GenreServiceImpl extends AbstractService<Genre, GenreRepository, Long> implements GenreService {
 
     public GenreServiceImpl(final GenreRepository repository) {
         super(repository);

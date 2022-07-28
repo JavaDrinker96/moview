@@ -12,7 +12,7 @@ import static java.time.LocalDate.now;
 
 @Validated
 @Service
-public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository> implements ReviewService {
+public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository, Long> implements ReviewService {
 
     private final MovieService movieService;
 

@@ -15,13 +15,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Validated
 @Service
-public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> implements MovieService {
-    private static final int SAMPLE_USERS_TOP_SCORE = 80;
-    private static final int USERS_TOP_SIZE = 5;
+public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Long> implements MovieService {
+    private static final int SAMPLE_SCORE = 80;
+    private static final int TOP_SIZE = 5;
 
     private final ReviewRepository reviewRepository;
 
@@ -48,21 +47,18 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
 
     @Override
     public List<Movie> getUsersTop(@NotNull final Long userId, @NotNull final List<Long> genresIds) {
-        final int sampleScore = SAMPLE_USERS_TOP_SCORE;
-        final int topSize = USERS_TOP_SIZE;
-
         final List<Movie> userMovies = repository.getMoviesByUserId(userId);
-        final List<Movie> bestUserMovies = filterByCurrentReviewsAndScore(userMovies, sampleScore);
-        final List<Movie> topList = pickUpMoviesByRatingAndGenres(bestUserMovies, sampleScore, genresIds, topSize);
+        final List<Movie> bestUserMovies = filterByCurrentReviewsAndScore(userMovies, SAMPLE_SCORE);
+        final List<Movie> topList = pickUpMoviesByRatingAndGenres(bestUserMovies, SAMPLE_SCORE, genresIds, TOP_SIZE);
 
-        if (topList.size() < topSize) {
-            final int remainToAdd = topSize - topList.size();
-            final List<Movie> pickedUpMovies = pickUpMoviesByScore(bestUserMovies, sampleScore, remainToAdd);
+        if (topList.size() < TOP_SIZE) {
+            final int remainToAdd = TOP_SIZE - topList.size();
+            final List<Movie> pickedUpMovies = pickUpMoviesByScore(bestUserMovies, SAMPLE_SCORE, remainToAdd);
             topList.addAll(pickedUpMovies);
         }
 
-        if (topList.size() < topSize) {
-            final int remainToAdd = topSize - topList.size();
+        if (topList.size() < TOP_SIZE) {
+            final int remainToAdd = TOP_SIZE - topList.size();
             final List<Movie> pickedUpMovies = pickUpFirstMovies(bestUserMovies, remainToAdd);
             topList.addAll(pickedUpMovies);
         }
@@ -71,23 +67,24 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
     }
 
     private void setActualRating(final Movie movie) {
-        final Integer movieRating = calculateRating(movie.getId());
-        movie.setRating(movieRating);
+        movie.setRating(calculateRating(movie.getId()));
     }
 
     private Integer calculateRating(final Long id) {
-        final List<Review> reviewList = reviewRepository.findAllByMovieId(id);
-        final OptionalDouble optionalAvgMovieRating = reviewList.stream().mapToLong(Review::getScore).average();
-        return optionalAvgMovieRating.isEmpty()
-                ? null
-                : Double.valueOf(Math.ceil(optionalAvgMovieRating.getAsDouble())).intValue();
+        final OptionalDouble optionalAvgMovieRating = reviewRepository.findAllByMovieId(id).stream()
+                .mapToLong(Review::getScore)
+                .average();
+
+        return optionalAvgMovieRating.isPresent()
+                ? Double.valueOf(Math.ceil(optionalAvgMovieRating.getAsDouble())).intValue()
+                : null;
     }
 
     private List<Movie> filterByCurrentReviewsAndScore(final List<Movie> movies, final int score) {
         return movies.stream()
                 .filter(movie -> getLastReview(movie.getReviews()).getScore() > score)
                 .sorted(Comparator.comparing(Movie::getRating).reversed())
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private Review getLastReview(final Set<Review> reviews) {
@@ -103,7 +100,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
 
         final List<Movie> result = sourceList.stream()
                 .filter(m -> m.getRating() >= score && anyGenresMatch(m.getGenres(), genresIds))
-                .limit(pickUpQuantity).collect(Collectors.toList());
+                .limit(pickUpQuantity).toList();
 
         if (!result.isEmpty()) {
             sourceList.removeAll(result);
@@ -120,7 +117,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
         final List<Movie> result = sourceList.stream()
                 .filter(m -> m.getRating() >= score)
                 .limit(pickUpQuantity)
-                .collect(Collectors.toList());
+                .toList();
 
         if (!result.isEmpty()) {
             sourceList.removeAll(result);
@@ -130,7 +127,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository> im
     }
 
     private List<Movie> pickUpFirstMovies(final List<Movie> sourceList, final int pickUpQuantity) {
-        final List<Movie> result = sourceList.stream().limit(pickUpQuantity).collect(Collectors.toList());
+        final List<Movie> result = sourceList.stream().limit(pickUpQuantity).toList();
 
         if (!result.isEmpty()) {
             sourceList.removeAll(result);

@@ -4,7 +4,7 @@ import com.example.moview.moview.model.Movie;
 
 import java.util.List;
 
-public interface MovieService extends BaseService<Movie> {
+public interface MovieService extends BaseService<Movie, Long> {
 
     void actualizeRating(Long id);
 
