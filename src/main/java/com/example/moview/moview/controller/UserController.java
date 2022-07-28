@@ -8,15 +8,18 @@ import com.example.moview.moview.model.User;
 import com.example.moview.moview.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -27,26 +30,23 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<UserDto> create(@RequestBody @Valid final UserCreateDto dto) {
-        final User user = userMapper.createDtoToModel(dto);
-        final User createdUser = userService.create(user);
-        final UserDto dtoCreated = userMapper.modelToDto(createdUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dtoCreated);
+        final User user = userService.create(userMapper.createDtoToModel(dto));
+        final UserDto userDto = userMapper.modelToDto(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
     public ResponseEntity<UserDto> read(@PathVariable final Long id) {
-        final User user = userService.read(id);
-        final UserDto dto = userMapper.modelToDto(user);
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+        final UserDto userDto = userMapper.modelToDto(userService.read(id));
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.PUT)
+    @PutMapping
     public ResponseEntity<UserDto> update(@RequestBody @Valid final UserUpdateDto dto) {
-        final User user = userMapper.updateDtoToModel(dto);
-        final User updatedUser = userService.update(user);
-        final UserDto dtoUpdated = userMapper.modelToDto(updatedUser);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoUpdated);
+        final User user = userService.update(userMapper.updateDtoToModel(dto));
+        final UserDto userDto = userMapper.modelToDto(user);
+        return ResponseEntity.status(HttpStatus.OK).body(userDto);
     }
 }

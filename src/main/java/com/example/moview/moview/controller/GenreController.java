@@ -8,16 +8,20 @@ import com.example.moview.moview.model.Genre;
 import com.example.moview.moview.service.GenreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequestMapping("/genre")
 public class GenreController {
 
     private final GenreService genreService;
@@ -28,39 +32,34 @@ public class GenreController {
         this.genreMapper = genreMapper;
     }
 
-    @RequestMapping(value = "/genre", method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<GenreDto> create(@RequestBody @Valid final GenreCreateDto dto) {
         final Genre genre = genreMapper.createDtoToModel(dto);
-        final Genre createdGenre = genreService.create(genre);
-        final GenreDto dtoCreated = genreMapper.modelToDto(createdGenre);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoCreated);
+        final GenreDto genreDto = genreMapper.modelToDto(genreService.create(genre));
+        return ResponseEntity.status(HttpStatus.OK).body(genreDto);
     }
 
-    @RequestMapping(value = "/genre/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
     public ResponseEntity<GenreDto> read(@PathVariable final Long id) {
-        final Genre genre = genreService.read(id);
-        final GenreDto dto = genreMapper.modelToDto(genre);
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+        final GenreDto genreDto = genreMapper.modelToDto(genreService.read(id));
+        return ResponseEntity.status(HttpStatus.OK).body(genreDto);
     }
 
-    @RequestMapping(value = "/genre", method = RequestMethod.PUT)
+    @PutMapping
     public ResponseEntity<GenreDto> update(@RequestBody @Valid final GenreUpdateDto dto) {
         final Genre genre = genreMapper.updateDtoToModel(dto);
-        final Genre updatedGenre = genreService.update(genre);
-        final GenreDto dtoUpdated = genreMapper.modelToDto(updatedGenre);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoUpdated);
+        final GenreDto genreDto = genreMapper.modelToDto(genreService.update(genre));
+        return ResponseEntity.status(HttpStatus.OK).body(genreDto);
     }
 
-    @RequestMapping(value = "/genre/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> delete(@PathVariable final Long id) {
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable final Long id) {
         genreService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @RequestMapping(value = "/genre/all", method = RequestMethod.GET)
+    @GetMapping("/all")
     public ResponseEntity<List<GenreDto>> readAll() {
-        final List<Genre> genreList = genreService.readAll();
-        final List<GenreDto> dtoList = genreMapper.modelListToDtoList(genreList);
+        final List<GenreDto> dtoList = genreMapper.modelListToDtoList(genreService.readAll());
         return ResponseEntity.status(HttpStatus.OK).body(dtoList);
     }
 }

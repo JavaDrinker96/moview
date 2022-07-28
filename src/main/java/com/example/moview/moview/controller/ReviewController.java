@@ -12,16 +12,19 @@ import com.example.moview.moview.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("/review")
 public class ReviewController {
 
     private final ReviewService reviewService;
@@ -42,34 +45,31 @@ public class ReviewController {
         this.reviewValidator = reviewValidator;
     }
 
-    @RequestMapping(value = "/review", method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<ReviewDto> create(@RequestHeader("Authorization") final Long userId,
                                             @RequestBody @Valid final ReviewCreateDto dto) {
 
         userValidator.validateUserExisting(userId);
         final Review review = reviewMapper.createDtoToModel(dto);
         review.setAuthor(User.builder().id(userId).build());
-        final Review createdReview = reviewService.create(review);
-        final ReviewDto dtoCreated = reviewMapper.modelToDto(createdReview);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoCreated);
+        final ReviewDto reviewDto = reviewMapper.modelToDto(reviewService.create(review));
+        return ResponseEntity.status(HttpStatus.OK).body(reviewDto);
     }
 
-    @RequestMapping(value = "/review", method = RequestMethod.PUT)
+    @PutMapping
     public ResponseEntity<ReviewDto> update(@RequestHeader("Authorization") final Long userId,
                                             @RequestBody @Valid final ReviewUpdateDto dto) {
 
         reviewValidator.validateAuthor(userId, dto.getId());
         final Review review = reviewMapper.updateDtoToModel(dto);
         review.setAuthor(User.builder().id(userId).build());
-        final Review updatedReview = reviewService.update(review);
-        final ReviewDto updatedDto = reviewMapper.modelToDto(updatedReview);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedDto);
+        final ReviewDto reviewDto = reviewMapper.modelToDto(reviewService.update(review));
+        return ResponseEntity.status(HttpStatus.OK).body(reviewDto);
     }
 
-    @RequestMapping(value = "/review/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> delete(@RequestHeader("Authorization") final Long userId, @PathVariable final Long id) {
+    @DeleteMapping("/{id}")
+    public void delete(@RequestHeader("Authorization") final Long userId, @PathVariable final Long id) {
         reviewValidator.validateAuthor(userId, id);
         reviewService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

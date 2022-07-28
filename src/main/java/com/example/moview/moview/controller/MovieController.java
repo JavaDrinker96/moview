@@ -10,20 +10,23 @@ import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.service.MovieService;
 import com.example.moview.moview.validator.UserValidator;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequestMapping("/movie")
 public class MovieController {
 
     private final MovieService movieService;
@@ -40,44 +43,39 @@ public class MovieController {
         this.userValidator = userValidator;
     }
 
-    @RequestMapping(value = "/movie", method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<MovieShortDto> create(@RequestBody @Valid final MovieCreateDto dto) {
-        final Movie movie = movieMapper.createDtoToModel(dto);
-        final Movie createdMovie = movieService.create(movie);
-        final MovieShortDto dtoCreated = movieMapper.modelToShortDto(createdMovie);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dtoCreated);
+        final Movie movie = movieService.create(movieMapper.createDtoToModel(dto));
+        final MovieShortDto movieShortDto = movieMapper.modelToShortDto(movie);
+        return ResponseEntity.status(HttpStatus.CREATED).body(movieShortDto);
     }
 
-    @RequestMapping(value = "/movie/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
     public ResponseEntity<MovieDto> deepRead(@PathVariable final Long id) {
-        final Movie movie = movieService.read(id);
-        final MovieDto dto = movieMapper.modelToDto(movie);
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+        final MovieDto movieDto = movieMapper.modelToDto(movieService.read(id));
+        return ResponseEntity.status(HttpStatus.OK).body(movieDto);
     }
 
-    @RequestMapping(value = "/movie", method = RequestMethod.PUT)
+    @PutMapping
     public ResponseEntity<MovieShortDto> update(@RequestBody @Valid final MovieUpdateDto dto) {
-        final Movie movie = movieMapper.updateDtoToModel(dto);
-        final Movie updatedMovie = movieService.update(movie);
-        final MovieShortDto dtoUpdated = movieMapper.modelToShortDto(updatedMovie);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoUpdated);
+        final Movie movie = movieService.update(movieMapper.updateDtoToModel(dto));
+        final MovieShortDto movieShortDto = movieMapper.modelToShortDto(movie);
+        return ResponseEntity.status(HttpStatus.OK).body(movieShortDto);
     }
 
-    @RequestMapping(value = "/movie/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> delete(@PathVariable final Long id) {
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable final Long id) {
         movieService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @RequestMapping(value = "/movie/all", method = RequestMethod.GET)
+    @GetMapping("/all")
     public ResponseEntity<List<MovieShortDto>> readAll(@RequestBody @Valid final MovieReadPageDto dto) {
-        final PageRequest pageRequest = movieMapper.pageDtoToPageRequest(dto);
-        final Page<Movie> moviePage = movieService.readAll(pageRequest);
-        final List<MovieShortDto> dtoList = movieMapper.modelListToShortDtoList(moviePage.getContent());
-        return ResponseEntity.status(HttpStatus.OK).body(dtoList);
+        final Page<Movie> page = movieService.readAll(movieMapper.pageDtoToPageRequest(dto));
+        final List<MovieShortDto> movieShortDtoList = movieMapper.modelListToShortDtoList(page.getContent());
+        return ResponseEntity.status(HttpStatus.OK).body(movieShortDtoList);
     }
 
-    @RequestMapping(value = "/movie/top", method = RequestMethod.GET)
+    @GetMapping("/top")
     public ResponseEntity<List<MovieShortDto>> getRecommendation(@RequestHeader("Authorization") final Long userId,
                                                                  @RequestBody final List<Long> genreIds) {
 
