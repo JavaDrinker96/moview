@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Validated
 @Service
@@ -52,15 +53,11 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
         final List<Movie> topList = pickUpMoviesByRatingAndGenres(bestUserMovies, SAMPLE_SCORE, genresIds, TOP_SIZE);
 
         if (topList.size() < TOP_SIZE) {
-            final int remainToAdd = TOP_SIZE - topList.size();
-            final List<Movie> pickedUpMovies = pickUpMoviesByScore(bestUserMovies, SAMPLE_SCORE, remainToAdd);
-            topList.addAll(pickedUpMovies);
+            topList.addAll(pickUpMoviesByScore(bestUserMovies, SAMPLE_SCORE, TOP_SIZE - topList.size()));
         }
 
         if (topList.size() < TOP_SIZE) {
-            final int remainToAdd = TOP_SIZE - topList.size();
-            final List<Movie> pickedUpMovies = pickUpFirstMovies(bestUserMovies, remainToAdd);
-            topList.addAll(pickedUpMovies);
+            topList.addAll(pickUpFirstMovies(bestUserMovies, TOP_SIZE - topList.size()));
         }
 
         return topList;
@@ -84,7 +81,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
         return movies.stream()
                 .filter(movie -> getLastReview(movie.getReviews()).getScore() > score)
                 .sorted(Comparator.comparing(Movie::getRating).reversed())
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private Review getLastReview(final Set<Review> reviews) {
@@ -100,11 +97,9 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
 
         final List<Movie> result = sourceList.stream()
                 .filter(m -> m.getRating() >= score && anyGenresMatch(m.getGenres(), genresIds))
-                .limit(pickUpQuantity).toList();
-
-        if (!result.isEmpty()) {
-            sourceList.removeAll(result);
-        }
+                .limit(pickUpQuantity)
+                .collect(Collectors.toList());
+        sourceList.removeAll(result);
 
         return result;
     }
@@ -117,22 +112,15 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
         final List<Movie> result = sourceList.stream()
                 .filter(m -> m.getRating() >= score)
                 .limit(pickUpQuantity)
-                .toList();
-
-        if (!result.isEmpty()) {
-            sourceList.removeAll(result);
-        }
+                .collect(Collectors.toList());
+        sourceList.removeAll(result);
 
         return result;
     }
 
     private List<Movie> pickUpFirstMovies(final List<Movie> sourceList, final int pickUpQuantity) {
-        final List<Movie> result = sourceList.stream().limit(pickUpQuantity).toList();
-
-        if (!result.isEmpty()) {
-            sourceList.removeAll(result);
-        }
-
+        final List<Movie> result = sourceList.stream().limit(pickUpQuantity).collect(Collectors.toList());
+        sourceList.removeAll(result);
         return result;
     }
 }
