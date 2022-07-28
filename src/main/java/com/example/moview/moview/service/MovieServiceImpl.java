@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Long> implements MovieService {
 
     public MovieServiceImpl(final MovieRepository repository) {
-        super(repository, Movie.class);
+        super(repository);
     }
 }
