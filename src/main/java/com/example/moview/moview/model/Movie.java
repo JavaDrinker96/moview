@@ -42,7 +42,7 @@ public class Movie extends BaseEntity {
     @Column(columnDefinition = "text not null")
     private String description;
 
-    @Column(name = "release_date", nullable = false)
+    @Column(nullable = false)
     private LocalDate releaseDate;
 
     @Column(nullable = false)

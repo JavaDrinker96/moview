@@ -44,7 +44,7 @@ public class Review extends BaseEntity {
     private String content;
 
     @Setter
-    @Column(name = "publication_date", updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false)
     private LocalDate publicationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
