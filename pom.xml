@@ -151,7 +151,11 @@
             <artifactId>threetenbp</artifactId>
             <version>1.4.2</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>3.0.2</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>moviewRest</finalName>
