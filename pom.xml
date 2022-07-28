@@ -18,6 +18,7 @@
         <java-version>17</java-version>
 
         <spring.version>5.3.20</spring.version>
+        <spring-aspect.version>5.3.22</spring-aspect.version>
         <servlets.version>4.0.1</servlets.version>
         <tomcat.version>9.0.62</tomcat.version>
         <lombok.version>1.18.22</lombok.version>
@@ -77,6 +78,11 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
             <version>${data-jpa.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring-aspect.version}</version>
         </dependency>
 
         <!--To interact with the server-->

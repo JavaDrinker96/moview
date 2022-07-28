@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import java.time.LocalDateTime;
-
-import static java.time.LocalDateTime.now;
 
 @SuperBuilder
 @Getter
@@ -20,21 +20,14 @@ import static java.time.LocalDateTime.now;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
     @Column(updatable = false)
+    @CreatedDate
     protected LocalDateTime created;
 
     @Column
+    @LastModifiedDate
     protected LocalDateTime modified;
-
-    @PrePersist
-    public void prePersist() {
-        created = now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        modified = now();
-    }
 }
