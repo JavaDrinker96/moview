@@ -1,5 +1,6 @@
 package com.example.moview.moview.config.db;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -24,11 +25,11 @@ import java.util.Properties;
 @PropertySource(value = "classpath:datasource.properties")
 @ComponentScan({"com.example.moview.moview"})
 @EnableJpaRepositories(basePackages = "com.example.moview.moview.repository")
-public class HibernateConfig {
+public class HibernateTestConfig {
 
     private final Environment environment;
 
-    public HibernateConfig(final Environment environment) {
+    public HibernateTestConfig(final Environment environment) {
         this.environment = environment;
     }
 
@@ -47,26 +48,26 @@ public class HibernateConfig {
 
     final Properties additionalProperties() {
         final Properties hibernateProperties = new Properties();
-        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hbm2ddl.auto"));
-        hibernateProperties.setProperty("hibernate.dialect", environment.getProperty("dialect"));
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", environment.getProperty("test.hbm2ddl.auto"));
+        hibernateProperties.setProperty("hibernate.dialect", environment.getProperty("test.dialect"));
 
         hibernateProperties.setProperty("hibernate.cache.use_second_level_cache",
-                environment.getProperty("cache.use_second_level_cache"));
+                environment.getProperty("test.cache.use_second_level_cache"));
 
         hibernateProperties.setProperty("hibernate.cache.use_query_cache",
-                environment.getProperty("cache.use_query_cache"));
+                environment.getProperty("test.cache.use_query_cache"));
 
-        hibernateProperties.setProperty("hibernate.show_sql", environment.getProperty("show_sql"));
+        hibernateProperties.setProperty("hibernate.show_sql", environment.getProperty("test.show_sql"));
         return hibernateProperties;
     }
 
     @Bean
     public DataSource dataSource() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("driverClassName")));
-        dataSource.setUrl(environment.getProperty("url"));
-        dataSource.setUsername(environment.getProperty("user"));
-        dataSource.setPassword(environment.getProperty("pass"));
+        dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("test.driverClassName")));
+        dataSource.setUrl(environment.getProperty("test.url"));
+        dataSource.setUsername(environment.getProperty("test.user"));
+        dataSource.setPassword(environment.getProperty("test.pass"));
         return dataSource;
     }
 

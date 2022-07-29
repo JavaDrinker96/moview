@@ -42,7 +42,7 @@ public class GenreController {
     @GetMapping("/{id}")
     public ResponseEntity<GenreDto> read(@PathVariable final Long id) {
         final GenreDto genreDto = genreMapper.modelToDto(genreService.read(id));
-        return ResponseEntity.status(HttpStatus.OK).body(genreDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(genreDto);
     }
 
     @PutMapping
