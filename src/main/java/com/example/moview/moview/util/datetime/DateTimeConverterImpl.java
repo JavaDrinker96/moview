@@ -1,6 +1,5 @@
 package com.example.moview.moview.util.datetime;
 
-import com.example.moview.moview.exception.NullParameterException;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -13,8 +12,8 @@ import java.util.Objects;
 @Component
 public class DateTimeConverterImpl implements DateTimeConverter {
 
-    private final String DATE_PATTERN = "dd.MM.yyyy";
-    private final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";
+    private static final String DATE_PATTERN = "dd.MM.yyyy";
+    private static final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";
 
     public Duration parseDuration(final String durationString) {
         return Duration.between(LocalTime.MIN, LocalTime.parse(durationString));
@@ -33,16 +32,11 @@ public class DateTimeConverterImpl implements DateTimeConverter {
     }
 
     public LocalDateTime parseLocalDateTime(final String dateTimeString) {
-        if (Objects.isNull(dateTimeString)) {
-            throw new NullParameterException(String.format("The parameter cannot be null in the parse method of %s.",
-                    this.getClass().getName()));
-        }
-
-        return dateTimeString.equalsIgnoreCase("null") ? null
-                : LocalDateTime.parse(dateTimeString, DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
+        Objects.requireNonNull(dateTimeString);
+        return LocalDateTime.parse(dateTimeString, DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
     }
 
     public String formatLocalDateTimeToString(final LocalDateTime dateTime) {
-        return Objects.nonNull(dateTime) ? dateTime.format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)) : null;
+        return dateTime.format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
     }
 }

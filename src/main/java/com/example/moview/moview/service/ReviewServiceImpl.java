@@ -1,13 +1,11 @@
 package com.example.moview.moview.service;
 
-import com.example.moview.moview.exception.NotFoundException;
 import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.model.Review;
 import com.example.moview.moview.repository.MovieRepository;
 import com.example.moview.moview.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.OptionalDouble;
 
@@ -22,7 +20,6 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository,
     }
 
     @Override
-    @Transactional
     public Review create(final Review entity) {
         final Review review = super.create(entity);
         actualizeMovieRating(review.getMovie().getId());
@@ -30,7 +27,6 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository,
     }
 
     @Override
-    @Transactional
     public Review update(final Review newEntity) {
         final Review review = super.update(newEntity);
         actualizeMovieRating(review.getMovie().getId());
@@ -38,7 +34,6 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository,
     }
 
     @Override
-    @Transactional
     public void delete(final Long id) {
         final Long movieId = super.read(id).getMovie().getId();
         super.delete(id);
@@ -47,10 +42,7 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository,
 
     private void actualizeMovieRating(final Long movieId) {
         final Movie movie = movieRepository.findById(movieId)
-                .orElseThrow(() ->
-                        new NotFoundException(String.format("%s with id = %d not found in the database for " +
-                                "method of %s", Movie.class.getName(), movieId, this.getClass().getName()))
-                );
+                .orElseThrow();
 
         final List<Review> reviewList = repository.findAllByMovieId(movieId);
         final OptionalDouble optionalAvgMovieScore = reviewList.stream().mapToLong(Review::getScore).average();
