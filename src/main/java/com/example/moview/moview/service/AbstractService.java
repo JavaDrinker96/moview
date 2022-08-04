@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -22,32 +21,26 @@ public abstract class AbstractService<E extends BaseEntity, R extends JpaReposit
     }
 
     @Override
-    @Transactional
     public E create(final E entity) {
         return repository.save(entity);
     }
 
     @Override
-    @Transactional
     public E update(final E newEntity) {
         return repository.save(newEntity);
     }
 
     @Override
-    @Transactional
     public E read(final ID id) {
-        return repository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException(String.format("Unable to find entity with id %s.", id.toString())));
+        return repository.findById(id).orElseThrow();
     }
 
     @Override
-    @Transactional
     public void delete(final ID id) {
         repository.deleteById(id);
     }
 
     @Override
-    @Transactional
     public List<E> readAll() {
         return repository.findAll();
     }

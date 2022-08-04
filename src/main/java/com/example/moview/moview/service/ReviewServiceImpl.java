@@ -5,7 +5,6 @@ import com.example.moview.moview.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 
 import static java.time.LocalDate.now;
@@ -22,7 +21,6 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository,
     }
 
     @Override
-    @Transactional
     public Review create(@NotNull final Review entity) {
         entity.setPublicationDate(now());
         final Review createdReview = super.create(entity);
@@ -32,7 +30,6 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository,
     }
 
     @Override
-    @Transactional
     public Review update(@NotNull final Review newEntity) {
         final Review updatedReview = super.update(newEntity);
         final Long movieId = updatedReview.getMovie().getId();
@@ -41,7 +38,6 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository,
     }
 
     @Override
-    @Transactional
     public void delete(@NotNull final Long id) {
         final Long movieId = super.read(id).getMovie().getId();
         super.delete(id);
