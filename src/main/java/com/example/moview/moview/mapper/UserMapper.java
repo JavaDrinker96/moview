@@ -10,12 +10,14 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(source = "birthday", target = "birthday", dateFormat = "dd.MM.yyyy")
+    String DATE_PATTERN = "dd.MM.yyyy";
+
+    @Mapping(source = "birthday", target = "birthday", dateFormat = DATE_PATTERN)
     User createDtoToModel(UserCreateDto dto);
 
-    @Mapping(source = "birthday", target = "birthday", dateFormat = "dd.MM.yyyy")
+    @Mapping(source = "birthday", target = "birthday", dateFormat = DATE_PATTERN)
     UserDto modelToDto(User model);
 
-    @Mapping(source = "birthday", target = "birthday", dateFormat = "dd.MM.yyyy")
+    @Mapping(source = "birthday", target = "birthday", dateFormat = DATE_PATTERN)
     User updateDtoToModel(UserUpdateDto dto);
 }

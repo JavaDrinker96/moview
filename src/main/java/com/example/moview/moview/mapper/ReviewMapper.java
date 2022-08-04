@@ -15,20 +15,22 @@ import java.util.Set;
 @Mapper(componentModel = "spring")
 public interface ReviewMapper {
 
+    String DATE_PATTERN = "dd.MM.yyyy";
+
     @Mapping(source = "movieId", target = "movie", qualifiedByName = "movieIdToMovie")
     Review createDtoToModel(ReviewCreateDto dto);
 
     @Mapping(source = "movieId", target = "movie", qualifiedByName = "movieIdToMovie")
     Review updateDtoToModel(ReviewUpdateDto dto);
 
-    @Mapping(source = "publicationDate", target = "publicationDate", dateFormat = "dd.MM.yyyy")
+    @Mapping(source = "publicationDate", target = "publicationDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "movie", target = "movieId", qualifiedByName = "movieToMovieId")
     ReviewDto modelToDto(Review model);
 
-    @Mapping(source = "publicationDate", target = "publicationDate", dateFormat = "dd.MM.yyyy")
+    @Mapping(source = "publicationDate", target = "publicationDate", dateFormat = DATE_PATTERN)
     List<ReviewDto> modelListToDtoList(List<Review> modelList);
 
-    @Mapping(source = "publicationDate", target = "publicationDate", dateFormat = "dd.MM.yyyy")
+    @Mapping(source = "publicationDate", target = "publicationDate", dateFormat = DATE_PATTERN)
     Set<ReviewDto> modelSetToDtoSet(Set<Review> modelSet);
 
     @Named("movieToMovieId")

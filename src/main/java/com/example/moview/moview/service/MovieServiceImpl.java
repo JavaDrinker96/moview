@@ -9,7 +9,6 @@ import com.example.moview.moview.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 import java.util.Comparator;
 import java.util.List;
@@ -39,9 +38,7 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
     @Override
     public void actualizeRating(final Long id) {
         final Movie movie = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(" Unable to find %s with id %d",
-                        Movie.class.getName(), id)));
-
+                .orElseThrow();
         setActualRating(movie);
         repository.save(movie);
     }

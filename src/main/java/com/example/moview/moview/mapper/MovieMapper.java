@@ -22,25 +22,27 @@ import java.util.stream.Collectors;
 @Mapper(uses = {ReviewMapper.class, GenreMapper.class}, componentModel = "spring")
 public interface MovieMapper {
 
-    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = "dd.MM.yyyy")
+    String DATE_PATTERN = "dd.MM.yyyy";
+
+    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "durationToString")
     MovieDto modelToDto(Movie model);
 
-    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = "dd.MM.yyyy")
+    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "stringToDuration")
     @Mapping(source = "genreIds", target = "genres", qualifiedByName = "genreIdsToGenres")
     Movie createDtoToModel(MovieCreateDto dto);
 
-    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = "dd.MM.yyyy")
+    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "stringToDuration")
     @Mapping(source = "genreIds", target = "genres", qualifiedByName = "genreIdsToGenres")
     Movie updateDtoToModel(MovieUpdateDto dto);
 
-    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = "dd.MM.yyyy")
+    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "durationToString")
     MovieShortDto modelToShortDto(Movie model);
 
-    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = "dd.MM.yyyy")
+    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "durationToString")
     List<MovieShortDto> modelListToShortDtoList(List<Movie> modelList);
 
