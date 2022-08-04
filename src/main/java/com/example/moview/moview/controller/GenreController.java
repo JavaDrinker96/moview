@@ -36,7 +36,7 @@ public class GenreController {
     public ResponseEntity<GenreDto> create(@RequestBody @Valid final GenreCreateDto dto) {
         final Genre genre = genreMapper.createDtoToModel(dto);
         final GenreDto genreDto = genreMapper.modelToDto(genreService.create(genre));
-        return ResponseEntity.status(HttpStatus.OK).body(genreDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(genreDto);
     }
 
     @GetMapping("/{id}")

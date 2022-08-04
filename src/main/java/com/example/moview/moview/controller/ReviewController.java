@@ -53,7 +53,7 @@ public class ReviewController {
         final Review review = reviewMapper.createDtoToModel(dto);
         review.setAuthor(User.builder().id(userId).build());
         final ReviewDto reviewDto = reviewMapper.modelToDto(reviewService.create(review));
-        return ResponseEntity.status(HttpStatus.OK).body(reviewDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(reviewDto);
     }
 
     @PutMapping

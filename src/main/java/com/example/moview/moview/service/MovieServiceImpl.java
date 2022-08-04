@@ -64,7 +64,8 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
     }
 
     private Integer calculateRating(final Long id) {
-        final OptionalDouble optionalAvgMovieRating = reviewRepository.findAllByMovieId(id).stream()
+        final OptionalDouble optionalAvgMovieRating = reviewRepository.findAllByMovieId(id)
+                .stream()
                 .mapToLong(Review::getScore)
                 .average();
 
