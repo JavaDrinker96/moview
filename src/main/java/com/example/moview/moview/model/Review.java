@@ -1,16 +1,49 @@
 package com.example.moview.moview.model;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Range;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import java.time.LocalDate;
 
-@Builder
-public record Review(
-        Long id,
-        Movie movie,
-        Integer score,
-        String title,
-        String content,
-        LocalDate publicationDate
-) {
+
+@SuperBuilder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(callSuper = true)
+@Entity
+public class Review extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_seq")
+    @SequenceGenerator(name = "review_seq", sequenceName = "SEQ_REVIEW", allocationSize = 10)
+    private Long id;
+
+    @Range(min = 1, max = 100)
+    private Integer score;
+
+    @Column(columnDefinition = "varchar(352) not null")
+    private String title;
+
+    @Column(columnDefinition = "text not null")
+    private String content;
+
+    @Column(nullable = false)
+    private LocalDate publicationDate;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Movie movie;
 }

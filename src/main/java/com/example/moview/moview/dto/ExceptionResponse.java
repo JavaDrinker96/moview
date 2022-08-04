@@ -5,17 +5,18 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 
 @Getter
 @Setter
 @Builder(builderClassName = "ErrorDtoBuilder")
-@JsonDeserialize(builder = ErrorDto.ErrorDtoBuilder.class)
-public class ErrorDto {
+@JsonDeserialize(builder = ExceptionResponse.ErrorDtoBuilder.class)
+public class ExceptionResponse {
 
     private String error;
     private String message;
-    private Integer status;
+    private HttpStatus status;
     private String timestamp;
 
     @JsonPOJOBuilder(withPrefix = "")

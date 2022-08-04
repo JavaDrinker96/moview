@@ -2,14 +2,13 @@ package com.example.moview.moview.repository;
 
 
 import com.example.moview.moview.model.Review;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.sql.SQLException;
+import java.util.List;
 
-public interface ReviewRepository {
+@Repository
+public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    void create(Review review) throws ClassNotFoundException, SQLException;
-
-    void update(Review newReview) throws SQLException, ClassNotFoundException;
-
-    void delete(Long id) throws SQLException, ClassNotFoundException;
+    List<Review> findAllByMovieId(Long movieId);
 }

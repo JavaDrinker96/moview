@@ -1,33 +1,56 @@
 package com.example.moview.moview.service;
 
-import com.example.moview.moview.config.mode_mapper.ModelMapperConfigurer;
+import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.model.Review;
+import com.example.moview.moview.repository.MovieRepository;
 import com.example.moview.moview.repository.ReviewRepository;
-import com.example.moview.moview.repository.ReviewRepositoryImpl;
-import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
+import java.util.List;
+import java.util.OptionalDouble;
 
-public class ReviewServiceImpl implements ReviewService {
+@Service
+public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository, Long> implements ReviewService {
 
-    private final ReviewRepository repository;
+    private final MovieRepository movieRepository;
 
-    public ReviewServiceImpl() {
-        this.repository = new ReviewRepositoryImpl();
+    public ReviewServiceImpl(final ReviewRepository repository, final MovieRepository movieRepository) {
+        super(repository);
+        this.movieRepository = movieRepository;
     }
 
     @Override
-    public void create(final Review review) throws SQLException, ClassNotFoundException {
-        repository.create(review);
+    public Review create(final Review entity) {
+        final Review review = super.create(entity);
+        actualizeMovieRating(review.getMovie().getId());
+        return review;
     }
 
     @Override
-    public void update(final Review review) throws SQLException, ClassNotFoundException {
-        repository.update(review);
+    public Review update(final Review newEntity) {
+        final Review review = super.update(newEntity);
+        actualizeMovieRating(review.getMovie().getId());
+        return review;
     }
 
     @Override
-    public void delete(final Long id) throws SQLException, ClassNotFoundException {
-        repository.delete(id);
+    public void delete(final Long id) {
+        final Long movieId = super.read(id).getMovie().getId();
+        super.delete(id);
+        actualizeMovieRating(movieId);
+    }
+
+    private void actualizeMovieRating(final Long movieId) {
+        final Movie movie = movieRepository.findById(movieId)
+                .orElseThrow();
+
+        final List<Review> reviewList = repository.findAllByMovieId(movieId);
+        final OptionalDouble optionalAvgMovieScore = reviewList.stream().mapToLong(Review::getScore).average();
+        final Integer avgMovieScore = optionalAvgMovieScore.isEmpty()
+                ? null
+                : Double.valueOf(Math.ceil(optionalAvgMovieScore.getAsDouble())).intValue();
+
+        movie.setRating(avgMovieScore);
+        movieRepository.save(movie);
     }
 }
