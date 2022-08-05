@@ -49,8 +49,7 @@ public class ReviewController {
                                             @RequestBody @Valid final ReviewCreateDto dto) {
 
         userValidator.validateUserExisting(userId);
-        dto.setAuthorId(userId);
-        final Review review = reviewMapper.reviewCreateDtoToEntity(dto);
+        final Review review = reviewMapper.reviewCreateDtoToEntity(dto, userId);
         final ReviewDto reviewDto = reviewMapper.entityToReviewDto(reviewService.create(review));
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewDto);
     }
@@ -60,8 +59,7 @@ public class ReviewController {
                                             @RequestBody @Valid final ReviewUpdateDto dto) {
 
         reviewValidator.validateAuthor(userId, dto.getId());
-        dto.setAuthorId(userId);
-        final Review review = reviewMapper.reviewUpdateDtoToEntity(dto);
+        final Review review = reviewMapper.reviewUpdateDtoToEntity(dto, userId);
         final ReviewDto reviewDto = reviewMapper.entityToReviewDto(reviewService.update(review));
         return ResponseEntity.ok(reviewDto);
     }

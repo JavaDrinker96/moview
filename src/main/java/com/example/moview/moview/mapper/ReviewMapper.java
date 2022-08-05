@@ -18,13 +18,13 @@ public interface ReviewMapper {
 
     String DATE_PATTERN = "dd.MM.yyyy";
 
-    @Mapping(source = "movieId", target = "movie", qualifiedByName = "movieIdToMovie")
+    @Mapping(source = "dto.movieId", target = "movie", qualifiedByName = "movieIdToMovie")
     @Mapping(source = "authorId", target = "author", qualifiedByName = "userIdToAuthor")
-    Review reviewCreateDtoToEntity(ReviewCreateDto dto);
+    Review reviewCreateDtoToEntity(ReviewCreateDto dto, Long authorId);
 
-    @Mapping(source = "movieId", target = "movie", qualifiedByName = "movieIdToMovie")
+    @Mapping(source = "dto.movieId", target = "movie", qualifiedByName = "movieIdToMovie")
     @Mapping(source = "authorId", target = "author", qualifiedByName = "userIdToAuthor")
-    Review reviewUpdateDtoToEntity(ReviewUpdateDto dto);
+    Review reviewUpdateDtoToEntity(ReviewUpdateDto dto, Long authorId);
 
     @Mapping(source = "publicationDate", target = "publicationDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "movie", target = "movieId", qualifiedByName = "movieToMovieId")
