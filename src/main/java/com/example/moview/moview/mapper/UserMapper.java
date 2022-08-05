@@ -13,11 +13,11 @@ public interface UserMapper {
     String DATE_PATTERN = "dd.MM.yyyy";
 
     @Mapping(source = "birthday", target = "birthday", dateFormat = DATE_PATTERN)
-    User createDtoToModel(UserCreateDto dto);
+    User userCreateDtoToEntity(UserCreateDto dto);
 
     @Mapping(source = "birthday", target = "birthday", dateFormat = DATE_PATTERN)
-    UserDto modelToDto(User model);
+    UserDto entityToUserDto(User entity);
 
     @Mapping(source = "birthday", target = "birthday", dateFormat = DATE_PATTERN)
-    User updateDtoToModel(UserUpdateDto dto);
+    User userUpdateDtoToEntity(UserUpdateDto dto);
 }

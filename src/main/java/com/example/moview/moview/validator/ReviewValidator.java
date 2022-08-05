@@ -24,8 +24,8 @@ public class ReviewValidator {
         final Long foundAuthorId = reviewRepository.getAuthorIdById(reviewId);
         if (!foundAuthorId.equals(authorId)) {
             throw new ForbiddenAuthorException(
-                    String.format(String.format("A user with id %d cannot interact with a review with id %d, " +
-                            "because he did not create it.", authorId, reviewId))
+                    String.format("A user with id %d cannot interact with a review with id %d, " +
+                            "because he did not create it.", authorId, reviewId)
             );
         }
     }

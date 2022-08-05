@@ -12,13 +12,13 @@ import java.util.Set;
 @Mapper(componentModel = "spring")
 public interface GenreMapper {
 
-    Genre createDtoToModel(GenreCreateDto dto);
+    Genre genreCreateDtoToEntity(GenreCreateDto dto);
 
-    GenreDto modelToDto(Genre model);
+    GenreDto entityToGenreDto(Genre entity);
 
-    Genre updateDtoToModel(GenreUpdateDto dto);
+    Genre genreUpdateDtoToEntity(GenreUpdateDto dto);
 
-    List<GenreDto> modelListToDtoList(List<Genre> modelList);
+    List<GenreDto> entityListToGenreDtoList(List<Genre> entityList);
 
-    Set<GenreDto> modelSetToDtoSet(Set<Genre> modelSet);
+    Set<GenreDto> entitySetToGenreDtoSet(Set<Genre> entitySet);
 }

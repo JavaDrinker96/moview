@@ -5,7 +5,6 @@ import com.example.moview.moview.dto.review.ReviewDto;
 import com.example.moview.moview.dto.review.ReviewUpdateDto;
 import com.example.moview.moview.mapper.ReviewMapper;
 import com.example.moview.moview.model.Review;
-import com.example.moview.moview.model.User;
 import com.example.moview.moview.service.ReviewService;
 import com.example.moview.moview.validator.ReviewValidator;
 import com.example.moview.moview.validator.UserValidator;
@@ -50,10 +49,10 @@ public class ReviewController {
                                             @RequestBody @Valid final ReviewCreateDto dto) {
 
         userValidator.validateUserExisting(userId);
-        final Review review = reviewMapper.createDtoToModel(dto);
-        review.setAuthor(User.builder().id(userId).build());
-        final ReviewDto reviewDto = reviewMapper.modelToDto(reviewService.create(review));
-        return ResponseEntity.status(HttpStatus.OK).body(reviewDto);
+        dto.setAuthorId(userId);
+        final Review review = reviewMapper.reviewCreateDtoToEntity(dto);
+        final ReviewDto reviewDto = reviewMapper.entityToReviewDto(reviewService.create(review));
+        return ResponseEntity.status(HttpStatus.CREATED).body(reviewDto);
     }
 
     @PutMapping
@@ -61,10 +60,10 @@ public class ReviewController {
                                             @RequestBody @Valid final ReviewUpdateDto dto) {
 
         reviewValidator.validateAuthor(userId, dto.getId());
-        final Review review = reviewMapper.updateDtoToModel(dto);
-        review.setAuthor(User.builder().id(userId).build());
-        final ReviewDto reviewDto = reviewMapper.modelToDto(reviewService.update(review));
-        return ResponseEntity.status(HttpStatus.OK).body(reviewDto);
+        dto.setAuthorId(userId);
+        final Review review = reviewMapper.reviewUpdateDtoToEntity(dto);
+        final ReviewDto reviewDto = reviewMapper.entityToReviewDto(reviewService.update(review));
+        return ResponseEntity.ok(reviewDto);
     }
 
     @DeleteMapping("/{id}")

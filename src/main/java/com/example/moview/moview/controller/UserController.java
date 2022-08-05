@@ -32,21 +32,21 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> create(@RequestBody @Valid final UserCreateDto dto) {
-        final User user = userService.create(userMapper.createDtoToModel(dto));
-        final UserDto userDto = userMapper.modelToDto(user);
+        final User user = userService.create(userMapper.userCreateDtoToEntity(dto));
+        final UserDto userDto = userMapper.entityToUserDto(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> read(@PathVariable final Long id) {
-        final UserDto userDto = userMapper.modelToDto(userService.read(id));
-        return ResponseEntity.status(HttpStatus.OK).body(userDto);
+        final UserDto userDto = userMapper.entityToUserDto(userService.read(id));
+        return ResponseEntity.ok(userDto);
     }
 
     @PutMapping
     public ResponseEntity<UserDto> update(@RequestBody @Valid final UserUpdateDto dto) {
-        final User user = userService.update(userMapper.updateDtoToModel(dto));
-        final UserDto userDto = userMapper.modelToDto(user);
-        return ResponseEntity.status(HttpStatus.OK).body(userDto);
+        final User user = userService.update(userMapper.userUpdateDtoToEntity(dto));
+        final UserDto userDto = userMapper.entityToUserDto(user);
+        return ResponseEntity.ok(userDto);
     }
 }
