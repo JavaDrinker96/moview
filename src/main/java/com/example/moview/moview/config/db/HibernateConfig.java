@@ -1,7 +1,6 @@
 package com.example.moview.moview.config.db;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -24,7 +23,6 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaAuditing
 @PropertySource(value = "classpath:datasource.properties")
-@ComponentScan({"com.example.moview.moview"})
 @EnableJpaRepositories(basePackages = "com.example.moview.moview.repository")
 public class HibernateConfig {
 

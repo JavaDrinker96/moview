@@ -18,9 +18,13 @@
         <java-version>17</java-version>
 
         <spring.version>5.3.20</spring.version>
+        <spring-aspect.version>5.3.22</spring-aspect.version>
         <servlets.version>4.0.1</servlets.version>
         <tomcat.version>9.0.62</tomcat.version>
         <lombok.version>1.18.22</lombok.version>
+        <threetenbp.version>1.4.2</threetenbp.version>
+        <maven-compiler.version>3.8.0</maven-compiler.version>
+        <maven-shade.version>3.2.4</maven-shade.version>
 
 
         <hibernate.version>5.6.8.Final</hibernate.version>
@@ -31,13 +35,19 @@
         <javax-el.version>3.0.0</javax-el.version>
 
         <jackson.version>2.13.3</jackson.version>
-        <modelmaper.version>3.1.0</modelmaper.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <mapstruct-processor.version>1.4.2.Final</mapstruct-processor.version>
 
         <psql.version>42.3.6</psql.version>
         <log4j.version>1.2.17</log4j.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>3.0.2</version>
+        </dependency>
         <!--For spring-->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -72,7 +82,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
-            <version>5.3.22</version>
+            <version>${spring-aspect.version}</version>
         </dependency>
 
         <!--To interact with the server-->
@@ -90,11 +100,6 @@
             <version>${hibernate.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-envers</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${psql.version}</version>
@@ -107,7 +112,7 @@
             <version>${javax-validation.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate.validator}</version>
         </dependency>
@@ -140,9 +145,9 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>${modelmaper.version}</version>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
         </dependency>
 
         <!--For a local server-->
@@ -159,30 +164,37 @@
         <dependency>
             <groupId>org.threeten</groupId>
             <artifactId>threetenbp</artifactId>
-            <version>1.4.2</version>
+            <version>${threetenbp.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>3.0.2</version>
-        </dependency>
+
     </dependencies>
     <build>
-        <finalName>moviewRest</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>${maven-compiler.version}</version>
                 <configuration>
                     <source>${java-version}</source>
                     <target>${java-version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct-processor.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>${maven-shade.version}</version>
                 <executions>
                     <execution>
                         <phase>package</phase>

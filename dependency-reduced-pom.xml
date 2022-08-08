@@ -25,24 +25,21 @@
             <goals>
               <goal>shade</goal>
             </goals>
-            <configuration>
-              <transformers>
-                <transformer>
-                  <mainClass>com.example.moview.moview.MoviewApplication</mainClass>
-                </transformer>
-                <transformer>
-                  <resource>META-INF/spring.handlers</resource>
-                </transformer>
-                <transformer>
-                  <resource>META-INF/spring.schemas</resource>
-                </transformer>
-                <transformer>
-                  <resource>META-INF/spring.factories</resource>
-                </transformer>
-              </transformers>
-            </configuration>
           </execution>
         </executions>
+        <configuration>
+          <filters>
+            <filter>
+              <artifact>*:*</artifact>
+              <excludes>
+                <exclude>module-info.class</exclude>
+                <exclude>META-INF/*.SF</exclude>
+                <exclude>META-INF/*.DSA</exclude>
+                <exclude>META-INF/*.RSA</exclude>
+              </excludes>
+            </filter>
+          </filters>
+        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -54,6 +51,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>6.0.13.Final</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.22</version>
@@ -62,19 +65,21 @@
   </dependencies>
   <properties>
     <hibernate.version>5.6.8.Final</hibernate.version>
+    <javax-validation.version>2.0.1.Final</javax-validation.version>
     <psql.version>42.3.6</psql.version>
     <servlets.version>4.0.1</servlets.version>
     <java-version>17</java-version>
     <maven.compiler.source>17</maven.compiler.source>
     <spring.version>5.3.20</spring.version>
-    <jackson.version>2.13.3</jackson.version>
     <tomcat.version>9.0.62</tomcat.version>
     <data-jpa.version>2.7.0</data-jpa.version>
+    <jackson.version>2.13.3</jackson.version>
     <modelmaper.version>3.1.0</modelmaper.version>
+    <javax-el.version>3.0.0</javax-el.version>
     <lombok.version>1.18.22</lombok.version>
     <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <hibernate.validator>5.4.1.Final</hibernate.validator>
+    <hibernate.validator>6.0.13.Final</hibernate.validator>
     <log4j.version>1.2.17</log4j.version>
   </properties>
 </project>

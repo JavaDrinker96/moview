@@ -1,12 +1,16 @@
 package com.example.moview.moview.service;
 
 import com.example.moview.moview.model.BaseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
+import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Component
+@Validated
 public abstract class AbstractService<E extends BaseEntity, R extends JpaRepository<E, ID>, ID>
         implements BaseService<E, ID> {
 
@@ -39,5 +43,11 @@ public abstract class AbstractService<E extends BaseEntity, R extends JpaReposit
     @Override
     public List<E> readAll() {
         return repository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public Page<E> readAll(@NotNull final Pageable pageable) {
+        return repository.findAll(pageable);
     }
 }
