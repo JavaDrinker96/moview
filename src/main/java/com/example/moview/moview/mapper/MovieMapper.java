@@ -26,25 +26,25 @@ public interface MovieMapper {
 
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "durationToString")
-    MovieDto modelToDto(Movie model);
+    MovieDto entityToMovieDto(Movie entity);
 
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "stringToDuration")
     @Mapping(source = "genreIds", target = "genres", qualifiedByName = "genreIdsToGenres")
-    Movie createDtoToModel(MovieCreateDto dto);
+    Movie movieCreateDtoToEntity(MovieCreateDto dto);
 
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "stringToDuration")
     @Mapping(source = "genreIds", target = "genres", qualifiedByName = "genreIdsToGenres")
-    Movie updateDtoToModel(MovieUpdateDto dto);
+    Movie movieUpdateDtoToEntity(MovieUpdateDto dto);
 
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "durationToString")
-    MovieShortDto modelToShortDto(Movie model);
+    MovieShortDto entityToMovieShortDto(Movie entity);
 
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "durationToString")
-    List<MovieShortDto> modelListToShortDtoList(List<Movie> modelList);
+    List<MovieShortDto> entityListToMovieShortDtoList(List<Movie> entityList);
 
     default PageRequest pageDtoToPageRequest(MovieReadPageDto dto) {
         return PageRequest.of(dto.getPage(), dto.getSize(),

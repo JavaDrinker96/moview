@@ -34,22 +34,22 @@ public class GenreController {
 
     @PostMapping
     public ResponseEntity<GenreDto> create(@RequestBody @Valid final GenreCreateDto dto) {
-        final Genre genre = genreMapper.createDtoToModel(dto);
-        final GenreDto genreDto = genreMapper.modelToDto(genreService.create(genre));
+        final Genre genre = genreMapper.genreCreateDtoToEntity(dto);
+        final GenreDto genreDto = genreMapper.entityToGenreDto(genreService.create(genre));
         return ResponseEntity.status(HttpStatus.CREATED).body(genreDto);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GenreDto> read(@PathVariable final Long id) {
-        final GenreDto genreDto = genreMapper.modelToDto(genreService.read(id));
-        return ResponseEntity.status(HttpStatus.CREATED).body(genreDto);
+        final GenreDto genreDto = genreMapper.entityToGenreDto(genreService.read(id));
+        return ResponseEntity.ok(genreDto);
     }
 
     @PutMapping
     public ResponseEntity<GenreDto> update(@RequestBody @Valid final GenreUpdateDto dto) {
-        final Genre genre = genreMapper.updateDtoToModel(dto);
-        final GenreDto genreDto = genreMapper.modelToDto(genreService.update(genre));
-        return ResponseEntity.status(HttpStatus.OK).body(genreDto);
+        final Genre genre = genreMapper.genreUpdateDtoToEntity(dto);
+        final GenreDto genreDto = genreMapper.entityToGenreDto(genreService.update(genre));
+        return ResponseEntity.ok(genreDto);
     }
 
     @DeleteMapping("/{id}")
@@ -59,7 +59,7 @@ public class GenreController {
 
     @GetMapping("/all")
     public ResponseEntity<List<GenreDto>> readAll() {
-        final List<GenreDto> dtoList = genreMapper.modelListToDtoList(genreService.readAll());
-        return ResponseEntity.status(HttpStatus.OK).body(dtoList);
+        final List<GenreDto> dtoList = genreMapper.entityListToGenreDtoList(genreService.readAll());
+        return ResponseEntity.ok(dtoList);
     }
 }

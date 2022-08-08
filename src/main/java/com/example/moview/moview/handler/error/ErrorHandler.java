@@ -2,8 +2,8 @@ package com.example.moview.moview.handler.error;
 
 import com.example.moview.moview.dto.ExceptionResponse;
 import com.example.moview.moview.exception.ForbiddenAuthorException;
-import com.example.moview.moview.exception.NullParameterException;
 import com.example.moview.moview.exception.UnauthorizedAuthorException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.UnexpectedTypeException;
 import java.time.format.DateTimeFormatter;
+import java.util.NoSuchElementException;
 
 import static java.time.LocalDateTime.now;
 
@@ -27,13 +28,19 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    protected ResponseEntity<Object> handleConstraintViolationException(final ConstraintViolationException e) {
+    protected ResponseEntity<Object> handleValidationException(final ConstraintViolationException e) {
         final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, response.getStatus());
     }
 
-    @ExceptionHandler(NullParameterException.class)
-    protected ResponseEntity<Object> handleNullParameterException(final NullParameterException e) {
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    protected ResponseEntity<Object> handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
+        final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    protected ResponseEntity<Object> handleNoSuchElementException(final NoSuchElementException e) {
         final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, response.getStatus());
     }

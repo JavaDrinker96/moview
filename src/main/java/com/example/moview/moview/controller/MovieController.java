@@ -8,6 +8,7 @@ import com.example.moview.moview.dto.pagination.MovieReadPageDto;
 import com.example.moview.moview.mapper.MovieMapper;
 import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.service.MovieService;
+import com.example.moview.moview.validator.GenreValidator;
 import com.example.moview.moview.validator.UserValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -32,35 +33,38 @@ public class MovieController {
     private final MovieService movieService;
     private final MovieMapper movieMapper;
     private final UserValidator userValidator;
+    private final GenreValidator genreValidator;
 
 
     public MovieController(final MovieService movieService,
                            final MovieMapper movieMapper,
-                           final UserValidator userValidator) {
+                           final UserValidator userValidator,
+                           final GenreValidator genreValidator) {
 
         this.movieService = movieService;
         this.movieMapper = movieMapper;
         this.userValidator = userValidator;
+        this.genreValidator = genreValidator;
     }
 
     @PostMapping
     public ResponseEntity<MovieShortDto> create(@RequestBody @Valid final MovieCreateDto dto) {
-        final Movie movie = movieService.create(movieMapper.createDtoToModel(dto));
-        final MovieShortDto movieShortDto = movieMapper.modelToShortDto(movie);
+        final Movie movie = movieService.create(movieMapper.movieCreateDtoToEntity(dto));
+        final MovieShortDto movieShortDto = movieMapper.entityToMovieShortDto(movie);
         return ResponseEntity.status(HttpStatus.CREATED).body(movieShortDto);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieDto> deepRead(@PathVariable final Long id) {
-        final MovieDto movieDto = movieMapper.modelToDto(movieService.read(id));
-        return ResponseEntity.status(HttpStatus.OK).body(movieDto);
+        final MovieDto movieDto = movieMapper.entityToMovieDto(movieService.read(id));
+        return ResponseEntity.ok(movieDto);
     }
 
     @PutMapping
     public ResponseEntity<MovieShortDto> update(@RequestBody @Valid final MovieUpdateDto dto) {
-        final Movie movie = movieService.update(movieMapper.updateDtoToModel(dto));
-        final MovieShortDto movieShortDto = movieMapper.modelToShortDto(movie);
-        return ResponseEntity.status(HttpStatus.OK).body(movieShortDto);
+        final Movie movie = movieService.update(movieMapper.movieUpdateDtoToEntity(dto));
+        final MovieShortDto movieShortDto = movieMapper.entityToMovieShortDto(movie);
+        return ResponseEntity.ok(movieShortDto);
     }
 
     @DeleteMapping("/{id}")
@@ -71,8 +75,8 @@ public class MovieController {
     @GetMapping("/all")
     public ResponseEntity<List<MovieShortDto>> readAll(@RequestBody @Valid final MovieReadPageDto dto) {
         final Page<Movie> page = movieService.readAll(movieMapper.pageDtoToPageRequest(dto));
-        final List<MovieShortDto> movieShortDtoList = movieMapper.modelListToShortDtoList(page.getContent());
-        return ResponseEntity.status(HttpStatus.OK).body(movieShortDtoList);
+        final List<MovieShortDto> movieShortDtoList = movieMapper.entityListToMovieShortDtoList(page.getContent());
+        return ResponseEntity.ok(movieShortDtoList);
     }
 
     @GetMapping("/top")
@@ -80,8 +84,9 @@ public class MovieController {
                                                                  @RequestBody final List<Long> genreIds) {
 
         userValidator.validateUserExisting(userId);
+        genreValidator.validateGenresIds(genreIds);
         final List<Movie> movieList = movieService.getUsersTop(userId, genreIds);
-        final List<MovieShortDto> dtoList = movieMapper.modelListToShortDtoList(movieList);
-        return ResponseEntity.status(HttpStatus.OK).body(dtoList);
+        final List<MovieShortDto> dtoList = movieMapper.entityListToMovieShortDtoList(movieList);
+        return ResponseEntity.ok(dtoList);
     }
 }
