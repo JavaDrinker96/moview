@@ -5,6 +5,7 @@ import com.example.moview.moview.dto.movie.MovieDto;
 import com.example.moview.moview.dto.movie.MovieShortDto;
 import com.example.moview.moview.dto.movie.MovieUpdateDto;
 import com.example.moview.moview.dto.pagination.MovieReadPageDto;
+import com.example.moview.moview.facade.MovieFacade;
 import com.example.moview.moview.mapper.MovieMapper;
 import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.service.MovieService;
@@ -30,17 +31,20 @@ import java.util.List;
 @RequestMapping("/movie")
 public class MovieController {
 
+    private final MovieFacade movieFacade;
     private final MovieService movieService;
     private final MovieMapper movieMapper;
     private final UserValidator userValidator;
     private final GenreValidator genreValidator;
 
 
-    public MovieController(final MovieService movieService,
+    public MovieController(final MovieFacade movieFacade,
+                           final MovieService movieService,
                            final MovieMapper movieMapper,
                            final UserValidator userValidator,
                            final GenreValidator genreValidator) {
 
+        this.movieFacade = movieFacade;
         this.movieService = movieService;
         this.movieMapper = movieMapper;
         this.userValidator = userValidator;
@@ -56,7 +60,7 @@ public class MovieController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieDto> deepRead(@PathVariable final Long id) {
-        final MovieDto movieDto = movieMapper.entityToMovieDto(movieService.read(id));
+        final MovieDto movieDto = movieFacade.read(id);
         return ResponseEntity.ok(movieDto);
     }
 

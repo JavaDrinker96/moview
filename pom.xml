@@ -17,7 +17,7 @@
 
         <java-version>17</java-version>
 
-        <spring.version>5.3.20</spring.version>
+        <spring.version>5.3.22</spring.version>
         <spring-aspect.version>5.3.22</spring-aspect.version>
         <servlets.version>4.0.1</servlets.version>
         <tomcat.version>9.0.62</tomcat.version>

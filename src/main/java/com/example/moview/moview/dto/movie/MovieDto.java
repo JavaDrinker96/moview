@@ -21,6 +21,7 @@ public class MovieDto {
     private String releaseDate;
     private String duration;
     private Integer rating;
+    private Integer IMDbRating;
     private Set<ReviewDto> reviews;
     private Set<GenreDto> genres;
 }
