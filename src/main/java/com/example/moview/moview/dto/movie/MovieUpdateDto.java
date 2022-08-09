@@ -24,7 +24,6 @@ public class MovieUpdateDto {
     @NotBlank
     private String title;
 
-    @NotBlank
     private String description;
 
     @NotNull

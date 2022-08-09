@@ -5,13 +5,8 @@ import com.example.moview.moview.model.Genre;
 import com.example.moview.moview.model.Movie;
 import com.example.moview.moview.model.Review;
 import com.example.moview.moview.model.User;
-import com.example.moview.moview.pojo.OmdbMovie;
 import com.example.moview.moview.repository.ReviewRepository;
-import com.example.moview.moview.service.OmdbService;
-import com.example.moview.moview.service.OmdbServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,10 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityNotFoundException;
-import java.net.URL;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.OptionalDouble;
@@ -315,13 +308,6 @@ class MovieTest extends AbstractTest {
                 .andReturn();
 
         assertThat(result.getResolvedException(), is(instanceOf(EntityNotFoundException.class)));
-    }
-
-
-    @Test
-    void test() throws JsonProcessingException {
-        final OmdbService omdbService = new OmdbServiceImpl();
-        System.out.println(omdbService.getRatingByMovieName("Lost Ark"));
     }
 
     private Integer calculateMovieRating(final Long id) {

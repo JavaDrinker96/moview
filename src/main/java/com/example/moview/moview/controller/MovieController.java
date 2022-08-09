@@ -53,7 +53,7 @@ public class MovieController {
 
     @PostMapping
     public ResponseEntity<MovieShortDto> create(@RequestBody @Valid final MovieCreateDto dto) {
-        final Movie movie = movieService.create(movieMapper.movieCreateDtoToEntity(dto));
+        final Movie movie = movieFacade.create(movieMapper.movieCreateDtoToEntity(dto));
         final MovieShortDto movieShortDto = movieMapper.entityToMovieShortDto(movie);
         return ResponseEntity.status(HttpStatus.CREATED).body(movieShortDto);
     }
@@ -66,7 +66,7 @@ public class MovieController {
 
     @PutMapping
     public ResponseEntity<MovieShortDto> update(@RequestBody @Valid final MovieUpdateDto dto) {
-        final Movie movie = movieService.update(movieMapper.movieUpdateDtoToEntity(dto));
+        final Movie movie = movieFacade.update(movieMapper.movieUpdateDtoToEntity(dto));
         final MovieShortDto movieShortDto = movieMapper.entityToMovieShortDto(movie);
         return ResponseEntity.ok(movieShortDto);
     }

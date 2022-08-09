@@ -24,9 +24,9 @@ public interface MovieMapper {
 
     String DATE_PATTERN = "dd.MM.yyyy";
 
-    @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
-    @Mapping(source = "duration", target = "duration", qualifiedByName = "durationToString")
-    MovieDto entityToMovieDto(Movie entity);
+    @Mapping(source = "entity.releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
+    @Mapping(source = "entity.duration", target = "duration", qualifiedByName = "durationToString")
+    MovieDto entityToMovieDto(Movie entity, Integer imdbRating);
 
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "stringToDuration")

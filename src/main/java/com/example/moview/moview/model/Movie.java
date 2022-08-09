@@ -39,7 +39,8 @@ public class Movie extends BaseEntity {
     @Column(columnDefinition = "varchar(352) not null")
     private String title;
 
-    @Column(columnDefinition = "text not null")
+    @Setter
+    @Column(columnDefinition = "text")
     private String description;
 
     @Column(nullable = false)

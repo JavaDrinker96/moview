@@ -19,7 +19,6 @@ public class MovieCreateDto {
     @NotBlank
     private String title;
 
-    @NotBlank
     private String description;
 
     @NotNull
