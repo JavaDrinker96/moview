@@ -21,9 +21,11 @@ import java.util.OptionalDouble;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -53,8 +55,8 @@ class MovieTest extends AbstractTest {
                 .genreIds(Set.of(genreId))
                 .build();
 
-        final String request = objectWriter.writeValueAsString(movieCreateDto);
-        mvc.perform(post("/movie").contentType(MediaType.APPLICATION_JSON).content(request))
+        final String requestBody = objectWriter.writeValueAsString(movieCreateDto);
+        mvc.perform(post("/movie").contentType(MediaType.APPLICATION_JSON).content(requestBody))
 
                 .andExpect(status().isCreated())
 
@@ -76,7 +78,7 @@ class MovieTest extends AbstractTest {
         final String duration = "01:00:00";
         final Long nonExistGenreId = 1L;
 
-        final String request = objectWriter.writeValueAsString(MovieCreateDto.builder()
+        final String requestBody = objectWriter.writeValueAsString(MovieCreateDto.builder()
                 .title(title)
                 .description(description)
                 .releaseDate(releaseDate)
@@ -86,7 +88,7 @@ class MovieTest extends AbstractTest {
 
         final RequestBuilder requestBuilder = post("/movie")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request);
+                .content(requestBody);
 
         final MvcResult result = mvc.perform(requestBuilder)
                 .andExpect(status().isBadRequest())
@@ -103,7 +105,7 @@ class MovieTest extends AbstractTest {
         final String duration = "01:00:00";
         final Long nonExistGenreId = 1L;
 
-        final String request = objectWriter.writeValueAsString(MovieCreateDto.builder()
+        final String requestBody = objectWriter.writeValueAsString(MovieCreateDto.builder()
                 .title(title)
                 .description(description)
                 .releaseDate(releaseDate)
@@ -113,7 +115,7 @@ class MovieTest extends AbstractTest {
 
         final RequestBuilder requestBuilder = post("/movie")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request);
+                .content(requestBody);
 
         final MvcResult result = mvc.perform(requestBuilder)
                 .andExpect(status().isBadRequest())
@@ -137,10 +139,10 @@ class MovieTest extends AbstractTest {
                 .andExpect(status().isOk())
 
                 .andExpect(jsonPath("$.id", is(movie.getId().intValue())))
-                .andExpect(jsonPath("$.title", is(movieTitle)))
-                .andExpect(jsonPath("$.description", is(movieDescription)))
-                .andExpect(jsonPath("$.releaseDate", is(formatLocalDate(movieReleaseDate))))
-                .andExpect(jsonPath("$.duration", is(formatDuration(movieDuration))))
+                .andExpect(jsonPath("$.title", is(defaultMovieTitle)))
+                .andExpect(jsonPath("$.description", is(defaultMovieDescription)))
+                .andExpect(jsonPath("$.releaseDate", is(formatLocalDate(defaultMovieReleaseDate))))
+                .andExpect(jsonPath("$.duration", is(formatDuration(defaultMovieDuration))))
                 .andExpect(jsonPath("$.rating", is(calculateMovieRating(movie.getId()))))
 
                 .andExpect(jsonPath("$.reviews.length()", is(2)))
@@ -148,22 +150,22 @@ class MovieTest extends AbstractTest {
                 .andExpect(jsonPath("$.reviews[0].id", is(review2.getId().intValue())))
                 .andExpect(jsonPath("$.reviews[0].movieId", is(movie.getId().intValue())))
                 .andExpect(jsonPath("$.reviews[0].score", is(review2Score)))
-                .andExpect(jsonPath("$.reviews[0].title", is(reviewTitle + "2")))
-                .andExpect(jsonPath("$.reviews[0].content", is(reviewContent + "2")))
+                .andExpect(jsonPath("$.reviews[0].title", is(defaultReviewTitle + "2")))
+                .andExpect(jsonPath("$.reviews[0].content", is(defaultReviewContent + "2")))
                 .andExpect(jsonPath("$.reviews[0].publicationDate",
                         is(formatLocalDate(review2.getPublicationDate()))))
 
                 .andExpect(jsonPath("$.reviews[1].id", is(review1.getId().intValue())))
                 .andExpect(jsonPath("$.reviews[1].movieId", is(movie.getId().intValue())))
                 .andExpect(jsonPath("$.reviews[1].score", is(review1Score)))
-                .andExpect(jsonPath("$.reviews[1].title", is(reviewTitle + "1")))
-                .andExpect(jsonPath("$.reviews[1].content", is(reviewContent + "1")))
+                .andExpect(jsonPath("$.reviews[1].title", is(defaultReviewTitle + "1")))
+                .andExpect(jsonPath("$.reviews[1].content", is(defaultReviewContent + "1")))
                 .andExpect(jsonPath("$.reviews[1].publicationDate",
                         is(formatLocalDate(review1.getPublicationDate()))))
 
                 .andExpect(jsonPath("$.genres.length()", is(1)))
                 .andExpect(jsonPath("$.genres[0].id", is(genre.getId().intValue())))
-                .andExpect(jsonPath("$.genres[0].name", is(genreName)));
+                .andExpect(jsonPath("$.genres[0].name", is(defaultGenreName)));
     }
 
     @Test
@@ -177,7 +179,7 @@ class MovieTest extends AbstractTest {
     }
 
     @Test
-    void getRecommendation_Success() throws Exception {
+    void givenGenresIds_whenFindRecommendations_thenReturn5Movies() throws Exception {
         final Genre genre1 = createDefaultGenre(1);
         final Genre genre2 = createDefaultGenre(2);
         final Genre genre3 = createDefaultGenre(3);
@@ -216,76 +218,23 @@ class MovieTest extends AbstractTest {
         final Movie movie7 = createDefaultMovie(genre3.getId(), 7);
         createDefaultReview(movie7.getId(), user1.getId(), 14, 80);
 
-        final Integer movie1ExpectedRating = 84;
-        final Integer movie2ExpectedRating = 87;
-        final Integer movie3ExpectedRating = 81;
-        final Integer movie4ExpectedRating = 81;
-        final Integer movie5ExpectedRating = 90;
-
         final RequestBuilder requestBuilder = get("/movie/top")
                 .header("Authorization", authorizationHeader)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectWriter.writeValueAsString(genreIdsForRecommendation));
+
+        final int lowerRatingLimit = 79;
 
         mvc.perform(requestBuilder)
                 .andExpect(status().isOk())
 
                 .andExpect(jsonPath("$.length()", is(5)))
 
-                .andExpect(jsonPath("$.[0].id", is(movie5.getId().intValue())))
-                .andExpect(jsonPath("$.[0].title", is(movieTitle + "5")))
-                .andExpect(jsonPath("$.[0].description", is(movieDescription + "5")))
-                .andExpect(jsonPath("$.[0].releaseDate", is(formatLocalDate(movieReleaseDate))))
-                .andExpect(jsonPath("$.[0].duration", is(formatDuration(movieDuration))))
-                .andExpect(jsonPath("$.[0].rating", is(movie5ExpectedRating)))
-
-                .andExpect(jsonPath("$.[0].genres[0].id", is(genre1.getId().intValue())))
-                .andExpect(jsonPath("$.[0].genres[0].name", is(genreName + "1")))
-                .andExpect(jsonPath("$.[0].genres.length()", is(1)))
-
-                .andExpect(jsonPath("$.[1].id", is(movie2.getId().intValue())))
-                .andExpect(jsonPath("$.[1].title", is(movieTitle + "2")))
-                .andExpect(jsonPath("$.[1].description", is(movieDescription + "2")))
-                .andExpect(jsonPath("$.[1].releaseDate", is(formatLocalDate(movieReleaseDate))))
-                .andExpect(jsonPath("$.[1].duration", is(formatDuration(movieDuration))))
-                .andExpect(jsonPath("$.[1].rating", is(movie2ExpectedRating)))
-
-                .andExpect(jsonPath("$.[1].genres[0].id", is(genre2.getId().intValue())))
-                .andExpect(jsonPath("$.[1].genres[0].name", is(genreName + "2")))
-                .andExpect(jsonPath("$.[1].genres.length()", is(1)))
-
-                .andExpect(jsonPath("$.[2].id", is(movie1.getId().intValue())))
-                .andExpect(jsonPath("$.[2].title", is(movieTitle + "1")))
-                .andExpect(jsonPath("$.[2].description", is(movieDescription + "1")))
-                .andExpect(jsonPath("$.[2].releaseDate", is(formatLocalDate(movieReleaseDate))))
-                .andExpect(jsonPath("$.[2].duration", is(formatDuration(movieDuration))))
-                .andExpect(jsonPath("$.[2].rating", is(movie1ExpectedRating)))
-
-                .andExpect(jsonPath("$.[2].genres[0].id", is(genre1.getId().intValue())))
-                .andExpect(jsonPath("$.[2].genres[0].name", is(genreName + "1")))
-                .andExpect(jsonPath("$.[2].genres.length()", is(1)))
-
-                .andExpect(jsonPath("$.[3].id", is(movie4.getId().intValue())))
-                .andExpect(jsonPath("$.[3].title", is(movieTitle + "4")))
-                .andExpect(jsonPath("$.[3].description", is(movieDescription + "4")))
-                .andExpect(jsonPath("$.[3].releaseDate", is(formatLocalDate(movieReleaseDate))))
-                .andExpect(jsonPath("$.[3].duration", is(formatDuration(movieDuration))))
-                .andExpect(jsonPath("$.[3].rating", is(movie4ExpectedRating)))
-
-                .andExpect(jsonPath("$.[3].genres[0].id", is(genre1.getId().intValue())))
-                .andExpect(jsonPath("$.[3].genres[0].name", is(genreName + "1")))
-                .andExpect(jsonPath("$.[3].genres.length()", is(1)))
-
-                .andExpect(jsonPath("$.[4].id", is(movie3.getId().intValue())))
-                .andExpect(jsonPath("$.[4].title", is(movieTitle + "3")))
-                .andExpect(jsonPath("$.[4].description", is(movieDescription + "3")))
-                .andExpect(jsonPath("$.[4].releaseDate", is(formatLocalDate(movieReleaseDate))))
-                .andExpect(jsonPath("$.[4].duration", is(formatDuration(movieDuration))))
-                .andExpect(jsonPath("$.[4].rating", is(movie3ExpectedRating)))
-
-                .andExpect(jsonPath("$.[4].genres[0].id", is(genre3.getId().intValue())))
-                .andExpect(jsonPath("$.[4].genres[0].name", is(genreName + "3")))
-                .andExpect(jsonPath("$.[4].genres.length()", is(1)));
+                .andExpect(jsonPath("$.[0].rating", greaterThan(lowerRatingLimit)))
+                .andExpect(jsonPath("$.[1].rating", greaterThan(lowerRatingLimit)))
+                .andExpect(jsonPath("$.[2].rating", greaterThan(lowerRatingLimit)))
+                .andExpect(jsonPath("$.[3].rating", greaterThan(lowerRatingLimit)))
+                .andExpect(jsonPath("$.[4].rating",greaterThan(lowerRatingLimit)));
     }
 
     @Test

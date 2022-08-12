@@ -18,33 +18,33 @@ class UserTest extends AbstractTest {
 
     @Test
     void createUser_Success() throws Exception {
-        final String request = objectWriter.writeValueAsString(UserCreateDto.builder()
-                .firstName(userName)
-                .lastName(userLastName)
-                .birthday(formatLocalDate(userBirthday))
-                .email(userEmail)
+        final String requestBody = objectWriter.writeValueAsString(UserCreateDto.builder()
+                .firstName(defaultUserName)
+                .lastName(defaultUserLastName)
+                .birthday(formatLocalDate(defaultUserBirthday))
+                .email(defaultUserEmail)
                 .build());
 
-        mvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON).content(request))
+        mvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.firstName", is(userName)))
-                .andExpect(jsonPath("$.lastName", is(userLastName)))
-                .andExpect(jsonPath("$.birthday", is(formatLocalDate(userBirthday))))
-                .andExpect(jsonPath("$.email", is(userEmail)));
+                .andExpect(jsonPath("$.firstName", is(defaultUserName)))
+                .andExpect(jsonPath("$.lastName", is(defaultUserLastName)))
+                .andExpect(jsonPath("$.birthday", is(formatLocalDate(defaultUserBirthday))))
+                .andExpect(jsonPath("$.email", is(defaultUserEmail)));
     }
 
     @Test
     void createUserWithNonValidEmail_Exception() throws Exception {
-        final String request = objectWriter.writeValueAsString(UserCreateDto.builder()
-                .firstName(userName)
-                .lastName(userLastName)
-                .birthday(formatLocalDate(userBirthday))
-                .email(userEmail + "@")
+        final String requestBody = objectWriter.writeValueAsString(UserCreateDto.builder()
+                .firstName(defaultUserName)
+                .lastName(defaultUserLastName)
+                .birthday(formatLocalDate(defaultUserBirthday))
+                .email(defaultUserEmail + "@")
                 .build());
 
         final RequestBuilder requestBuilder = post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(request);
+                .content(requestBody);
 
         final MvcResult result = mvc.perform(requestBuilder)
                 .andExpect(status().isBadRequest())

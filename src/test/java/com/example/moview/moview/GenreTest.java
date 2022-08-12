@@ -16,9 +16,9 @@ class GenreTest extends AbstractTest {
     @Test
     void createGenre_Success() throws Exception {
         final GenreCreateDto genreCreateDto = GenreCreateDto.builder().name("genre").build();
-        final String request = objectWriter.writeValueAsString(genreCreateDto);
+        final String requestBody = objectWriter.writeValueAsString(genreCreateDto);
 
-        mvc.perform(post("/genre").contentType(MediaType.APPLICATION_JSON).content(request))
+        mvc.perform(post("/genre").contentType(MediaType.APPLICATION_JSON).content(requestBody))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("genre")));
     }

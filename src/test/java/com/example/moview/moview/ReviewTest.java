@@ -35,8 +35,8 @@ class ReviewTest extends AbstractTest {
         final ReviewCreateDto reviewCreateDto = ReviewCreateDto.builder()
                 .movieId(movie.getId())
                 .score(defaultReviewScore)
-                .title(reviewTitle)
-                .content(reviewContent)
+                .title(defaultReviewTitle)
+                .content(defaultReviewContent)
                 .build();
 
         final RequestBuilder requestBuilder = post("/review")
@@ -48,8 +48,8 @@ class ReviewTest extends AbstractTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.movieId", is(movie.getId().intValue())))
                 .andExpect(jsonPath("$.score", is(defaultReviewScore)))
-                .andExpect(jsonPath("$.title", is(reviewTitle)))
-                .andExpect(jsonPath("$.content", is(reviewContent)))
+                .andExpect(jsonPath("$.title", is(defaultReviewTitle)))
+                .andExpect(jsonPath("$.content", is(defaultReviewContent)))
                 .andExpect(jsonPath("$.publicationDate", is(formatLocalDate(now()))));
     }
 
@@ -62,8 +62,8 @@ class ReviewTest extends AbstractTest {
         final ReviewCreateDto reviewCreateDto = ReviewCreateDto.builder()
                 .movieId(movie.getId())
                 .score(defaultReviewScore)
-                .title(reviewTitle)
-                .content(reviewContent)
+                .title(defaultReviewTitle)
+                .content(defaultReviewContent)
                 .build();
 
         final RequestBuilder requestBuilder = post("/review")

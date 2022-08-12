@@ -41,23 +41,23 @@ public abstract class AbstractTest {
 
 
     //data for Genre
-    protected static final String genreName = "genreName";
+    protected static final String defaultGenreName = "genreName";
 
     //data for User
-    protected static final String userName = "userName";
-    protected static final String userLastName = "userLastName";
-    protected static final LocalDate userBirthday = LocalDate.of(2000, 1, 1);
-    protected static final String userEmail = "email@gmail.com";
+    protected static final String defaultUserName = "userName";
+    protected static final String defaultUserLastName = "userLastName";
+    protected static final LocalDate defaultUserBirthday = LocalDate.of(2000, 1, 1);
+    protected static final String defaultUserEmail = "email@gmail.com";
 
     //data for Movie
-    protected static final String movieTitle = "movieTitle";
-    protected static final String movieDescription = "movieDescription";
-    protected static final LocalDate movieReleaseDate = LocalDate.of(1999, 1, 1);
-    protected static final Duration movieDuration = Duration.ofHours(1);
+    protected static final String defaultMovieTitle = "movieTitle";
+    protected static final String defaultMovieDescription = "movieDescription";
+    protected static final LocalDate defaultMovieReleaseDate = LocalDate.of(1999, 1, 1);
+    protected static final Duration defaultMovieDuration = Duration.ofHours(1);
 
     //data for Review
-    protected static final String reviewTitle = "reviewTitle";
-    protected static final String reviewContent = "reviewContent";
+    protected static final String defaultReviewTitle = "reviewTitle";
+    protected static final String defaultReviewContent = "reviewContent";
     protected static final int defaultReviewScore = 50;
 
 
@@ -92,31 +92,31 @@ public abstract class AbstractTest {
     }
 
     protected Genre createDefaultGenre() {
-        return genreService.create(Genre.builder().name(genreName).build());
+        return genreService.create(Genre.builder().name(defaultGenreName).build());
     }
 
     protected Genre createDefaultGenre(final int number) {
-        final StringBuilder sbGenreName = new StringBuilder(genreName);
+        final StringBuilder sbGenreName = new StringBuilder(defaultGenreName);
         return genreService.create(Genre.builder().name(sbGenreName.append(number).toString()).build());
     }
 
     protected User createDefaultUser() {
         return userService.create(User.builder()
-                .firstName(userName)
-                .lastName(userLastName)
-                .birthday(userBirthday)
-                .email(userEmail)
+                .firstName(defaultUserName)
+                .lastName(defaultUserLastName)
+                .birthday(defaultUserBirthday)
+                .email(defaultUserEmail)
                 .build());
     }
 
     protected User createDefaultUser(final int number) {
-        final StringBuilder sbUserName = new StringBuilder(userName);
-        final StringBuilder sbUserLastName = new StringBuilder(userLastName);
-        final StringBuilder sbUserEmail = new StringBuilder(userEmail);
+        final StringBuilder sbUserName = new StringBuilder(defaultUserName);
+        final StringBuilder sbUserLastName = new StringBuilder(defaultUserLastName);
+        final StringBuilder sbUserEmail = new StringBuilder(defaultUserEmail);
         return userService.create(User.builder()
                 .firstName(sbUserName.append(number).toString())
                 .lastName(sbUserLastName.append(number).toString())
-                .birthday(userBirthday)
+                .birthday(defaultUserBirthday)
                 .email(sbUserEmail.insert(5, number).toString())
                 .build());
     }
@@ -125,23 +125,23 @@ public abstract class AbstractTest {
 
         final Set<Genre> movieGenres = Set.of(Genre.builder().id(genreId).build());
         return movieService.create(Movie.builder()
-                .title(movieTitle)
-                .description(movieDescription)
-                .releaseDate(movieReleaseDate)
-                .duration(movieDuration)
+                .title(defaultMovieTitle)
+                .description(defaultMovieDescription)
+                .releaseDate(defaultMovieReleaseDate)
+                .duration(defaultMovieDuration)
                 .genres(movieGenres)
                 .build());
     }
 
     protected Movie createDefaultMovie(final Long genreId, final int number) {
-        final StringBuilder sbMovieTitle = new StringBuilder(movieTitle);
-        final StringBuilder sbMovieDescription = new StringBuilder(movieDescription);
+        final StringBuilder sbMovieTitle = new StringBuilder(defaultMovieTitle);
+        final StringBuilder sbMovieDescription = new StringBuilder(defaultMovieDescription);
         final Set<Genre> movieGenres = Set.of(Genre.builder().id(genreId).build());
         return movieService.create(Movie.builder()
                 .title(sbMovieTitle.append(number).toString())
                 .description(sbMovieDescription.append(number).toString())
-                .releaseDate(movieReleaseDate)
-                .duration(movieDuration)
+                .releaseDate(defaultMovieReleaseDate)
+                .duration(defaultMovieDuration)
                 .genres(movieGenres)
                 .build());
     }
@@ -149,8 +149,8 @@ public abstract class AbstractTest {
     protected Review createDefaultReview(final Long movieId, final Long authorId, final int reviewScore) {
         return reviewService.create(Review.builder()
                 .score(reviewScore)
-                .title(reviewTitle)
-                .content(reviewContent)
+                .title(defaultReviewTitle)
+                .content(defaultReviewContent)
                 .movie(Movie.builder().id(movieId).build())
                 .author(User.builder().id(authorId).build())
                 .build());
@@ -161,8 +161,8 @@ public abstract class AbstractTest {
                                          final int number,
                                          final int reviewScore) {
 
-        final StringBuilder sbReviewTitle = new StringBuilder(reviewTitle);
-        final StringBuilder sbReviewContent = new StringBuilder(reviewContent);
+        final StringBuilder sbReviewTitle = new StringBuilder(defaultReviewTitle);
+        final StringBuilder sbReviewContent = new StringBuilder(defaultReviewContent);
         return reviewService.create(Review.builder()
                 .score(reviewScore)
                 .title(sbReviewTitle.append(number).toString())
