@@ -1,0 +1,97 @@
+# date pattern for id: mm-dd-yyyy
+databaseChangeLog:
+  - changeSet:
+      id: 08-13-2022-create-review-table
+      author: vladimir_egorov
+      changes:
+        - createTable:
+            tableName: review
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: review_pkey
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+              - column:
+                  name: created
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: modified
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: content
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: publication_date
+                  type: date
+              - column:
+                  name: score
+                  type: INTEGER
+              - column:
+                  constraints:
+                    nullable: false
+                  name: title
+                  type: VARCHAR(352)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: app_user_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: movie_id
+                  type: BIGINT
+
+  - changeSet:
+      id: 08-13-2022-create-review-sequence
+      author: vladimir_egorov
+      changes:
+        - createSequence:
+            sequenceName: seq_review
+            cacheSize: 1
+            cycle: false
+            dataType: bigint
+            incrementBy: 10
+            maxValue: 9223372036854775807
+            minValue: 1
+            startValue: 1
+
+  - changeSet:
+      id: 08-13-2022-create-movie-id-foreign-key-for-review
+      author: vladimir_egorov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: movie_id
+            baseTableName: review
+            constraintName: fk8378dhlpvq0e9tnkn9mx0r64i
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: movie
+            validate: true
+
+  - changeSet:
+      id: 08-13-2022-create-app-user-id-foreign-key-for-review
+      author: Vladzimir.Egorov (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: app_user_id
+            baseTableName: review
+            constraintName: fka8d1jolhqnvp4xhfufns7yv40
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: app_user
+            validate: true

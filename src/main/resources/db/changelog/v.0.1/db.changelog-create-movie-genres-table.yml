@@ -1,0 +1,55 @@
+# date pattern for id: mm-dd-yyyy
+databaseChangeLog:
+  - changeSet:
+      id: 08-13-2022-create-movie-genres-table
+      author: vladimir_egorov
+      changes:
+        - createTable:
+            tableName: movie_genres
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: movie_genres_pkey
+                  name: movie_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: movie_genres_pkey
+                  name: genre_id
+                  type: BIGINT
+
+  - changeSet:
+      id: 08-13-2022-create-genre-id-foreign-key-for-movie-genres
+      author: vladimir_egorov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: genre_id
+            baseTableName: movie_genres
+            constraintName: fknup1hm4tk18om6dgawfgo5ay9
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: genre
+            validate: true
+
+  - changeSet:
+      id: 08-13-2022-create-movie-id-foreign-key-for-movie-genres
+      author: Vladzimir.Egorov (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: movie_id
+            baseTableName: movie_genres
+            constraintName: fks2xl3sirbon75mjcongwhrbi3
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: movie
+            validate: true

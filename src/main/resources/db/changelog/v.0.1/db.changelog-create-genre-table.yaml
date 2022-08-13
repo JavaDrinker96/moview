@@ -1,0 +1,41 @@
+# date pattern for id: mm-dd-yyyy
+databaseChangeLog:
+  - changeSet:
+      id: 08-13-2022-create-genre-table
+      author: vladimir_egorov
+      changes:
+        - createTable:
+            tableName: genre
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: genre_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: modified
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: 08-13-2022-create-genre-sequence
+      author: vladimir_egorov
+      changes:
+        - createSequence:
+            sequenceName: seq_genre
+            cacheSize: 1
+            cycle: false
+            dataType: bigint
+            incrementBy: 10
+            maxValue: 9223372036854775807
+            minValue: 1
+            startValue: 1

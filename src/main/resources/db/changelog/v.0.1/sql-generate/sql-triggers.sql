@@ -1,35 +1,3 @@
-create table if not exists movie
-(
-    id           serial
-    primary key,
-    title        text   not null,
-    description  text   not null,
-    release_date date   not null,
-    duration     bigint not null,
-    rating       integer
-);
-
-alter table movie
-    owner to postgres;
-
-create table if not exists review
-(
-    id               serial
-    primary key,
-    movie_id         integer not null
-    references movie
-    on delete cascade,
-    score            integer
-    constraint review_score_check
-    check ((score > 0) AND (score <= 100)),
-    title            text    not null,
-    content          text    not null,
-    publication_date date    not null
-    );
-
-alter table review
-    owner to postgres;
-
 create or replace function get_avg_movie_score(m_id integer) returns integer
     language sql
 as
@@ -98,4 +66,3 @@ create trigger actualize_movie_before_delete_review
     on review
     for each row
     execute procedure actualize_movie_score_for_delete();
-

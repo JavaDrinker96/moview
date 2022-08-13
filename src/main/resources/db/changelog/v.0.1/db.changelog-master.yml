@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - include:
+      file: db.changelog-create-user-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-create-genre-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-create-movie-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-create-movie-genres-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: db.changelog-create-review-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: sql-generate/sql-triggers.sql
+      relativeToChangelogFile: true
