@@ -22,8 +22,8 @@ import javax.persistence.SequenceGenerator;
 public class Genre extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "genre_seq")
-    @SequenceGenerator(name = "genre_seq", sequenceName = "SEQ_GENRE", allocationSize = 10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_genre")
+    @SequenceGenerator(name = "seq_genre", sequenceName = "SEQ_GENRE", allocationSize = 10)
     private Long id;
 
     @Column(nullable = false)

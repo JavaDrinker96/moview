@@ -30,8 +30,8 @@ import java.time.LocalDate;
 public class Review extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_seq")
-    @SequenceGenerator(name = "review_seq", sequenceName = "SEQ_REVIEW", allocationSize = 10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_review")
+    @SequenceGenerator(name = "seq_review", sequenceName = "SEQ_REVIEW", allocationSize = 10)
     private Long id;
 
     @Range(min = 1, max = 100)

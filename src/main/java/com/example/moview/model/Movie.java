@@ -32,8 +32,8 @@ import java.util.Set;
 public class Movie extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "movie_seq")
-    @SequenceGenerator(name = "movie_seq", sequenceName = "SEQ_MOVIE", allocationSize = 10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_movie")
+    @SequenceGenerator(name = "seq_movie", sequenceName = "SEQ_MOVIE", allocationSize = 10)
     private Long id;
 
     @Column(columnDefinition = "varchar(352) not null")

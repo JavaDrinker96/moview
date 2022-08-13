@@ -1,4 +1,4 @@
-create or replace function get_avg_movie_score(m_id integer) returns integer
+create or replace function get_avg_movie_score(m_id bigint) returns integer
     language sql
 as
 $$
@@ -7,9 +7,9 @@ FROM review as r
 WHERE r.movie_id = m_id;
 $$;
 
-alter function get_avg_movie_score(integer) owner to postgres;
+alter function get_avg_movie_score(bigint) owner to postgres;
 
-create or replace function get_avg_movie_score_for_delete(m_id integer, deleted_r_id integer) returns integer
+create or replace function get_avg_movie_score_for_delete(m_id bigint, deleted_r_id bigint) returns integer
     language sql
 as
 $$
@@ -19,7 +19,7 @@ WHERE r.movie_id = m_id
   AND r.id != deleted_r_id;
 $$;
 
-alter function get_avg_movie_score_for_delete(integer, integer) owner to postgres;
+alter function get_avg_movie_score_for_delete(bigint, bigint) owner to postgres;
 
 create or replace function actualize_movie_score() returns trigger
     language plpgsql

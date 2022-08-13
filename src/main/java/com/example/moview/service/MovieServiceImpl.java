@@ -5,12 +5,10 @@ import com.example.moview.model.Genre;
 import com.example.moview.model.Movie;
 import com.example.moview.model.Review;
 import com.example.moview.repository.MovieRepository;
-import com.example.moview.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,24 +17,8 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
     private static final int SAMPLE_SCORE = 80;
     private static final int TOP_SIZE = 5;
 
-    private final ReviewRepository reviewRepository;
-
-    public MovieServiceImpl(final MovieRepository repository, final ReviewRepository reviewRepository) {
+    public MovieServiceImpl(final MovieRepository repository) {
         super(repository);
-        this.reviewRepository = reviewRepository;
-    }
-
-    @Override
-    public Movie update(final Movie movie) {
-        setActualRating(movie);
-        return repository.save(movie);
-    }
-
-    @Override
-    public void actualizeRating(final Long id) {
-        final Movie movie = repository.findById(id).orElseThrow();
-        setActualRating(movie);
-        repository.save(movie);
     }
 
     @Override
@@ -54,21 +36,6 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
         }
 
         return topList;
-    }
-
-    private void setActualRating(final Movie movie) {
-        movie.setRating(calculateRating(movie.getId()));
-    }
-
-    private Integer calculateRating(final Long id) {
-        final OptionalDouble optionalAvgMovieRating = reviewRepository.findAllByMovieId(id)
-                .stream()
-                .mapToLong(Review::getScore)
-                .average();
-
-        return optionalAvgMovieRating.isPresent()
-                ? Double.valueOf(Math.ceil(optionalAvgMovieRating.getAsDouble())).intValue()
-                : null;
     }
 
     private List<Movie> filterByCurrentReviewsAndScore(final List<Movie> movies, final int score) {
