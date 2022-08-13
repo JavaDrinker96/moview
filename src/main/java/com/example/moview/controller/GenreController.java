@@ -6,6 +6,7 @@ import com.example.moview.model.Genre;
 import com.example.moview.dto.genre.GenreCreateDto;
 import com.example.moview.dto.genre.GenreDto;
 import com.example.moview.service.GenreService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +34,7 @@ public class GenreController {
     }
 
     @PostMapping
+    @ApiOperation("Create Genre.")
     public ResponseEntity<GenreDto> create(@RequestBody @Valid final GenreCreateDto dto) {
         final Genre genre = genreMapper.genreCreateDtoToEntity(dto);
         final GenreDto genreDto = genreMapper.entityToGenreDto(genreService.create(genre));
@@ -40,23 +42,27 @@ public class GenreController {
     }
 
     @GetMapping("/{id}")
+    @ApiOperation("Find Genre genre by id.")
     public ResponseEntity<GenreDto> read(@PathVariable final Long id) {
         final GenreDto genreDto = genreMapper.entityToGenreDto(genreService.read(id));
         return ResponseEntity.ok(genreDto);
     }
 
     @PutMapping
+    @ApiOperation("Update Genre.")
     public ResponseEntity<GenreDto> update(@RequestBody @Valid final GenreUpdateDto dto) {
         final Genre genre = genreMapper.genreUpdateDtoToEntity(dto);
         final GenreDto genreDto = genreMapper.entityToGenreDto(genreService.update(genre));
         return ResponseEntity.ok(genreDto);
     }
 
+    @ApiOperation("Delete Genre by id.")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable final Long id) {
         genreService.delete(id);
     }
 
+    @ApiOperation("Find all Genres.")
     @GetMapping("/all")
     public ResponseEntity<List<GenreDto>> readAll() {
         final List<GenreDto> dtoList = genreMapper.entityListToGenreDtoList(genreService.readAll());
