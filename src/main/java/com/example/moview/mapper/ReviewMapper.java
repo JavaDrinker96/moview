@@ -1,53 +1,31 @@
 package com.example.moview.mapper;
 
-import com.example.moview.model.User;
 import com.example.moview.dto.review.ReviewCreateDto;
 import com.example.moview.dto.review.ReviewDto;
 import com.example.moview.dto.review.ReviewUpdateDto;
-import com.example.moview.model.Movie;
 import com.example.moview.model.Review;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 
-import java.util.List;
 import java.util.Set;
 
-@Mapper(componentModel = "spring")
+@Mapper(uses = {MovieMapper.class}, componentModel = "spring")
 public interface ReviewMapper {
 
     String DATE_PATTERN = "dd.MM.yyyy";
 
-    @Mapping(source = "dto.movieId", target = "movie", qualifiedByName = "movieIdToMovie")
-    @Mapping(source = "authorId", target = "author", qualifiedByName = "userIdToAuthor")
+    @Mapping(source = "dto.movieId", target = "movie")
+    @Mapping(source = "authorId", target = "author.id")
     Review reviewCreateDtoToEntity(ReviewCreateDto dto, Long authorId);
 
-    @Mapping(source = "dto.movieId", target = "movie", qualifiedByName = "movieIdToMovie")
-    @Mapping(source = "authorId", target = "author", qualifiedByName = "userIdToAuthor")
+    @Mapping(source = "dto.movieId", target = "movie")
+    @Mapping(source = "authorId", target = "author.id")
     Review reviewUpdateDtoToEntity(ReviewUpdateDto dto, Long authorId);
 
     @Mapping(source = "publicationDate", target = "publicationDate", dateFormat = DATE_PATTERN)
-    @Mapping(source = "movie", target = "movieId", qualifiedByName = "movieToMovieId")
+    @Mapping(source = "movie.id", target = "movieId")
     ReviewDto entityToReviewDto(Review model);
 
     @Mapping(source = "publicationDate", target = "publicationDate", dateFormat = DATE_PATTERN)
-    List<ReviewDto> entityListToDtoList(List<Review> entityList);
-
-    @Mapping(source = "publicationDate", target = "publicationDate", dateFormat = DATE_PATTERN)
     Set<ReviewDto> entitySetToReviewDtoSet(Set<Review> entitySet);
-
-    @Named("movieToMovieId")
-    default Long movieToMovieId(Movie movie) {
-        return movie.getId();
-    }
-
-    @Named("movieIdToMovie")
-    default Movie movieToMovieId(Long movieId) {
-        return Movie.builder().id(movieId).build();
-    }
-
-    @Named("userIdToAuthor")
-    default User userIdToAuthor(Long userId) {
-        return User.builder().id(userId).build();
-    }
 }

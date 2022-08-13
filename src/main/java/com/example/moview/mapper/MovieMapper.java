@@ -1,6 +1,5 @@
 package com.example.moview.mapper;
 
-import com.example.moview.model.Genre;
 import com.example.moview.dto.movie.MovieCreateDto;
 import com.example.moview.dto.movie.MovieDto;
 import com.example.moview.dto.movie.MovieShortDto;
@@ -16,10 +15,8 @@ import org.springframework.data.domain.Sort;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-@Mapper(uses = {ReviewMapper.class, GenreMapper.class}, componentModel = "spring")
+@Mapper(uses = {GenreMapper.class}, componentModel = "spring")
 public interface MovieMapper {
 
     String DATE_PATTERN = "dd.MM.yyyy";
@@ -30,12 +27,12 @@ public interface MovieMapper {
 
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "stringToDuration")
-    @Mapping(source = "genreIds", target = "genres", qualifiedByName = "genreIdsToGenres")
+    @Mapping(source = "genreIds", target = "genres")
     Movie movieCreateDtoToEntity(MovieCreateDto dto);
 
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "stringToDuration")
-    @Mapping(source = "genreIds", target = "genres", qualifiedByName = "genreIdsToGenres")
+    @Mapping(source = "genreIds", target = "genres")
     Movie movieUpdateDtoToEntity(MovieUpdateDto dto);
 
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
@@ -45,6 +42,8 @@ public interface MovieMapper {
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "durationToString")
     List<MovieShortDto> entityListToMovieShortDtoList(List<Movie> entityList);
+
+    Movie idToEntity(Long id);
 
     default PageRequest pageDtoToPageRequest(MovieReadPageDto dto) {
         return PageRequest.of(dto.getPage(), dto.getSize(),
@@ -59,12 +58,5 @@ public interface MovieMapper {
     @Named("stringToDuration")
     default Duration stringToDuration(String string) {
         return Duration.between(LocalTime.MIN, LocalTime.parse(string));
-    }
-
-    @Named("genreIdsToGenres")
-    default Set<Genre> genreIdsToGenres(Set<Long> genreIds) {
-        return genreIds.stream()
-                .map(id -> Genre.builder().id(id).build())
-                .collect(Collectors.toSet());
     }
 }
