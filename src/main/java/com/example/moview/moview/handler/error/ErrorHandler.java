@@ -2,6 +2,7 @@ package com.example.moview.moview.handler.error;
 
 import com.example.moview.moview.dto.ExceptionResponse;
 import com.example.moview.moview.exception.ForbiddenAuthorException;
+import com.example.moview.moview.exception.OmdbDescriptionException;
 import com.example.moview.moview.exception.UnauthorizedAuthorException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,12 @@ public class ErrorHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> handleEntityNotFoundException(final EntityNotFoundException e) {
+        final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
+    @ExceptionHandler(OmdbDescriptionException.class)
+    protected ResponseEntity<Object> handleOmdbDescriptionException(final OmdbDescriptionException e) {
         final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, response.getStatus());
     }
