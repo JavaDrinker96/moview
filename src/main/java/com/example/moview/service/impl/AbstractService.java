@@ -1,6 +1,7 @@
-package com.example.moview.service;
+package com.example.moview.service.impl;
 
 import com.example.moview.model.BaseEntity;
+import com.example.moview.service.BaseService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

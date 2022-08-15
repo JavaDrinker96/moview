@@ -1,10 +1,11 @@
-package com.example.moview.service;
+package com.example.moview.service.impl;
 
 import com.example.moview.model.BaseEntity;
 import com.example.moview.model.Genre;
 import com.example.moview.model.Movie;
 import com.example.moview.model.Review;
 import com.example.moview.repository.MovieRepository;
+import com.example.moview.service.MovieService;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;

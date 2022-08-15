@@ -1,7 +1,8 @@
-package com.example.moview.service;
+package com.example.moview.service.impl;
 
 import com.example.moview.model.User;
 import com.example.moview.repository.UserRepository;
+import com.example.moview.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service

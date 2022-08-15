@@ -1,5 +1,6 @@
-package com.example.moview.service;
+package com.example.moview.service.impl;
 
+import com.example.moview.service.OmdbService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
