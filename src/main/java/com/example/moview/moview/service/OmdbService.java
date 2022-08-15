@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public interface OmdbService {
 
-    Optional<Integer> getRatingByMovieName(String name);
+    Integer getRatingByMovieName(String name);
 
     Optional<String> getDescriptionByMovieName(String name);
 }

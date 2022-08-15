@@ -21,18 +21,16 @@ public class OmdbServiceImpl implements OmdbService {
 
     @Override
     @SneakyThrows
-    public Optional<Integer> getRatingByMovieName(final String name) {
+    public Integer getRatingByMovieName(final String name) {
         final String uriString = buildUri(name, false);
         final ObjectMapper objectMapper = new ObjectMapper();
         final JsonNode jsonNode = objectMapper.readTree(execute(uriString));
 
         if (gotResponse(jsonNode)) {
-            return Optional.of(
-                    Integer.valueOf(jsonNode.get(OMDB_RATING_PROPERTY).asText().replace(".", ""))
-            );
+           return Integer.valueOf(jsonNode.get(OMDB_RATING_PROPERTY).asText().replace(".", ""));
         }
-        return Optional.empty();
 
+        return null;
     }
 
     @Override

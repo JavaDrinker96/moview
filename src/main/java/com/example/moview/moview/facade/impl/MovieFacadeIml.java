@@ -10,7 +10,6 @@ import com.example.moview.moview.service.OmdbService;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Component
 public class MovieFacadeIml implements MovieFacade {
@@ -39,7 +38,7 @@ public class MovieFacadeIml implements MovieFacade {
     @Override
     public MovieDto read(final Long id) {
         final Movie movie = movieService.read(id);
-        final Optional<Integer> omdbRating = omdbService.getRatingByMovieName(movie.getTitle());
+        final Integer omdbRating = omdbService.getRatingByMovieName(movie.getTitle());
         return movieMapper.entityToMovieDto(movie, omdbRating);
     }
 
@@ -51,16 +50,16 @@ public class MovieFacadeIml implements MovieFacade {
         return movieService.update(movie);
     }
 
+    private boolean hasBadDescription(final Movie movie) {
+        return Objects.isNull(movie.getDescription()) || movie.getDescription().isBlank();
+    }
+
     private void trySetOmdbDescription(final Movie movie) {
         final String movieDescription = omdbService.getDescriptionByMovieName(movie.getTitle())
                 .orElseThrow(() -> new OmdbDescriptionException(
-                        String.format("Unable to get description for movie with title = %s  via Imdb API.",
+                        String.format("Unable to get description for movie with title = %s  via Omdb API.",
                                 movie.getTitle()))
                 );
         movie.setDescription(movieDescription);
-    }
-
-    private boolean hasBadDescription(final Movie movie) {
-        return Objects.isNull(movie.getDescription()) || movie.getDescription().isBlank();
     }
 }

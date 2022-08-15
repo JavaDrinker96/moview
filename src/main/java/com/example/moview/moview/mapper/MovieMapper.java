@@ -16,19 +16,17 @@ import org.springframework.data.domain.Sort;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(uses = {ReviewMapper.class, GenreMapper.class, RatingMapper.class}, componentModel = "spring")
+@Mapper(uses = {ReviewMapper.class, GenreMapper.class}, componentModel = "spring")
 public interface MovieMapper {
 
     String DATE_PATTERN = "dd.MM.yyyy";
 
     @Mapping(source = "entity.releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "entity.duration", target = "duration", qualifiedByName = "durationToString")
-    @Mapping(source = "omdbRating", target = "omdbRating")
-    MovieDto entityToMovieDto(Movie entity, Optional<Integer> omdbRating);
+    MovieDto entityToMovieDto(Movie entity, Integer omdbRating);
 
     @Mapping(source = "releaseDate", target = "releaseDate", dateFormat = DATE_PATTERN)
     @Mapping(source = "duration", target = "duration", qualifiedByName = "stringToDuration")

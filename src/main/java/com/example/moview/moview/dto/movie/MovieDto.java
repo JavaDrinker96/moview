@@ -1,7 +1,6 @@
 package com.example.moview.moview.dto.movie;
 
 import com.example.moview.moview.dto.genre.GenreDto;
-import com.example.moview.moview.dto.rating.RatingDto;
 import com.example.moview.moview.dto.review.ReviewDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +20,8 @@ public class MovieDto {
     private String description;
     private String releaseDate;
     private String duration;
-    private RatingDto rating;
-    private RatingDto omdbRating;
+    private Integer rating;
+    private Integer omdbRating;
     private Set<ReviewDto> reviews;
     private Set<GenreDto> genres;
 }
