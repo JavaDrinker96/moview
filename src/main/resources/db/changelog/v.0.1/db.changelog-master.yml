@@ -15,5 +15,8 @@ databaseChangeLog:
       file: db.changelog-create-review-table.yml
       relativeToChangelogFile: true
   - include:
+      file: sql-generate/sql-check.sql
+      relativeToChangelogFile: true
+  - include:
       file: sql-generate/sql-triggers.sql
       relativeToChangelogFile: true

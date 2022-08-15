@@ -82,7 +82,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 08-13-2022-create-app-user-id-foreign-key-for-review
-      author: Vladzimir.Egorov (generated)
+      author: vladimir_egorov
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: app_user_id

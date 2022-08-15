@@ -1,3 +1,5 @@
+-- 08-13-2022-create-db-triggers
+-- author: vladimir_egorov
 create or replace function get_avg_movie_score(m_id bigint) returns integer
     language sql
 as
