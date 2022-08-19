@@ -1,19 +1,28 @@
+server:
+  port: 8080
+
 spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yml
+
   datasource:
     url: jdbc:postgresql://localhost:5432/moview
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     show-sql: true
     open-in-view: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret: secret

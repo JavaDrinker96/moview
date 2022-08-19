@@ -2,7 +2,7 @@ package com.example.moview;
 
 import com.example.moview.dto.review.ReviewCreateDto;
 import com.example.moview.dto.review.ReviewUpdateDto;
-import com.example.moview.exception.ForbiddenAuthorException;
+import com.example.moview.exception.ForbiddenUserException;
 import com.example.moview.model.Genre;
 import com.example.moview.model.Movie;
 import com.example.moview.model.Review;
@@ -148,6 +148,6 @@ class ReviewTest extends AbstractTest {
                 .andExpect(status().isForbidden())
                 .andReturn();
 
-        assertThat(result.getResolvedException(), is(instanceOf(ForbiddenAuthorException.class)));
+        assertThat(result.getResolvedException(), is(instanceOf(ForbiddenUserException.class)));
     }
 }

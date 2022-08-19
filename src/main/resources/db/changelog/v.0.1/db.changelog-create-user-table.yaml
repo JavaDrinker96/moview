@@ -46,7 +46,7 @@ databaseChangeLog:
       author: vladimir_egorov
       changes:
         - createSequence:
-            sequenceName: seq_user
+            sequenceName: SEQ_USER
             cacheSize: 1
             cycle: false
             dataType: bigint

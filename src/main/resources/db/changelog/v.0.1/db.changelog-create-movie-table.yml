@@ -47,7 +47,7 @@ databaseChangeLog:
       author: vladimir_egorov
       changes:
         - createSequence:
-            sequenceName: seq_movie
+            sequenceName: SEQ_MOVIE
             cacheSize: 1
             cycle: false
             dataType: bigint

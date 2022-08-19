@@ -55,7 +55,7 @@ databaseChangeLog:
       author: vladimir_egorov
       changes:
         - createSequence:
-            sequenceName: seq_review
+            sequenceName: SEQ_REVIEW
             cacheSize: 1
             cycle: false
             dataType: bigint

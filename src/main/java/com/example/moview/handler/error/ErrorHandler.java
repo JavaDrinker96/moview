@@ -1,8 +1,8 @@
 package com.example.moview.handler.error;
 
 import com.example.moview.dto.ExceptionResponse;
-import com.example.moview.exception.ForbiddenAuthorException;
-import com.example.moview.exception.UnauthorizedAuthorException;
+import com.example.moview.exception.ForbiddenUserException;
+import com.example.moview.exception.UnauthorizedUserException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,14 +57,14 @@ public class ErrorHandler {
         return new ResponseEntity<>(response, response.getStatus());
     }
 
-    @ExceptionHandler(UnauthorizedAuthorException.class)
-    protected ResponseEntity<Object> handleUnauthorizedAuthorException(final UnauthorizedAuthorException e) {
+    @ExceptionHandler(UnauthorizedUserException.class)
+    protected ResponseEntity<Object> handleUnauthorizedAuthorException(final UnauthorizedUserException e) {
         final ExceptionResponse response = buildErrorResponse(e, HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(response, response.getStatus());
     }
 
-    @ExceptionHandler(ForbiddenAuthorException.class)
-    protected ResponseEntity<Object> handleForbiddenAuthorException(final ForbiddenAuthorException e) {
+    @ExceptionHandler(ForbiddenUserException.class)
+    protected ResponseEntity<Object> handleForbiddenAuthorException(final ForbiddenUserException e) {
         final ExceptionResponse response = buildErrorResponse(e, HttpStatus.FORBIDDEN);
         return new ResponseEntity<>(response, response.getStatus());
     }
