@@ -16,7 +16,7 @@ public interface BaseService<E extends BaseEntity, ID> {
 
     void delete(ID id);
 
-    List<E> readAll();
+    List<E> findByTitle();
 
-    Page<E> readAll(Pageable pageable);
+    Page<E> findByTitle(String title, Pageable pageable);
 }

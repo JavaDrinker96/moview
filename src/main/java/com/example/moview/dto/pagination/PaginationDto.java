@@ -10,12 +10,11 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@SuperBuilder
 public abstract class PaginationDto {
 
     @NotNull
     @Min(0)
-    protected Integer page;
+    protected int page;
 
     @NotNull
     @Min(1)

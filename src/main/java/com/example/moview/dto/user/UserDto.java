@@ -1,6 +1,5 @@
 package com.example.moview.dto.user;
 
-import com.example.moview.model.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +14,7 @@ import java.util.Set;
 public class UserDto {
 
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String birthday;
     private String email;
-    private Set<Role> roles;
 }

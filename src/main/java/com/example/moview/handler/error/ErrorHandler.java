@@ -1,11 +1,16 @@
 package com.example.moview.handler.error;
 
 import com.example.moview.dto.ExceptionResponse;
+import com.example.moview.exception.ContentPermissionException;
 import com.example.moview.exception.ForbiddenUserException;
+import com.example.moview.exception.NotValidTokenException;
 import com.example.moview.exception.UnauthorizedUserException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,6 +28,18 @@ public class ErrorHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+        final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
+    @ExceptionHandler(NotValidTokenException.class)
+    protected ResponseEntity<Object> handleNotValidTokenException(final NotValidTokenException e) {
+        final ExceptionResponse response = buildErrorResponse(e, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(response, response.getStatus());
+    }
+
+    @ExceptionHandler(ContentPermissionException.class)
+    protected ResponseEntity<Object> handleContentPermissionException(final ContentPermissionException e) {
         final ExceptionResponse response = buildErrorResponse(e, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, response.getStatus());
     }

@@ -10,9 +10,12 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Jacksonized
-@SuperBuilder
 public class MovieReadPageDto extends PaginationDto {
 
     @NotNull
     private MovieProperties property;
+
+    private String title;
+
+    private boolean forCurrentUser;
 }

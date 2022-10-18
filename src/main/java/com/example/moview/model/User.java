@@ -1,12 +1,13 @@
 package com.example.moview.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @SuperBuilder
 @Getter
@@ -21,30 +22,37 @@ public class User extends BaseEntity {
     @SequenceGenerator(name = "seq_user", sequenceName = "SEQ_USER", allocationSize = 10)
     private Long id;
 
+    @Setter
+    @Column(nullable = false)
+    private String name;
+
+    @Setter
     @Column(nullable = false)
     private String firstName;
 
+    @Setter
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
     private LocalDate birthday;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Setter
     @Column(nullable = false)
-    private String password;
+    private Boolean emailVerified = false;
 
     @Setter
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @JsonIgnore
+    private String password;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Review> reviews;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providerId;
 }

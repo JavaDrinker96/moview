@@ -39,13 +39,13 @@ public abstract class AbstractService<E extends BaseEntity, R extends JpaReposit
     }
 
     @Override
-    public List<E> readAll() {
+    public List<E> findByTitle() {
         return repository.findAll();
     }
 
     @Override
     @Transactional
-    public Page<E> readAll(final Pageable pageable) {
+    public Page<E> findByTitle(String title, final Pageable pageable) {
         return repository.findAll(pageable);
     }
 }

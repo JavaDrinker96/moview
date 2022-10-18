@@ -7,7 +7,6 @@ import com.example.moview.model.User;
 import com.example.moview.service.GenreService;
 import com.example.moview.service.MovieService;
 import com.example.moview.service.ReviewService;
-import com.example.moview.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -54,9 +53,7 @@ public abstract class AbstractTest {
     protected WebApplicationContext context;
     @Autowired
     protected MovieService movieService;
-    @Autowired
-    protected UserService userService;
-    @Autowired
+//    @Autowired
     protected GenreService genreService;
     @Autowired
     protected ReviewService reviewService;
@@ -90,59 +87,64 @@ public abstract class AbstractTest {
     }
 
     protected User createDefaultUser() {
-        return userService.create(User.builder()
-                .firstName(userName)
-                .lastName(userLastName)
-                .birthday(userBirthday)
-                .email(userEmail)
-                .build());
+//        return userService.create(User.builder()
+//                .firstName(userName)
+//                .lastName(userLastName)
+//                .birthday(userBirthday)
+//                .email(userEmail)
+//                .build());
+        return null;
     }
 
     protected User createDefaultUser(final int number) {
         final StringBuilder sbUserName = new StringBuilder(userName);
         final StringBuilder sbUserLastName = new StringBuilder(userLastName);
         final StringBuilder sbUserEmail = new StringBuilder(userEmail);
-        return userService.create(User.builder()
-                .firstName(sbUserName.append(number).toString())
-                .lastName(sbUserLastName.append(number).toString())
-                .birthday(userBirthday)
-                .email(sbUserEmail.insert(5, number).toString())
-                .build());
+//        return userService.create(User.builder()
+//                .firstName(sbUserName.append(number).toString())
+//                .lastName(sbUserLastName.append(number).toString())
+//                .birthday(userBirthday)
+//                .email(sbUserEmail.insert(5, number).toString())
+//                .build());
+        return null;
     }
 
     protected Movie createDefaultMovie(final Long genreId) {
 
         final Set<Genre> movieGenres = Set.of(Genre.builder().id(genreId).build());
-        return movieService.create(Movie.builder()
-                .title(movieTitle)
-                .description(movieDescription)
-                .releaseDate(movieReleaseDate)
-                .duration(movieDuration)
-                .genres(movieGenres)
-                .build());
+//        return movieService.create(Movie.builder()
+//                .title(movieTitle)
+//                .description(movieDescription)
+//                .releaseDate(movieReleaseDate)
+//                .duration(movieDuration)
+//                .genres(movieGenres)
+//                .build());
+        return null;
     }
 
     protected Movie createDefaultMovie(final Long genreId, final int number) {
         final StringBuilder sbMovieTitle = new StringBuilder(movieTitle);
         final StringBuilder sbMovieDescription = new StringBuilder(movieDescription);
         final Set<Genre> movieGenres = Set.of(Genre.builder().id(genreId).build());
-        return movieService.create(Movie.builder()
-                .title(sbMovieTitle.append(number).toString())
-                .description(sbMovieDescription.append(number).toString())
-                .releaseDate(movieReleaseDate)
-                .duration(movieDuration)
-                .genres(movieGenres)
-                .build());
+//        return movieService.create(Movie.builder()
+//                .title(sbMovieTitle.append(number).toString())
+//                .description(sbMovieDescription.append(number).toString())
+//                .releaseDate(movieReleaseDate)
+//                .duration(movieDuration)
+//                .genres(movieGenres)
+//                .build());
+        return null;
     }
 
     protected Review createDefaultReview(final Long movieId, final Long authorId, final int reviewScore) {
-        return reviewService.create(Review.builder()
-                .score(reviewScore)
-                .title(reviewTitle)
-                .content(reviewContent)
-                .movie(Movie.builder().id(movieId).build())
-                .author(User.builder().id(authorId).build())
-                .build());
+//        return reviewService.create(Review.builder()
+//                .score(reviewScore)
+//                .title(reviewTitle)
+//                .content(reviewContent)
+//                .movie(Movie.builder().id(movieId).build())
+//                .author(User.builder().id(authorId).build())
+//                .build());
+        return null;
     }
 
     protected Review createDefaultReview(final Long movieId,
@@ -152,12 +154,13 @@ public abstract class AbstractTest {
 
         final StringBuilder sbReviewTitle = new StringBuilder(reviewTitle);
         final StringBuilder sbReviewContent = new StringBuilder(reviewContent);
-        return reviewService.create(Review.builder()
-                .score(reviewScore)
-                .title(sbReviewTitle.append(number).toString())
-                .content(sbReviewContent.append(number).toString())
-                .movie(Movie.builder().id(movieId).build())
-                .author(User.builder().id(authorId).build())
-                .build());
+//        return reviewService.create(Review.builder()
+//                .score(reviewScore)
+//                .title(sbReviewTitle.append(number).toString())
+//                .content(sbReviewContent.append(number).toString())
+//                .movie(Movie.builder().id(movieId).build())
+//                .author(User.builder().id(authorId).build())
+//                .build());
+        return null;
     }
 }

@@ -1,45 +1,77 @@
 package com.example.moview.controller;
 
-import com.example.moview.dto.auth.AuthRequest;
-import com.example.moview.dto.auth.AuthResponse;
-import com.example.moview.dto.user.UserCreateDto;
-import com.example.moview.dto.user.UserDto;
+import com.example.moview.dto.security.TokenResponse;
+import com.example.moview.dto.security.SignInRequest;
+import com.example.moview.dto.security.SignUpRequest;
+import com.example.moview.exception.BadRequestException;
+import com.example.moview.mapper.AuthMapper;
 import com.example.moview.mapper.UserMapper;
+import com.example.moview.model.AuthProvider;
 import com.example.moview.model.User;
-import com.example.moview.security.JwtProvider;
-import com.example.moview.service.UserService;
+import com.example.moview.repository.UserRepository;
+import com.example.moview.security.TokenService;
+import com.example.moview.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
-    private final JwtProvider jwtProvider;
+    private final AuthenticationManager authenticationManager;
+    private final UserValidator userValidator;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
     private final UserMapper userMapper;
+    private final AuthMapper authMapper;
 
-
-    @PostMapping("/register")
-    public ResponseEntity<UserDto> registerUser(@RequestBody @Valid final UserCreateDto dto) {
-        final User user = userMapper.userCreateDtoToEntity(dto);
-        final UserDto userDto = userMapper.entityToUserDto(userService.register(user));
-        return ResponseEntity.status(HttpStatus.OK).body(userDto);
-    }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> auth(@Valid @RequestBody final AuthRequest request) {
-        final User user = userService.findByEmailAndPassword(request.getEmail(), request.getPassword());
-        final String token = jwtProvider.generateToken(user.getEmail());
-        return ResponseEntity.status(HttpStatus.OK).body(new AuthResponse(token));
+    public ResponseEntity<TokenResponse> authenticateUser(@Valid @RequestBody SignInRequest signInRequest) {
+
+        final Authentication authentication = authenticationManager.authenticate(
+                authMapper.signInRequestToAuthentication(signInRequest)
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return ResponseEntity.ok(tokenService.generateTokensByAuthentication(authentication));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponse> refreshTokens(final String refreshToken) {
+
+        final TokenResponse tokenResponse = tokenService.refreshTokens(refreshToken);
+
+        return ResponseEntity.ok(tokenResponse);
+    }
+
+    @PostMapping("/signup")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            throw new BadRequestException("Email address already in use.");
+        }
+
+        setEncodedPassword(signUpRequest);
+        final User user = userMapper.userFromLocalRegistration(signUpRequest, AuthProvider.local);
+        userRepository.save(user);
+    }
+
+    public void setEncodedPassword(final SignUpRequest request) {
+        final String encodedPassword = passwordEncoder.encode(request.getPassword());
+        request.setPassword(encodedPassword);
     }
 }

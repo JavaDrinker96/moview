@@ -2,6 +2,7 @@ package com.example.moview;
 
 import com.example.moview.dto.genre.GenreCreateDto;
 import com.example.moview.model.Genre;
+import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
@@ -10,6 +11,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 class GenreTest extends AbstractTest {
 

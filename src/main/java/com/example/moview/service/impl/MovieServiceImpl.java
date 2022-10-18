@@ -6,6 +6,8 @@ import com.example.moview.model.Movie;
 import com.example.moview.model.Review;
 import com.example.moview.repository.MovieRepository;
 import com.example.moview.service.MovieService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -20,6 +22,16 @@ public class MovieServiceImpl extends AbstractService<Movie, MovieRepository, Lo
 
     public MovieServiceImpl(final MovieRepository repository) {
         super(repository);
+    }
+
+    @Override
+    public Page<Movie> findByTitle(final String title, final PageRequest pageRequest) {
+        return repository.findAllByTitleContaining(title, pageRequest);
+    }
+
+    @Override
+    public Page<Movie> findByTitleAndUserId(String title, Long userId, PageRequest pageRequest) {
+        return repository.findAllByTitleAndUserId(title, userId, pageRequest);
     }
 
     @Override

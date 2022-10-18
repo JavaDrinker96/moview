@@ -19,9 +19,16 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     Optional<Movie> findById(Long id);
 
     @EntityGraph(attributePaths = {"genres"})
-    Page<Movie> findAll(Pageable pageable);
+    Page<Movie> findAllByTitleContaining(String title, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"genres"})
+    @Query(value = "SELECT m FROM Movie m WHERE m.title LIKE CONCAT('%',:title,'%') AND m.user.id =:userId")
+    Page<Movie> findAllByTitleAndUserId(String title, Long userId, Pageable pageable);
 
     @EntityGraph(attributePaths = {"reviews", "genres"})
     @Query(value = "SELECT m FROM Movie m LEFT JOIN m.reviews r WHERE r.author.id = :userId")
     List<Movie> getMoviesByUserId(@Param("userId") Long userId);
+
+    @Query(value = "SELECT m.user.id FROM Movie m WHERE m.id =:movieId")
+    Optional<Long> findUserIdByMovieId(Long movieId);
 }
