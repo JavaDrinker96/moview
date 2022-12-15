@@ -19,4 +19,5 @@ public class ReviewServiceImpl extends AbstractService<Review, ReviewRepository,
         entity.setPublicationDate(now());
         return repository.save(entity);
     }
+
 }

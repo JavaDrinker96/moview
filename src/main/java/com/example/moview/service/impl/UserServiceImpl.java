@@ -11,4 +11,5 @@ public class UserServiceImpl extends AbstractService<User, UserRepository, Long>
     public UserServiceImpl(final UserRepository repository) {
         super(repository);
     }
+
 }

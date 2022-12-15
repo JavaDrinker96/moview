@@ -20,4 +20,5 @@ public interface UserMapper {
 
     @Mapping(source = "birthday", target = "birthday", dateFormat = DATE_PATTERN)
     User userUpdateDtoToEntity(UserUpdateDto dto);
+
 }

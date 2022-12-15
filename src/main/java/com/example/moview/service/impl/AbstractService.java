@@ -48,4 +48,5 @@ public abstract class AbstractService<E extends BaseEntity, R extends JpaReposit
     public Page<E> readAll(final Pageable pageable) {
         return repository.findAll(pageable);
     }
+
 }

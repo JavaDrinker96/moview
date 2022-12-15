@@ -20,4 +20,5 @@ public class UserValidator {
                 new EntityNotFoundException(String.format("Unable to find %s with id %d", User.class.getName(), userId))
         );
     }
+
 }

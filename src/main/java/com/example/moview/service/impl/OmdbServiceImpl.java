@@ -59,4 +59,5 @@ public class OmdbServiceImpl implements OmdbService {
                 .build()
                 .toUriString();
     }
+
 }

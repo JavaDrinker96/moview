@@ -23,4 +23,5 @@ public interface GenreMapper {
     Set<GenreDto> entitySetToGenreDtoSet(Set<Genre> entitySet);
 
     Genre idToEntity(Long id);
+
 }

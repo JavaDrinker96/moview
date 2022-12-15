@@ -52,4 +52,5 @@ public class MovieFacadeIml implements MovieFacade {
     private boolean hasBadDescription(final Movie movie) {
         return Objects.isNull(movie.getDescription()) || movie.getDescription().isBlank();
     }
+
 }

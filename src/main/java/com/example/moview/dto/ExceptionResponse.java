@@ -17,4 +17,5 @@ public class ExceptionResponse {
     private String message;
     private HttpStatus status;
     private String timestamp;
+
 }

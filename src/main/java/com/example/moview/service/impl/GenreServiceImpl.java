@@ -11,4 +11,5 @@ public class GenreServiceImpl extends AbstractService<Genre, GenreRepository, Lo
     public GenreServiceImpl(final GenreRepository repository) {
         super(repository);
     }
+
 }

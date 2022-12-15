@@ -19,4 +19,5 @@ public interface BaseService<E extends BaseEntity, ID> {
     List<E> readAll();
 
     Page<E> readAll(Pageable pageable);
+
 }
