@@ -11,24 +11,21 @@ import com.example.moview.model.Movie;
 import com.example.moview.service.MovieService;
 import com.example.moview.validator.GenreValidator;
 import com.example.moview.validator.UserValidator;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/movie")
+@RequiredArgsConstructor
+@Api(tags = "Endpoints for movies")
 public class MovieController {
 
     private final MovieFacade movieFacade;
@@ -38,40 +35,32 @@ public class MovieController {
     private final GenreValidator genreValidator;
 
 
-    public MovieController(final MovieFacade movieFacade,
-                           final MovieService movieService,
-                           final MovieMapper movieMapper,
-                           final UserValidator userValidator,
-                           final GenreValidator genreValidator) {
-
-        this.movieFacade = movieFacade;
-        this.movieService = movieService;
-        this.movieMapper = movieMapper;
-        this.userValidator = userValidator;
-        this.genreValidator = genreValidator;
-    }
-
     @PostMapping
-    public ResponseEntity<MovieShortDto> create(@RequestBody @Valid final MovieCreateDto dto) {
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @ApiOperation("Add new movie")
+    public MovieShortDto create(@RequestBody @Valid final MovieCreateDto dto) {
         final Movie movie = movieFacade.create(movieMapper.movieCreateDtoToEntity(dto));
-        final MovieShortDto movieShortDto = movieMapper.entityToMovieShortDto(movie);
-        return ResponseEntity.status(HttpStatus.CREATED).body(movieShortDto);
+        return movieMapper.entityToMovieShortDto(movie);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieDto> deepRead(@PathVariable final Long id) {
-        final MovieDto movieDto = movieFacade.read(id);
-        return ResponseEntity.ok(movieDto);
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiOperation("Get movie by id")
+    public MovieDto deepRead(@PathVariable final Long id) {
+        return movieFacade.read(id);
     }
 
     @PutMapping
-    public ResponseEntity<MovieShortDto> update(@RequestBody @Valid final MovieUpdateDto dto) {
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiOperation("Change movie")
+    public MovieShortDto update(@RequestBody @Valid final MovieUpdateDto dto) {
         final Movie movie = movieFacade.update(movieMapper.movieUpdateDtoToEntity(dto));
-        final MovieShortDto movieShortDto = movieMapper.entityToMovieShortDto(movie);
-        return ResponseEntity.ok(movieShortDto);
+        return movieMapper.entityToMovieShortDto(movie);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiOperation("Delete movie by id")
     public void delete(@PathVariable final Long id) {
         movieService.delete(id);
     }
@@ -93,4 +82,5 @@ public class MovieController {
         final List<MovieShortDto> dtoList = movieMapper.entityListToMovieShortDtoList(movieList);
         return ResponseEntity.ok(dtoList);
     }
+
 }

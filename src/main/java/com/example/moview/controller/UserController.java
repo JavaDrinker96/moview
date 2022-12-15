@@ -6,47 +6,45 @@ import com.example.moview.dto.user.UserUpdateDto;
 import com.example.moview.mapper.UserMapper;
 import com.example.moview.model.User;
 import com.example.moview.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
+@Api(tags = "Endpoints for users")
 public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
 
-    public UserController(final UserService userService, final UserMapper userMapper) {
-        this.userService = userService;
-        this.userMapper = userMapper;
-    }
 
     @PostMapping
-    public ResponseEntity<UserDto> create(@RequestBody @Valid final UserCreateDto dto) {
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @ApiOperation("Register new user")
+    public UserDto create(@RequestBody @Valid final UserCreateDto dto) {
         final User user = userService.create(userMapper.userCreateDtoToEntity(dto));
-        final UserDto userDto = userMapper.entityToUserDto(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
+        return userMapper.entityToUserDto(user);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> read(@PathVariable final Long id) {
-        final UserDto userDto = userMapper.entityToUserDto(userService.read(id));
-        return ResponseEntity.ok(userDto);
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiOperation("Get user by id")
+    public UserDto read(@PathVariable final Long id) {
+        return userMapper.entityToUserDto(userService.read(id));
     }
 
     @PutMapping
-    public ResponseEntity<UserDto> update(@RequestBody @Valid final UserUpdateDto dto) {
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiOperation("Change user")
+    public UserDto update(@RequestBody @Valid final UserUpdateDto dto) {
         final User user = userService.update(userMapper.userUpdateDtoToEntity(dto));
-        final UserDto userDto = userMapper.entityToUserDto(user);
-        return ResponseEntity.ok(userDto);
+        return userMapper.entityToUserDto(user);
     }
+
 }

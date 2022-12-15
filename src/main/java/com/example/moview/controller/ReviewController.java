@@ -1,72 +1,61 @@
 package com.example.moview.controller;
 
-import com.example.moview.mapper.ReviewMapper;
 import com.example.moview.dto.review.ReviewCreateDto;
 import com.example.moview.dto.review.ReviewDto;
 import com.example.moview.dto.review.ReviewUpdateDto;
+import com.example.moview.mapper.ReviewMapper;
 import com.example.moview.model.Review;
 import com.example.moview.service.ReviewService;
 import com.example.moview.validator.ReviewValidator;
 import com.example.moview.validator.UserValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/review")
+@RequiredArgsConstructor
+@Api(tags = "Endpoints for users reviews")
 public class ReviewController {
 
     private final ReviewService reviewService;
-
     private final ReviewMapper reviewMapper;
     private final UserValidator userValidator;
     private final ReviewValidator reviewValidator;
 
-    @Autowired
-    public ReviewController(final ReviewService reviewService,
-                            final ReviewMapper reviewMapper,
-                            final UserValidator userValidator,
-                            final ReviewValidator reviewValidator) {
-
-        this.reviewService = reviewService;
-        this.reviewMapper = reviewMapper;
-        this.userValidator = userValidator;
-        this.reviewValidator = reviewValidator;
-    }
 
     @PostMapping
-    public ResponseEntity<ReviewDto> create(@RequestHeader("Authorization") final Long userId,
-                                            @RequestBody @Valid final ReviewCreateDto dto) {
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @ApiOperation("Add new review")
+    public ReviewDto create(@RequestHeader("Authorization") final Long userId,
+                            @RequestBody @Valid final ReviewCreateDto dto) {
 
         userValidator.validateUserExisting(userId);
         final Review review = reviewMapper.reviewCreateDtoToEntity(dto, userId);
-        final ReviewDto reviewDto = reviewMapper.entityToReviewDto(reviewService.create(review));
-        return ResponseEntity.status(HttpStatus.CREATED).body(reviewDto);
+        return reviewMapper.entityToReviewDto(reviewService.create(review));
     }
 
     @PutMapping
-    public ResponseEntity<ReviewDto> update(@RequestHeader("Authorization") final Long userId,
-                                            @RequestBody @Valid final ReviewUpdateDto dto) {
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiOperation("Change review")
+    public ReviewDto update(@RequestHeader("Authorization") final Long userId,
+                            @RequestBody @Valid final ReviewUpdateDto dto) {
 
         reviewValidator.validateAuthor(userId, dto.getId());
         final Review review = reviewMapper.reviewUpdateDtoToEntity(dto, userId);
-        final ReviewDto reviewDto = reviewMapper.entityToReviewDto(reviewService.update(review));
-        return ResponseEntity.ok(reviewDto);
+        return reviewMapper.entityToReviewDto(reviewService.update(review));
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.OK)
+    @ApiOperation("Get review by id")
     public void delete(@RequestHeader("Authorization") final Long userId, @PathVariable final Long id) {
         reviewValidator.validateAuthor(userId, id);
         reviewService.delete(id);
     }
+
 }
