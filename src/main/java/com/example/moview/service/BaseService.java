@@ -12,7 +12,7 @@ public interface BaseService<E extends BaseEntity, ID> {
 
     E update(E newEntity);
 
-    E read(ID id);
+    E readById(ID id);
 
     void delete(ID id);
 

@@ -36,7 +36,7 @@ public class UserController {
     @ResponseStatus(code = HttpStatus.OK)
     @ApiOperation("Get user by id")
     public UserDto read(@PathVariable final Long id) {
-        return userMapper.entityToUserDto(userService.read(id));
+        return userMapper.entityToUserDto(userService.readById(id));
     }
 
     @PutMapping

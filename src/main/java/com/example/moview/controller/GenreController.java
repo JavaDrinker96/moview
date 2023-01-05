@@ -37,7 +37,7 @@ public class GenreController {
     @ResponseStatus(code = HttpStatus.OK)
     @ApiOperation("Get genre by id")
     public GenreDto read(@PathVariable final Long id) {
-        return genreMapper.entityToGenreDto(genreService.read(id));
+        return genreMapper.entityToGenreDto(genreService.readById(id));
     }
 
     @PutMapping

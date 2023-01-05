@@ -26,7 +26,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@Entity
+@Entity(name = "review")
 public class Review extends BaseEntity {
 
     @Id

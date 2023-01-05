@@ -29,7 +29,7 @@ public abstract class AbstractService<E extends BaseEntity, R extends JpaReposit
     }
 
     @Override
-    public E read(final ID id) {
+    public E readById(final ID id) {
         return repository.findById(id).orElseThrow();
     }
 
@@ -44,7 +44,6 @@ public abstract class AbstractService<E extends BaseEntity, R extends JpaReposit
     }
 
     @Override
-    @Transactional
     public Page<E> readAll(final Pageable pageable) {
         return repository.findAll(pageable);
     }

@@ -36,7 +36,7 @@ public class MovieFacadeIml implements MovieFacade {
 
     @Override
     public MovieDto read(final Long id) {
-        final Movie movie = movieService.read(id);
+        final Movie movie = movieService.readById(id);
         final Integer imdbRating = omdbService.getRatingByMovieName(movie.getTitle());
         return movieMapper.entityToMovieDto(movie, imdbRating);
     }

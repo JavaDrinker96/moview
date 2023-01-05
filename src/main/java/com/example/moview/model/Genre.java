@@ -18,7 +18,7 @@ import javax.persistence.SequenceGenerator;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@Entity
+@Entity(name = "genre")
 public class Genre extends BaseEntity{
 
     @Id
@@ -28,4 +28,5 @@ public class Genre extends BaseEntity{
 
     @Column(nullable = false)
     private String name;
+
 }

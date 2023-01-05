@@ -71,7 +71,7 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseColumnNames: movie_id
             baseTableName: review
-            constraintName: fk8378dhlpvq0e9tnkn9mx0r64i
+            constraintName: review_movie_id_foreign_key_constraint
             deferrable: false
             initiallyDeferred: false
             onDelete: NO ACTION
@@ -87,7 +87,7 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseColumnNames: app_user_id
             baseTableName: review
-            constraintName: fka8d1jolhqnvp4xhfufns7yv40
+            constraintName: review_app_user_id_foreign_key_constraint
             deferrable: false
             initiallyDeferred: false
             onDelete: NO ACTION

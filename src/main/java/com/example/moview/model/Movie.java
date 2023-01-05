@@ -28,7 +28,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@Entity
+@Entity(name = "movie")
 public class Movie extends BaseEntity {
 
     @Id

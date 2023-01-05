@@ -29,17 +29,17 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: email
-                  type: VARCHAR(255)
+                  type: VARCHAR(320)
               - column:
                   constraints:
                     nullable: false
                   name: first_name
-                  type: VARCHAR(255)
+                  type: VARCHAR(50)
               - column:
                   constraints:
                     nullable: false
                   name: last_name
-                  type: VARCHAR(255)
+                  type: VARCHAR(50)
 
   - changeSet:
       id: 08-13-2022-create-user-sequence

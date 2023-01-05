@@ -29,7 +29,7 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseColumnNames: genre_id
             baseTableName: movie_genres
-            constraintName: fknup1hm4tk18om6dgawfgo5ay9
+            constraintName: movie_genres_genre_id_foreign_key_constraint
             deferrable: false
             initiallyDeferred: false
             onDelete: NO ACTION
@@ -40,12 +40,12 @@ databaseChangeLog:
 
   - changeSet:
       id: 08-13-2022-create-movie-id-foreign-key-for-movie-genres
-      author: Vladzimir.Egorov (generated)
+      author: vladimir_egorov
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: movie_id
             baseTableName: movie_genres
-            constraintName: fks2xl3sirbon75mjcongwhrbi3
+            constraintName: movie_genres_movie_id_foreign_key_constraint
             deferrable: false
             initiallyDeferred: false
             onDelete: NO ACTION

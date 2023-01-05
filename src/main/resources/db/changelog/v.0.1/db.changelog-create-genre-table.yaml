@@ -24,7 +24,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: name
-                  type: VARCHAR(255)
+                  type: VARCHAR(20)
 
   - changeSet:
       id: 08-13-2022-create-genre-sequence
