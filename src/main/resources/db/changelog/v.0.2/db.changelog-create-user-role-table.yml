@@ -1,0 +1,55 @@
+# date pattern for id: mm-dd-yyyy
+databaseChangeLog:
+  - changeSet:
+      id: 12-15-2022-create-user-role-table
+      author: vladimir_egorov
+      changes:
+        - createTable:
+            tableName: app_user_role
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: user_role_pkey
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: user_role_pkey
+                  name: role_id
+                  type: BIGINT
+
+  - changeSet:
+      id: 12-15-2022-create-genre-id-foreign-key-for-user-role
+      author: vladimir_egorov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: app_user_role
+            constraintName: user_role_genre_id_foreign_key_constraint
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: app_user
+            validate: true
+
+  - changeSet:
+      id: 12-15-2022-create-role-id-foreign-key-for-user-roles
+      author: vladimir_egorov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: app_user_roles
+            constraintName: user_role_role_id_foreign_key_constraint
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: role
+            validate: true

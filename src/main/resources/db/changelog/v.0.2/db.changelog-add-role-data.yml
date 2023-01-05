@@ -1,0 +1,10 @@
+# date pattern for id: mm-dd-yyyy
+databaseChangeLog:
+  - changeSet:
+      id: 12-15-2022-add-role-data
+      author: vladimir_egorov
+      changes:
+        sqlFile:
+          dbms: 'postgresql'
+          path: /db/changelog/v.0.2/sql-import/import-data.sql
+          stripComments: true

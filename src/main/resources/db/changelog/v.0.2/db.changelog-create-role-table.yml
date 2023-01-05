@@ -1,0 +1,36 @@
+# date pattern for id: mm-dd-yyyy
+databaseChangeLog:
+  - changeSet:
+      id: 12-15-2022-create-role-table
+      author: vladimir_egorov
+      changes:
+        - createTable:
+            tableName: role
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: role_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    unique: true
+                    nullable: false
+                  name: name
+                  type: VARCHAR(20)
+
+  - changeSet:
+      id: 12-15-2022-create-role-sequence
+      author: vladimir_egorov
+      changes:
+        - createSequence:
+            sequenceName: seq_role
+            cacheSize: 1
+            cycle: false
+            dataType: bigint
+            incrementBy: 10
+            maxValue: 9223372036854775807
+            minValue: 1
+            startValue: 1
